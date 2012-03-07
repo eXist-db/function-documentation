@@ -1,0 +1,49 @@
+@import url("exist.css");
+
+#content {
+    width: 100%;
+}
+
+#fun-query-form td {
+    padding: 4px 8px;
+}
+
+h1 {
+    font: 225% "Quicksand", "Arial", Helvetica, sans-serif; margin: 10px 0 20px;
+}
+
+.module {
+    margin-bottom: 2em;
+}
+
+.module .module-head {
+    background: url(../images/1331160322_expand_right.png) no-repeat left top;
+    color: #707070;
+    padding: 4px 0;
+}
+
+.module-head p {
+    font-size: 1.5em;
+    margin-left: 50px;
+}
+
+.module-head h3 {
+    float: right;
+    border: 0;
+    margin: 4px 0;
+    padding: 0;
+}
+
+.function .signature {
+    font-family: "Ubuntu Mono", "Consolas", monospace;
+    font-size: 1.125em;
+}
+
+.function .description {
+    text-align: justify;
+    margin: 8px 16px;
+}
+
+#main .parameters li {
+    list-style: none;
+}

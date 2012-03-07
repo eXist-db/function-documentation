@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div class="templates:surround?with=templates/page.html&amp;at=content">
+    <h1>XQuery Function Documentation</h1>
+    <form id="fun-query-form" name="f-query" action="" method="GET">
+        <table>
+            <tr>
+                <td>
+                    <select name="type" class="templates:form-control">
+                        <option value="name">Function Name</option>
+                        <option value="desc">Description</option>
+                    </select>
+                    <input id="query-field" name="q" type="text" class="templates:form-control"/>
+                </td>
+                <td class="f-btn">
+                    <input id="f-btn-search" type="submit" name="action" value="Search"/>
+                </td>
+                <td>
+                    <input id="f-btn-print" type="submit" name="action" value="Print"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="module">Or display <b>all</b> in:</label>
+                    <select name="module" class="app:modules-select">
+                        <option value="All">All</option>
+                    </select>
+                </td>
+                <td class="f-btn">
+                    <input id="f-btn-browse" type="submit" name="action" value="Browse"/>
+                </td>
+                <td><!--img id="f-loading" src="../resources/loading.gif"/--></td>
+            </tr>
+        </table>
+        <input type="hidden" name="prev" value="{$action}"/>
+    </form>
+    <div id="results">
+        <div class="app:action">
+            <div class="app:module"/>
+        </div>
+    </div>
+</div>
