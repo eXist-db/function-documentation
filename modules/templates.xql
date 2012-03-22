@@ -231,3 +231,38 @@ declare function templates:error-description($node as node(), $params as element
         else
             ()
 };
+
+declare function templates:fix-links($node as node(), $params as element(parameters)?, $model as item()*) {
+    let $root := $params/param[@name = "root"]/@value/string()
+    let $prefix :=
+        if ($root eq "context") then
+            request:get-context-path()
+        else
+            concat(request:get-context-path(), request:get-attribute("$exist:prefix"), request:get-attribute("$exist:controller"))
+    let $temp := 
+        element { node-name($node) } {
+            $node/@* except $node/@class,
+            for $child in $node/node() return templates:fix-links($child, $prefix)
+        }
+    return
+        templates:process($temp, $model)
+};
+
+declare function templates:fix-links($node as node(), $prefix as xs:string) {
+    typeswitch ($node)
+        case element(a) return
+            let $href := $node/@href
+            return
+                if (starts-with($href, "/")) then
+                    <a href="{$prefix}{$href}">
+                    { $node/@* except $href, $node/node() }
+                    </a>
+                else
+                    $node
+        case element() return
+            element { node-name($node) } {
+                $node/@*, for $child in $node/node() return templates:fix-links($child, $prefix)
+            }
+        default return
+            $node
+};
