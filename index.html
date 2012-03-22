@@ -9,18 +9,19 @@
                         <option value="name">Function Name</option>
                         <option value="desc">Description</option>
                     </select>
+                </td>
+                <td>
                     <input id="query-field" name="q" type="text" class="templates:form-control"/>
                 </td>
                 <td class="f-btn">
                     <input id="f-btn-search" type="submit" name="action" value="Search"/>
                 </td>
-                <td>
-                    <input id="f-btn-print" type="submit" name="action" value="Print"/>
-                </td>
             </tr>
             <tr>
                 <td>
                     <label for="module">Or display <b>all</b> in:</label>
+                </td>
+                <td>
                     <select name="module" class="app:modules-select">
                         <option value="All">All</option>
                     </select>
@@ -28,7 +29,6 @@
                 <td class="f-btn">
                     <input id="f-btn-browse" type="submit" name="action" value="Browse"/>
                 </td>
-                <td><!--img id="f-loading" src="../resources/loading.gif"/--></td>
             </tr>
         </table>
         <input type="hidden" name="prev" value="{$action}"/>
