@@ -1,15 +1,17 @@
-xquery version "1.0";
+xquery version "3.0";
 
 import module namespace templates="http://exist-db.org/xquery/templates" at "templates.xql";
+import module namespace app="http://exist-db.org/xquery/app" at "app.xql";
 
 declare option exist:serialize "method=html5 media-type=text/html";
 
-declare variable $modules :=
-    <modules>
-        <module prefix="config" uri="http://exist-db.org/xquery/apps/config" at="config.xql"/>
-        <module prefix="app" uri="http://exist-db.org/xquery/app" at="app.xql"/>
-    </modules>;
-
+let $resolve := function($func as xs:string, $arity as xs:int) {
+    try {
+        function-lookup(xs:QName($func), $arity)
+    } catch * {
+        ()
+    }
+}
 let $content := request:get-data()
 return
-    templates:apply($content, $modules, ())
+    templates:apply($content, $resolve, (), map { $templates:CONFIG_STOP_ON_ERROR := false() })

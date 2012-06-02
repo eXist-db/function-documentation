@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <html>
     <head>
-        <title>XQuery Function Documentation</title>
+        <title>XQuery Function Libraries</title>
         <link rel="shortcut icon" href="resources/images/favicon.ico"/>
-        <link href="http://fonts.googleapis.com/css?family=Quicksand:400,700" rel="stylesheet" type="text/css"/>
-        <link rel="stylesheet" type="text/css" href="resources/css/style.css"/>
+        <link rel="stylesheet" type="text/css" href="resources/css/exist.css"/>
         <script type="text/javascript" src="libs/scripts/jquery/jquery-1.7.1.min.js"/>
         <script type="text/javascript" src="resources/scripts/query.js"/>
     </head>
-    <body>
+    <body id="body">
         <div id="grey-top">
             <div id="grey-bot">
                 <div id="container">
                     <div id="header">
-                        <a href="../../index.html" id="logo">eXistDB</a>
+                        <a href="/" id="logo">eXistDB</a>
                     </div><!--/header-->
                     <div id="navigation" class="templates:fix-links?root=context">
                         <ul id="nav" class="dropdown dropdown-horizontal">
-                            <li class="dir" id="about">About Us
+                            <li class="dir" id="about">
+                                <span>About Us</span>
                                 <ul>
                                     <li>
                                         <a href="/credits.xml">Who we are</a>
@@ -30,8 +30,9 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="dir" id="documentation">Documentation
-                              <ul>
+                            <li class="dir" id="documentation">
+                                <span>Documentation</span>
+                                <ul>
                                     <li>
                                         <a href="/quickstart.xml">Quick Start</a>
                                     </li>
@@ -46,18 +47,8 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="dir" id="examples">Demo
-                              <ul>
-                                    <li>
-                                        <a href="http://demo.exist-db.org/exist/examples.xql">Examples/Demos</a>
-                                    </li>
-                                    <li>
-                                        <a href="/eXide/">eXide (XQuery IDE)</a>
-                                    </li>
-                                </ul>
-                            </li>
                             <li class="dir" id="community">
-                                <a href="#">Community</a>
+                                <span>Community</span>
                                 <ul>
                                     <li>
                                         <a href="/index.xml#mailing">Mailing List/IRC</a>
@@ -65,8 +56,11 @@
                                 </ul>
                             </li>
                             <li class="dir" id="development">
-                                <a href="#">Development</a>
+                                <span>Development</span>
                                 <ul>
+                                    <li>
+                                        <a href="/eXide/">eXide (XQuery IDE)</a>
+                                    </li>
                                     <li>
                                         <a href="/api/index.html">Javadocs</a>
                                     </li>
@@ -82,7 +76,7 @@
                                 </ul>
                             </li>
                             <li class="dir" id="administration">
-                                <a href="#">Administration</a>
+                                <span>Administration</span>
                                 <ul>
                                     <li>
                                         <a href="/admin/admin.xql">Admin</a>
@@ -94,9 +88,11 @@
                             </li>
                         </ul>
                     </div>
-                    <div id="main">
-                        <!-- Page content will be injected into the div below -->
-                        <div id="content"/>
+                    <div class="container" id="main">
+                        <div class="row" id="container-body">
+                            <!-- Page content will be injected into the div below -->
+                            <div class="span12" id="content"/>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -104,15 +100,15 @@
         <div id="footer">
             <ul>
                 <li>
-                    <a href="#">Documentation</a>
+                    <a href="/">Homepage</a>
                 </li>
             </ul>
             <div id="copyright">
-                <p> Copyright eXist 2011</p>
-                <p>
-                    <a href="http://www.jameshambly.com"> Designed by JamesHambly.com</a>
-                </p>
+                <p>Copyright eXist-db Project 2012</p>
             </div><!--/copyright-->
         </div><!--/footer-->
+        <script type="text/javascript">
+            SyntaxHighlighter.all()
+        </script>
     </body>
 </html>
