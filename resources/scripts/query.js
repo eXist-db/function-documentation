@@ -7,7 +7,7 @@ $(document).ready(function() {
             $.ajax({
     		    type: "POST",
 			    url: "ajax.html",
-			    data: data,
+			    data: data + "&action=search",
 			    success: function (data) {
                     $("#results").html(data);
 			    }

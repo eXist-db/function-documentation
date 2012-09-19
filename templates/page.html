@@ -17,16 +17,13 @@
                     <div id="navigation" class="templates:fix-links?root=context">
                         <ul id="nav" class="dropdown dropdown-horizontal">
                             <li class="dir" id="about">
-                                <span>About Us</span>
+                                <span>Home</span>
                                 <ul>
                                     <li>
-                                        <a href="/credits.xml">Who we are</a>
+                                        <a href="{dashboard}">Dashboard</a>
                                     </li>
                                     <li>
-                                        <a href="/acknowledge.xml">Acknowledgements</a>
-                                    </li>
-                                    <li>
-                                        <a href="http://atomic.exist-db.org/blogs/eXist/Press/">Press/Contact</a>
+                                        <a href="http://exist-db.org">eXist-db Home</a>
                                     </li>
                                 </ul>
                             </li>
@@ -34,24 +31,13 @@
                                 <span>Documentation</span>
                                 <ul>
                                     <li>
-                                        <a href="/quickstart.xml">Quick Start</a>
+                                        <a href="{doc|documentation.xml}">Documentation</a>
                                     </li>
                                     <li>
-                                        <a href="/xquery/functions.xql">Function Library</a>
-                                    </li>
-                                    <li>
-                                        <a href="/documentation.xml">Main Documentation</a>
+                                        <a href="{xqfdoc}">XQuery Function Library</a>
                                     </li>
                                     <li>
                                         <a href="http://en.wikibooks.org/wiki/XQuery">XQuery Wikibook</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="dir" id="community">
-                                <span>Community</span>
-                                <ul>
-                                    <li>
-                                        <a href="/index.xml#mailing">Mailing List/IRC</a>
                                     </li>
                                 </ul>
                             </li>
@@ -59,10 +45,10 @@
                                 <span>Development</span>
                                 <ul>
                                     <li>
-                                        <a href="/eXide/">eXide (XQuery IDE)</a>
+                                        <a href="{eXide}">eXide (XQuery IDE)</a>
                                     </li>
                                     <li>
-                                        <a href="/api/index.html">Javadocs</a>
+                                        <a href="http://exist-db.org/api/index.html">Javadocs</a>
                                     </li>
                                     <li>
                                         <a href="http://sourceforge.net/tracker/?group_id=17691&amp;atid=117691">Bug Tracker</a>
@@ -110,8 +96,5 @@
                 <p>Copyright eXist-db Project 2012</p>
             </div><!--/copyright-->
         </div><!--/footer-->
-        <script type="text/javascript">
-            SyntaxHighlighter.all()
-        </script>
     </body>
 </html>

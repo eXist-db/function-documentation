@@ -25,7 +25,7 @@ declare function app:modules-select($node as node(), $model as map(*), $module a
 };
 
 declare 
-    %templates:default("action", "Search")
+    %templates:default("action", "search")
     %templates:default("type", "name")
 function app:action($node as node(), $model as map(*), $action as xs:string, $module as xs:string?, 
     $q as xs:string?, $type as xs:string) {
