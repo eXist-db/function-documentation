@@ -14,7 +14,7 @@
                     <input id="query-field" name="q" type="text" class="templates:form-control"/>
                 </td>
                 <td class="f-btn">
-                    <input id="f-btn-search" type="submit" name="action" value="Search"/>
+                    <button id="f-btn-search" type="submit" name="action" class="btn" value="search">Search</button>
                 </td>
             </tr>
             <tr>
@@ -27,9 +27,18 @@
                     </select>
                 </td>
                 <td class="f-btn">
-                    <input id="f-btn-browse" type="submit" name="action" value="Browse"/>
+                    <button id="f-btn-browse" type="submit" name="action" class="btn" value="browse">Browse</button>
                 </td>
             </tr>
+            <!--tr>
+                <td>Re-scan all modules (may take a few seconds)</td>
+                <td>
+                    <button id="f-btn-reindex" class="btn">Reindex</button>
+                </td>
+                <td>
+                    <img id="f-load-indicator" src="resources/images/ajax-loader.gif"/>
+                </td>
+            </tr-->
         </table>
         <input type="hidden" name="prev" value="{$action}"/>
     </form>

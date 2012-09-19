@@ -6,6 +6,7 @@ declare namespace xqdoc="http://www.xqdoc.org/1.0";
 
 import module namespace templates="http://exist-db.org/xquery/templates" at "templates.xql";
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
+import module namespace docs="http://exist-db.org/xquery/docs" at "scan.xql";
 
 declare function app:modules-select($node as node(), $model as map(*), $module as xs:string?) {
     <select name="module">
@@ -29,15 +30,21 @@ declare
 function app:action($node as node(), $model as map(*), $action as xs:string, $module as xs:string?, 
     $q as xs:string?, $type as xs:string) {
     switch ($action)
-        case "Browse" return
+        case "browse" return
             app:browse($node, $module)
-        case "Search" return
+        case "search" return
             app:search($node, $module, $q, $type)
+        case "reindex" return
+            app:rescan()
         default return
             ()
 };
 
-declare function app:browse($node as node(), $module as xs:string?) {
+declare function app:rescan() {
+    docs:load-fundocs($config:app-root)
+};
+
+declare %private function app:browse($node as node(), $module as xs:string?) {
     let $functions :=
         if( $module eq "All" ) then
             collection($config:app-data)/xqdoc:xqdoc//xqdoc:function

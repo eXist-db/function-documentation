@@ -4,6 +4,7 @@ module namespace docs="http://exist-db.org/xquery/docs";
 
 import module namespace xdb="http://exist-db.org/xquery/xmldb";
 import module namespace xqdm="http://exist-db.org/xquery/xqdoc";
+import module namespace dbutil="http://exist-db.org/xquery/dbutil" at "dbutils.xql";
 
 declare namespace xqdoc="http://www.xqdoc.org/1.0";
  
@@ -19,10 +20,26 @@ declare %private function docs:load-external($uri as xs:string, $store as functi
         $store($moduleURI, $xml)
 };
 
+declare %private function docs:load-stored($path as xs:anyURI, $store as function(xs:string, element()) as empty()) {
+    let $data := util:binary-doc($path)
+    let $name := replace($path, "^.*/([^/]+)\.[^\.]+$", "$1")
+    let $xml := xqdm:scan($data, $name)
+    let $moduleURI := $xml//xqdoc:module/xqdoc:uri
+    return
+        $store($moduleURI, $xml)
+};
+
 declare %private function docs:load-external-modules($store as function(xs:string, element()) as empty()) {
     for $uri in util:mapped-modules()
     return
         docs:load-external($uri, $store)
+(:    for $path in dbutil:find-by-mimetype(xs:anyURI("/db"), "application/xquery"):)
+(:    return:)
+(:        try {:)
+(:            docs:load-stored($path, $store):)
+(:        } catch * {:)
+(:            util:log("DEBUG", "Error: " || $err:description):)
+(:        }:)
 };
 
 declare %private function docs:load-internal-modules($store as function(xs:string, element()) as empty()) {
