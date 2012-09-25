@@ -53,9 +53,15 @@ declare function xqdoc:module-order($module as element(xqdoc:xqdoc)) {
 };
 
 declare function xqdoc:print-module($module as element(xqdoc:xqdoc), $functions as element(xqdoc:function)) {
-    <div class="module">
+    <div class="module" id="{util:document-name($module)}">
         <div class="module-head">
             <h3>{ $module/xqdoc:module/xqdoc:uri/text() }</h3>
+            {
+                if ($module/xqdoc:control/xqdoc:location) then
+                    <h4>{$module/xqdoc:control/xqdoc:location/text()}</h4>
+                else
+                    ()
+            }
             { xqdoc:parse-text($module/xqdoc:module/xqdoc:comment/xqdoc:description) }
         </div>
         <div class="functions">

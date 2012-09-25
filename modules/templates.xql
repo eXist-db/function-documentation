@@ -9,6 +9,7 @@ module namespace templates="http://exist-db.org/xquery/templates";
  : @author Wolfgang Meier
 :)
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
+import module namespace inspect="http://exist-db.org/xquery/inspection" at "java:org.exist.xquery.functions.inspect.InspectionModule";
 
 declare variable $templates:CONFIG_STOP_ON_ERROR := "stop-on-error";
 
@@ -119,7 +120,7 @@ declare %private function templates:call($class as xs:string, $node as element()
 
 declare %private function templates:call-by-introspection($node as element(), $parameters as map(xs:string, xs:string), $model as map(*), 
     $fn as function(*)) {
-    let $inspect := util:inspect-function($fn)
+    let $inspect := inspect:inspect-function($fn)
     let $args := templates:map-arguments($inspect, $parameters)
     return
         templates:process-output(

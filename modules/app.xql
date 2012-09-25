@@ -34,14 +34,8 @@ function app:action($node as node(), $model as map(*), $action as xs:string, $mo
             app:browse($node, $module)
         case "search" return
             app:search($node, $module, $q, $type)
-        case "reindex" return
-            app:rescan()
         default return
             ()
-};
-
-declare function app:rescan() {
-    docs:load-fundocs($config:app-root)
 };
 
 declare %private function app:browse($node as node(), $module as xs:string?) {
@@ -59,7 +53,7 @@ declare %private function app:search($node as node(), $module as xs:string?,
     let $functions :=
         switch( $type )
             case "name" return
-            collection($config:app-data)/xqdoc:xqdoc//xqdoc:function[ngram:contains(xqdoc:name, $q)]
+            collection($config:app-data)/xqdoc:xqdoc//xqdoc:function[ngram:contains(xqdoc:signature, $q)]
         case "desc" return
             collection($config:app-data)/xqdoc:xqdoc//xqdoc:function[ngram:contains(xqdoc:comment/xqdoc:description, $q)]
         default return ()
@@ -83,6 +77,14 @@ declare %private function app:print-module($module as element(xqdoc:xqdoc), $fun
     <div class="module">
         <div class="module-head">
             <h3>{ $module/xqdoc:module/xqdoc:uri/text() }</h3>
+            {
+                let $location := $module/xqdoc:control/xqdoc:location/text()
+                return
+                    if ($location) then
+                        <h4><a href="../eXide/index.html?open={$location}">{$location}</a></h4>
+                    else
+                        ()
+            }
             <p class="module-description">{ $module/xqdoc:module/xqdoc:comment/xqdoc:description/node() }</p>
         </div>
         <div class="functions">

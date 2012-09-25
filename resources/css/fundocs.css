@@ -6,6 +6,12 @@
     padding: 4px 8px;
 }
 
+.messages {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid red;
+}
+
 .module {
     margin-bottom: 2em;
 }
@@ -27,6 +33,10 @@
     padding: 0;
 }
 
+.module-head h4 {
+    margin: 4px 0 4px 50px;
+}
+
 .function .signature {
     font-family: "Ubuntu Mono", "Consolas", monospace;
     font-size: 1.125em;
@@ -43,7 +53,6 @@
 
 .code { font: 13px/20px bold "Courier New", Courier, monospace; }
 
-/* ---------------------------------------- Local styles ----------------------------------- */
 form { margin: 20px 0; }
 form td {
     padding-right: 8px;

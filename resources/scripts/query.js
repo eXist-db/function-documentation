@@ -9,7 +9,9 @@ $(document).ready(function() {
 			    url: "ajax.html",
 			    data: data + "&action=search",
 			    success: function (data) {
-                    $("#results").html(data);
+                    $("#results").fadeOut(200, function() {
+                        $(this).html(data).fadeIn(200);
+                    });
 			    }
             });
         }
@@ -20,10 +22,15 @@ $(document).ready(function() {
         $("#f-load-indicator").show();
         $.ajax({
             type: "POST",
-            url: "ajax.html",
-            data: { "action": "reindex" },
+            dataType: "json",
+            url: "modules/reindex.xql",
             success: function (data) {
                 $("#f-load-indicator").hide();
+                if (data.status == "failed") {
+                    $("#messages").text(data.message);
+                } else {
+                    window.location.href = ".";
+                }
             }
         })
     });

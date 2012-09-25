@@ -4,7 +4,7 @@
         <fulltext default="none" attributes="no"/>
         <lucene>
         </lucene>
-        <ngram qname="xqdoc:name"/>
+        <ngram qname="xqdoc:signature"/>
         <ngram qname="xqdoc:description"/>
     </index>
 </collection>
