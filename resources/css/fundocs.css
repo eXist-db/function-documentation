@@ -23,8 +23,22 @@
 }
 
 .module-head p {
-    font-size: 1.5em;
+    font-size: 1.33em;
+    line-height: 1.5em;
     margin-left: 50px;
+}
+
+.module-head table {
+	margin-left: 50px;
+}
+
+.module-head td {
+	padding-right: 2em;
+}
+
+.module-head td:first-child {
+	font-weight: bold;
+	text-transform: capitalize;
 }
 
 .module-head h3 {

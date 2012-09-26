@@ -86,6 +86,23 @@ declare %private function app:print-module($module as element(xqdoc:xqdoc), $fun
                         ()
             }
             <p class="module-description">{ $module/xqdoc:module/xqdoc:comment/xqdoc:description/node() }</p>
+            {
+                let $metadata := $module/xqdoc:module/xqdoc:comment/(xqdoc:author|xqdoc:version|xqdoc:since)
+                return
+                    if (exists($metadata)) then
+                        <table>
+                        {
+                            for $meta in $metadata
+                            return
+                                <tr>
+                                    <td>{local-name($meta)}</td>
+                                    <td>{$meta/string()}</td>
+                                </tr>
+                        }
+                        </table>
+                    else
+                        ()
+            }
         </div>
         <div class="functions">
             {

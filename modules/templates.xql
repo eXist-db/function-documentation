@@ -1,13 +1,13 @@
 xquery version "3.0";
 
-module namespace templates="http://exist-db.org/xquery/templates";
-
 (:~
  : HTML templating module
  : 
  : @version 2.0
  : @author Wolfgang Meier
 :)
+module namespace templates="http://exist-db.org/xquery/templates";
+
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
 import module namespace inspect="http://exist-db.org/xquery/inspection" at "java:org.exist.xquery.functions.inspect.InspectionModule";
 

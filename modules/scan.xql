@@ -26,7 +26,7 @@ declare %private function docs:load-stored($path as xs:anyURI, $store as functio
     let $name := replace($path, "^.*/([^/]+)\.[^\.]+$", "$1")
     let $moduleURI := $xml//xqdoc:module/xqdoc:uri
     return
-        $store($moduleURI, $xml)
+        $store($path, $xml)
 };
 
 declare %private function docs:load-external-modules($store as function(xs:string, element()) as empty()) {
@@ -77,6 +77,21 @@ declare function docs:generate-xqdoc($module as element(module), $location as xs
         <xqdoc:module type="library">
             <xqdoc:uri>{$module/@uri/string()}</xqdoc:uri>
             <xqdoc:name>{$module/@prefix/string()}</xqdoc:name>
+            <xqdoc:comment>
+                <xqdoc:description>{$module/description/string()}</xqdoc:description>
+                {
+                    if ($module/version) then
+                        <xqdoc:version>{$module/version/string()}</xqdoc:version>
+                    else
+                        ()
+                }
+                {
+                    if ($module/author) then
+                        <xqdoc:author>{$module/author/string()}</xqdoc:author>
+                    else
+                        ()
+                }    
+            </xqdoc:comment>
         </xqdoc:module>
         <xqdoc:functions>
         {
