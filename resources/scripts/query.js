@@ -1,19 +1,32 @@
+
+function search() {
+    var data = $("#fun-query-form").serialize();
+    $.ajax({
+	    type: "POST",
+	    url: "ajax.html",
+	    data: data + "&action=search",
+	    success: function (data) {
+            $("#results").fadeOut(100, function() {
+                $(this).html(data);
+                $(this).fadeIn(100, function() {
+                    $(".signature").highlight();
+                });
+                timeout = null;
+            });
+	    }
+    });
+}
+
+var timeout = null;
+
 $(document).ready(function() {
     $("#f-load-indicator").hide();
     $("#query-field").keyup(function() {
         var val = $(this).val();
-        if (val.length > 1) {
-            var data = $("#fun-query-form").serialize();
-            $.ajax({
-    		    type: "POST",
-			    url: "ajax.html",
-			    data: data + "&action=search",
-			    success: function (data) {
-                    $("#results").fadeOut(200, function() {
-                        $(this).html(data).fadeIn(200);
-                    });
-			    }
-            });
+        if (val.length > 3) {
+            if (timeout)
+                clearTimeout(timeout);
+            timeout = setTimeout(search, 300);
         }
     });
     
@@ -34,4 +47,6 @@ $(document).ready(function() {
             }
         })
     });
+    
+    $(".signature").highlight();
 });

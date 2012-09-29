@@ -22,11 +22,16 @@ declare %private function docs:load-external($uri as xs:string, $store as functi
 };
 
 declare %private function docs:load-stored($path as xs:anyURI, $store as function(xs:string, element()) as empty()) {
-    let $xml := docs:generate-xqdoc(inspect:inspect-module($path), $path)
-    let $name := replace($path, "^.*/([^/]+)\.[^\.]+$", "$1")
-    let $moduleURI := $xml//xqdoc:module/xqdoc:uri
+    let $meta := inspect:inspect-module($path)
     return
-        $store($path, $xml)
+        if ($meta) then
+            let $xml := docs:generate-xqdoc($meta, $path)
+            let $name := replace($path, "^.*/([^/]+)\.[^\.]+$", "$1")
+            let $moduleURI := $xml//xqdoc:module/xqdoc:uri
+            return
+                $store($path, $xml)
+        else
+            ()
 };
 
 declare %private function docs:load-external-modules($store as function(xs:string, element()) as empty()) {

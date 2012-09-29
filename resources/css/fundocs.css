@@ -1,5 +1,10 @@
 #fun-query-form {
+    font-size: 14px;
     margin: 10px 0 30px 0;
+}
+
+#fun-query-form input, #fun-query-form select, #fun-query-form button {
+    font-size: 14px;
 }
 
 #fun-query-form td {
@@ -17,9 +22,13 @@
 }
 
 .module .module-head {
+    padding: 4px 0;
+    background: #E0E0E0 url(../images/noise.png);
+}
+
+.module .module-head-inner {
     background: url(../images/1331160322_expand_right.png) no-repeat left top;
     color: #707070;
-    padding: 4px 0;
 }
 
 .module-head p {
@@ -51,9 +60,18 @@
     margin: 4px 0 4px 50px;
 }
 
+.function-head h4 {
+    font-size: 1.25em;
+    margin-bottom: 10px;
+}
+
 .function .signature {
-    font-family: "Ubuntu Mono", "Consolas", monospace;
+    font-family: "Ubuntu Mono", "Menlo", "Consolas", monospace;
     font-size: 1.125em;
+    background: #555555 url(../images/noise.png);
+    margin-left: 16px;
+    margin-right: 16px;
+    padding: 8px 8px;
 }
 
 .function .description {
@@ -61,11 +79,20 @@
     margin: 8px 16px;
 }
 
-#main .parameters li {
-    list-style: none;
+.function table {
+    width: 100%;
 }
 
-.code { font: 13px/20px bold "Courier New", Courier, monospace; }
+.function td {
+    padding: 0 0 .85em 0;
+}
+
+.function .parameter-name {
+    width: 150px;
+    padding-right: 1em;
+    vertical-align: top;
+    font-family: "Ubuntu Mono", "Menlo", "Consolas", monospace;
+}
 
 form { margin: 20px 0; }
 form td {

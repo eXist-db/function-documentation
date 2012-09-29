@@ -57,12 +57,8 @@ declare %private function app:search($node as node(), $module as xs:string?,
         case "desc" return
             collection($config:app-data)/xqdoc:xqdoc//xqdoc:function[ngram:contains(xqdoc:comment/xqdoc:description, $q)]
         default return ()
-    let $filteredFuncs := 
-        if( $module eq "All" ) then $functions
-        else $functions[ancestor::xqdoc:xqdoc/xqdoc:module/xqdoc:uri = $module]
-    
     return
-        map { "result" := $filteredFuncs }
+        map { "result" := $functions }
 };
 
 declare function app:module($node as node(), $model as map(*)) {
@@ -76,33 +72,35 @@ declare function app:module($node as node(), $model as map(*)) {
 declare %private function app:print-module($module as element(xqdoc:xqdoc), $functions as element(xqdoc:function)) {
     <div class="module">
         <div class="module-head">
-            <h3>{ $module/xqdoc:module/xqdoc:uri/text() }</h3>
-            {
-                let $location := $module/xqdoc:control/xqdoc:location/text()
-                return
-                    if ($location) then
-                        <h4><a href="../eXide/index.html?open={$location}">{$location}</a></h4>
-                    else
-                        ()
-            }
-            <p class="module-description">{ $module/xqdoc:module/xqdoc:comment/xqdoc:description/node() }</p>
-            {
-                let $metadata := $module/xqdoc:module/xqdoc:comment/(xqdoc:author|xqdoc:version|xqdoc:since)
-                return
-                    if (exists($metadata)) then
-                        <table>
-                        {
-                            for $meta in $metadata
-                            return
-                                <tr>
-                                    <td>{local-name($meta)}</td>
-                                    <td>{$meta/string()}</td>
-                                </tr>
-                        }
-                        </table>
-                    else
-                        ()
-            }
+            <div class="module-head-inner">
+                <h3>{ $module/xqdoc:module/xqdoc:uri/text() }</h3>
+                {
+                    let $location := $module/xqdoc:control/xqdoc:location/text()
+                    return
+                        if ($location) then
+                            <h4><a href="../eXide/index.html?open={$location}">{$location}</a></h4>
+                        else
+                            ()
+                }
+                <p class="module-description">{ $module/xqdoc:module/xqdoc:comment/xqdoc:description/node() }</p>
+                {
+                    let $metadata := $module/xqdoc:module/xqdoc:comment/(xqdoc:author|xqdoc:version|xqdoc:since)
+                    return
+                        if (exists($metadata)) then
+                            <table>
+                            {
+                                for $meta in $metadata
+                                return
+                                    <tr>
+                                        <td>{local-name($meta)}</td>
+                                        <td>{$meta/string()}</td>
+                                    </tr>
+                            }
+                            </table>
+                        else
+                            ()
+                }
+            </div>
         </div>
         <div class="functions">
             {
@@ -115,31 +113,65 @@ declare %private function app:print-module($module as element(xqdoc:xqdoc), $fun
 };
 
 declare %private function app:print-function($function as element(xqdoc:function)) {
-    <div class="function">
-        <div class="function-head">
-            <h4>{ $function/xqdoc:name/node() }</h4>
-            <p class="signature">{ $function/xqdoc:signature/node() }</p>
-        </div>
-        <div class="function-detail">
-            <p class="description">{ $function/xqdoc:comment/xqdoc:description/node() }</p>
-            
-            <div class="parameters">
-                <p>Parameters:</p>
-                <ul>
-                {
-                    for $param in $function/xqdoc:comment/xqdoc:param
-                    return
-                        <li>{ $param/node() }</li>
-                }
-                </ul>
+    let $comment := $function/xqdoc:comment
+    return
+        <div class="function">
+            <div class="function-head">
+                <h4>{ $function/xqdoc:name/node() }</h4>
+                <div class="signature" data-language="xquery">{ $function/xqdoc:signature/node() }</div>
             </div>
-            
-            {
-                let $returnValue := $function/xqdoc:comment/xqdoc:return/node()
-                return
+            <div class="function-detail">
+                <p class="description">{ $comment/xqdoc:description/node() }</p>
                 
-                <p><strong>Returns: </strong>{ if( $returnValue ) then $returnValue else "empty()" }</p>
-            }
+                <dl class="parameters">
+                    <dt>Parameters:</dt>
+                    <dd>
+                    {
+                        app:print-parameters($comment/xqdoc:param)
+                    }
+                    </dd>
+                    <dt>Returns:</dt>
+                    <dd>
+                    {
+                        let $returnValue := $comment/xqdoc:return/node()
+                        return
+                            <p>{ if( $returnValue ) then $returnValue else "empty()" }</p>
+                    }
+                    </dd>
+                </dl>
+            </div>
         </div>
-    </div>
+};
+
+declare %private function app:print-parameters($params as element(xqdoc:param)*) {
+    <table>
+    {
+        $params !
+            <tr>
+                <td class="parameter-name">{replace(., "^([^\s]+)\s.*$", "$1")}</td>
+                <td>{replace(., "^[^\s]+\s(.*)$", "$1")}</td>
+            </tr>
+    }
+    </table>
+};
+
+(: ~
+ : If eXide is installed, we can load ace locally. If not, download ace
+ : from cloudfront.
+ :)
+declare function app:import-ace($node as node(), $model as map(*)) {
+    let $eXideInstalled := doc-available("/db/eXide/repo.xml")
+    let $path :=
+        if ($eXideInstalled) then
+            "../eXide/resources/scripts/ace/"
+        else
+            "//d1n0x3qji82z53.cloudfront.net/src-min-noconflict/"
+    for $script in $node/script
+    return
+        <script>
+        {
+            $script/@* except $script/@src,
+            attribute src { $path || $script/@src }
+        }
+        </script>
 };
