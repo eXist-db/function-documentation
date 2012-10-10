@@ -12,7 +12,7 @@ declare function app:modules-select($node as node(), $model as map(*), $module a
     <select name="module">
         <option value="All">All</option>
         {
-            for $mod in collection("/db")//xqdoc:module
+            for $mod in collection("/db")//xqdoc:module[xqdoc:uri/text()]
             let $uri := $mod/xqdoc:uri/text()
             order by $uri
             return
