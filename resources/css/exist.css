@@ -255,3 +255,6 @@ input:required:valid {
 .testresult .pass {
     background-color: #69EB7F;
 }
+
+select[name='module']
+    {width:50em;}

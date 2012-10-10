@@ -6,19 +6,24 @@ declare namespace xqdoc="http://www.xqdoc.org/1.0";
 
 import module namespace templates="http://exist-db.org/xquery/templates" at "templates.xql";
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
-import module namespace docs="http://exist-db.org/xquery/docs" at "scan.xql";
 
 declare function app:modules-select($node as node(), $model as map(*), $module as xs:string?) {
     <select name="module">
-        <option value="All">All</option>
+        <option value="AllFunctions">All Functions</option>
+        <option value="AllCoreFunctions">All Core Functions</option>
+        <option value="AllAppFunctions">All App Functions</option>
         {
-            for $mod in collection("/db")//xqdoc:module[xqdoc:uri/text()]
-            let $uri := $mod/xqdoc:uri/text()
-            order by $uri
+            let $functions := collection("/db")//xqdoc:xqdoc
+            for $function in $functions[xqdoc:module[xqdoc:uri/text()]]
+            let $uri := $function/xqdoc:module/xqdoc:uri/text()
+            let $location := $function/xqdoc:control/xqdoc:location/text()
+            let $option := concat($uri, if ($location) then ' @ ' else '', $location)
+            
+            order by $option
             return
-                <option value="{$uri}">
-                { if ($uri eq $module) then attribute selected { "true" } else () }
-                { $uri }
+                <option value="{$option}">
+                { if ($option eq $module) then attribute selected { "true" } else () }
+                { $option }
                 </option>
         }
     </select>
@@ -33,17 +38,27 @@ function app:action($node as node(), $model as map(*), $action as xs:string, $mo
         case "browse" return
             app:browse($node, $module)
         case "search" return
-            app:search($node, $module, $q, $type)
+            app:search($node, (), $q, $type)
         default return
             ()
 };
 
 declare %private function app:browse($node as node(), $module as xs:string?) {
-    let $functions :=
-        if( $module eq "All" ) then
-            collection($config:app-data)/xqdoc:xqdoc//xqdoc:function
+    let $location := if (contains($module, '@')) then substring-after($module, ' @ ') else ''
+    let $module := if (contains($module, '@')) then substring-before($module, ' @ ') else $module
+    let $functions :=        
+        if ($module eq "AllFunctions") 
+        then collection($config:app-data)/xqdoc:xqdoc//xqdoc:function
         else
-            collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri = $module]//xqdoc:function
+            if ($module eq "AllCoreFunctions") 
+            then collection($config:app-data)/xqdoc:xqdoc[not(xqdoc:control/xqdoc:location)]//xqdoc:function
+            else
+                if ($module eq "AllAppFunctions") 
+                then collection($config:app-data)/xqdoc:xqdoc[xqdoc:control/xqdoc:location/text()]//xqdoc:function
+                else
+                    if ($location)
+                    then collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri = $module][xqdoc:control/xqdoc:location = $location]//xqdoc:function
+                    else collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri = $module]//xqdoc:function
     return
         map { "result" := $functions }
 };
@@ -57,6 +72,7 @@ declare %private function app:search($node as node(), $module as xs:string?,
         case "desc" return
             collection($config:app-data)/xqdoc:xqdoc//xqdoc:function[ngram:contains(xqdoc:comment/xqdoc:description, $q)]
         default return ()
+        order by $module/xqdoc:xqdoc/xqdoc:control/xqdoc:location/text(), $module/xqdoc:xqdoc/xqdoc:module/xqdoc:name/text()
     return
         map { "result" := $functions }
 };

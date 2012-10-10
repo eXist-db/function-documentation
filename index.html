@@ -4,40 +4,43 @@
     <form id="fun-query-form" name="f-query" action="" method="POST">
         <table>
             <tr>
-                <td>
+                <td class="f-btn" width="10%">
+                    <button id="f-btn-search" type="submit" name="action" value="search">Search</button>
+                </td>
+                <td width="15%">
                     <select name="type" class="templates:form-control">
                         <option value="name">Function Signature</option>
                         <option value="desc">Description</option>
                     </select>
                 </td>
+                <td width="5%">for</td>
                 <td>
                     <input id="query-field" name="q" type="text" class="templates:form-control"/>
                 </td>
-                <td class="f-btn">
-                    <button id="f-btn-search" type="submit" name="action" class="btn btn-primary" value="search">Search</button>
-                </td>
             </tr>
             <tr>
-                <td>
-                    <label for="module">Or display <b>all</b> in:</label>
+                <td class="f-btn">
+                    <button id="f-btn-browse" type="submit" name="action" class="btn" value="browse">Browse</button>
                 </td>
-                <td>
+                <td colspan="3">
                     <select name="module" class="app:modules-select">
                         <option value="All">All</option>
                     </select>
                 </td>
-                <td class="f-btn">
-                    <button id="f-btn-browse" type="submit" name="action" class="btn" value="browse">Browse</button>
-                </td>
             </tr>
             <tr>
                 <td>
+                    <button id="f-btn-reindex" class="btn">Regenerate</button>
+                </td>
+                <td colspan="3">XQuery Function Documentation (after the addition of new modules)</td>
+            </tr>
+            <tr>
+                <td/>
+                <td/>
+                <td>
                     <img id="f-load-indicator" src="resources/images/ajax-loader.gif"/>
                 </td>
-                <td>Re-scan all modules (may take a few seconds)</td>
-                <td>
-                    <button id="f-btn-reindex" class="btn">Reindex</button>
-                </td>
+                <td/>
             </tr>
         </table>
     </form>
