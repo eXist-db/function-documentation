@@ -12,14 +12,16 @@ declare function app:modules-select($node as node(), $model as map(*), $module a
         <option value="AllFunctions">All Functions</option>
         <option value="AllCoreFunctions">All Core Functions</option>
         <option value="AllAppFunctions">All App Functions</option>
+        <option value="All">---</option>
         {
-            let $functions := collection("/db")//xqdoc:xqdoc
+            let $functions := collection($config:app-data)//xqdoc:xqdoc
             for $function in $functions[xqdoc:module[xqdoc:uri/text()]]
             let $uri := $function/xqdoc:module/xqdoc:uri/text()
             let $location := $function/xqdoc:control/xqdoc:location/text()
             let $option := concat($uri, if ($location) then ' @ ' else '', $location)
             
-            order by $option
+            order by $location empty least, $uri
+            
             return
                 <option value="{$option}">
                 { if ($option eq $module) then attribute selected { "true" } else () }
@@ -47,7 +49,7 @@ declare %private function app:browse($node as node(), $module as xs:string?) {
     let $location := if (contains($module, '@')) then substring-after($module, ' @ ') else ''
     let $module := if (contains($module, '@')) then substring-before($module, ' @ ') else $module
     let $functions :=        
-        if ($module eq "AllFunctions") 
+        if ($module = ("AllFunctions", "All")) 
         then collection($config:app-data)/xqdoc:xqdoc//xqdoc:function
         else
             if ($module eq "AllCoreFunctions") 
