@@ -87,7 +87,7 @@ declare function app:module($node as node(), $model as map(*)) {
         app:print-module($module, $funcsInModule)
 };
 
-declare %private function app:print-module($module as element(xqdoc:xqdoc), $functions as element(xqdoc:function)) {
+declare %private function app:print-module($module as element(xqdoc:xqdoc), $functions as element(xqdoc:function)*) {
     <div class="module">
         <div class="module-head">
             <div class="module-head-inner">
