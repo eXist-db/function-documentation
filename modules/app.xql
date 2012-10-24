@@ -19,8 +19,8 @@ declare function app:modules-select($node as node(), $model as map(*), $module a
             let $uri := $function/xqdoc:module/xqdoc:uri/text()
             let $location := $function/xqdoc:control/xqdoc:location/text()
             let $option := concat($uri, if ($location) then ' @ ' else '', $location)
-            
-            order by $location empty least, $uri
+            let $order := (if ($location) then $location else " " || $uri)
+            order by $order
             
             return
                 <option value="{$option}">
@@ -82,7 +82,13 @@ declare %private function app:search($node as node(), $module as xs:string?,
 declare function app:module($node as node(), $model as map(*)) {
     let $functions := $model("result")
     for $module in $functions/ancestor::xqdoc:xqdoc
+    
+    let $uri := $module/xqdoc:module/xqdoc:uri/text()
+    let $location := $module/xqdoc:control/xqdoc:location/text()
+    let $order := (if ($location) then $location else " " || $uri)
     let $funcsInModule := $module//xqdoc:function intersect $functions
+    
+    order by $order
     return
         app:print-module($module, $funcsInModule)
 };
@@ -123,6 +129,7 @@ declare %private function app:print-module($module as element(xqdoc:xqdoc), $fun
         <div class="functions">
             {
                 for $function in $functions
+                order by $function/xqdoc:name
                 return
                     app:print-function($function)
             }
