@@ -2,7 +2,6 @@
 <project default="xar" name="fundocs">
     <property name="build.dir" value="build"/>
     <property name="server.url" value="http://demo.exist-db.org/exist/apps/public-repo/public/"/>
-    <property name="server.pass" value=""/>
 
     <target name="xar">
         <mkdir dir="${build.dir}"/>
@@ -10,6 +9,9 @@
     </target>
     <target name="upload">
         <property name="xar" value="fundocs-0.1.xar"/>
+        <input message="Enter password:" addproperty="server.pass" defaultvalue="">
+            <handler type="secure"/>
+        </input>
         <exec executable="curl">
                 <arg line="-T ${build.dir}/${xar} -u admin:${server.pass} ${server.url}/${xar}"/>
         </exec>
