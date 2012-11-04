@@ -1,6 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
 
+@import url('$shared/resources/css/fonts.css');
 @import url('bootstrap.min.css');
 @import url('dropdowns.css');
 @import url('fundocs.css');
@@ -102,7 +103,7 @@ body { color: #222; background: url(../images/body.gif) repeat 50% 100%; }
 
 p { padding: 5px 0; }
 
-h1 { font: 38px "Quicksand", "Arial", "Helvetica", sans-serif;
+h1 { font: 38px "QuicksandBook", "Arial", "Helvetica", sans-serif;
     color: #0083CB;
     border-bottom: 1px solid #C7C7C7;
     padding-bottom: 15px;
