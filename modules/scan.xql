@@ -25,8 +25,7 @@ declare %private function docs:load-stored($path as xs:anyURI, $store as functio
     let $meta := inspect:inspect-module($path)
     return
         if ($meta) then
-            let $xml := docs:generate-xqdoc($meta, $path)
-            let $name := replace($path, "^.*/([^/]+)\.[^\.]+$", "$1")
+            let $xml := docs:generate-xqdoc($meta)
             let $moduleURI := $xml//xqdoc:module/xqdoc:uri
             return
                 $store($path, $xml)
@@ -43,18 +42,21 @@ declare %private function docs:load-external-modules($store as function(xs:strin
         try {
             docs:load-stored($path, $store)
         } catch * {
-            util:log("DEBUG", "Error: " || $err:description)
+            (: Expected to fail if XQuery file is not a library module :)
+            ()
         }
 };
 
 declare %private function docs:load-internal-modules($store as function(xs:string, element()) as empty()) {
     for $moduleURI in util:registered-modules()
-	let $moduleDocs := util:extract-docs($moduleURI)
-	return 
-	   if ($moduleDocs) then
-           $store($moduleURI, $moduleDocs)
-	   else
-	      ()
+    let $meta := inspect:inspect-module-uri($moduleURI)
+    return
+        if ($meta) then
+            let $xml := docs:generate-xqdoc($meta)
+            return
+                $store($moduleURI, $xml)
+        else
+            util:log("WARN", "Module not found: " || $moduleURI)
 };
 
 declare function docs:load-fundocs($target as xs:string) {
@@ -73,11 +75,11 @@ declare function docs:load-fundocs($target as xs:string) {
     )
 };
 
-declare function docs:generate-xqdoc($module as element(module), $location as xs:anyURI) {
+declare function docs:generate-xqdoc($module as element(module)) {
     <xqdoc:xqdoc xmlns:xqdoc="http://www.xqdoc.org/1.0">
         <xqdoc:control>
             <xqdoc:date>{current-dateTime()}</xqdoc:date>
-            <xqdoc:location>{$location}</xqdoc:location>
+            <xqdoc:location>{$module/@location/string()}</xqdoc:location>
         </xqdoc:control>
         <xqdoc:module type="library">
             <xqdoc:uri>{$module/@uri/string()}</xqdoc:uri>

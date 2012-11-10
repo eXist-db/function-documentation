@@ -27,7 +27,7 @@ else if (ends-with($exist:resource, ".html")) then
     </dispatch>
 
 (: Requests for javascript libraries are resolved to the file system :)
-else if (starts-with($exist:path, "/$shared/")) then
+else if (contains($exist:path, "/$shared/")) then
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
         <forward url="/shared-resources/{substring-after($exist:path, '/$shared/')}"/>
     </dispatch>

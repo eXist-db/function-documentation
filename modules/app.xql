@@ -53,7 +53,7 @@ declare %private function app:browse($node as node(), $module as xs:string?) {
         then collection($config:app-data)/xqdoc:xqdoc//xqdoc:function
         else
             if ($module eq "AllCoreFunctions") 
-            then collection($config:app-data)/xqdoc:xqdoc[not(xqdoc:control/xqdoc:location)]//xqdoc:function
+            then collection($config:app-data)/xqdoc:xqdoc[starts-with(xqdoc:control/xqdoc:location, "java:")]//xqdoc:function
             else
                 if ($module eq "AllAppFunctions") 
                 then collection($config:app-data)/xqdoc:xqdoc[xqdoc:control/xqdoc:location/text()]//xqdoc:function

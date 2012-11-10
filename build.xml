@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="xar" name="fundocs">
+    <property name="project.version" value="0.2"/>
     <property name="build.dir" value="build"/>
     <property name="server.url" value="http://demo.exist-db.org/exist/apps/public-repo/public/"/>
 
     <target name="xar">
         <mkdir dir="${build.dir}"/>
-        <zip basedir="." destfile="${build.dir}/fundocs-0.1.xar" excludes="${build.dir}/* data/**"/>
+        <zip basedir="." destfile="${build.dir}/fundocs-${project.version}.xar" excludes="${build.dir}/* data/**"/>
     </target>
     <target name="upload">
-        <property name="xar" value="fundocs-0.1.xar"/>
+        <property name="xar" value="fundocs-{$project.version}.xar"/>
         <input message="Enter password:" addproperty="server.pass" defaultvalue="">
             <handler type="secure"/>
         </input>
