@@ -9,7 +9,7 @@
         <zip basedir="." destfile="${build.dir}/fundocs-${project.version}.xar" excludes="${build.dir}/* data/**"/>
     </target>
     <target name="upload">
-        <property name="xar" value="fundocs-{$project.version}.xar"/>
+        <property name="xar" value="fundocs-${project.version}.xar"/>
         <input message="Enter password:" addproperty="server.pass" defaultvalue="">
             <handler type="secure"/>
         </input>

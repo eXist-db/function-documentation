@@ -114,12 +114,20 @@ declare function docs:generate-xqdoc($module as element(module)) {
                             return
                                 <xqdoc:param>${$param/@var/string()}{" "}{$param/text()}</xqdoc:param>
                         }
-                        <xqdoc:return>{$func/returns/text()}</xqdoc:return>
+                        <xqdoc:return>{$func/returns/@type/string()}{docs:cardinality($func/returns/@cardinality)}</xqdoc:return>
                     </xqdoc:comment>
                 </xqdoc:function>
         }
         </xqdoc:functions>
     </xqdoc:xqdoc>
+};
+
+declare function docs:cardinality($cardinality as xs:string) {
+    switch ($cardinality)
+        case "zero or one" return "?"
+        case "zero or more" return "*"
+        case "one or more" return "+"
+        default return ()
 };
 
 declare function docs:generate-signature($func as element(function)) {
