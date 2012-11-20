@@ -7,8 +7,8 @@
     <repo:license>GNU-LGPL</repo:license>
     <repo:copyright>true</repo:copyright>
     <repo:type>application</repo:type>
-    <repo:target>/db/xqfdocs</repo:target>
+    <repo:target>/db/fundocs</repo:target>
     <repo:prepare>pre-install.xql</repo:prepare>
     <repo:finish>post-install.xql</repo:finish>
-    <deployed>2012-03-07T18:21:45.479+01:00</deployed>
+    <deployed>2012-10-24T13:32:04.2+02:00</deployed>
 </repo:meta>
