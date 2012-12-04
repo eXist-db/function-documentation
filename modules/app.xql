@@ -151,13 +151,20 @@ declare %private function app:print-function($function as element(xqdoc:function
             <div class="function-detail">
                 <p class="description">{ (: DWES xqdoc: :) $comment/description/node() }</p>
                 
-                <dl class="parameters">
-                    <dt>Parameters:</dt>
-                    <dd>
+                <dl class="parameters">          
                     {
-                        app:print-parameters($comment/xqdoc:param)
+                        if($comment/xqdoc:param) then 
+                            <div>
+                                <dt>Parameters:</dt>
+                                <dd>
+                                {
+                                    app:print-parameters($comment/xqdoc:param)
+                                }
+                                </dd>
+                            </div>
+                        else 
+                            ""
                     }
-                    </dd>
                     <dt>Returns:</dt>
                     <dd>
                     {
