@@ -149,7 +149,7 @@ declare %private function app:print-function($function as element(xqdoc:function
                 <div class="signature" data-language="xquery">{ $function/xqdoc:signature/node() }</div>
             </div>
             <div class="function-detail">
-                <p class="description">{ $comment/xqdoc:description/node() }</p>
+                <p class="description">{ (: DWES xqdoc: :) $comment/description/node() }</p>
                 
                 <dl class="parameters">
                     <dt>Parameters:</dt>
