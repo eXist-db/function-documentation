@@ -112,7 +112,7 @@ declare function docs:generate-xqdoc($module as element(module)) {
                         {
                             for $param in $func/argument
                             return
-                                <xqdoc:param>${$param/@var/string()}{" "}{$param/text()}</xqdoc:param>
+                                <xqdoc:param>${$param/@var/string()}{docs:cardinality($param/@cardinality)}{" "}{$param/text()}</xqdoc:param>
                         }
                         <xqdoc:return>{$func/returns/@type/string()}{docs:cardinality($func/returns/@cardinality)} - {$func/returns/text()}</xqdoc:return>
                     </xqdoc:comment>
@@ -135,8 +135,8 @@ declare function docs:generate-signature($func as element(function)) {
     string-join(
         for $param in $func/argument
         return
-            "$" || $param/@var/string() || " as " || $param/@type/string(),
+            "$" || $param/@var/string() || docs:cardinality($param/@cardinality)  || " as " || $param/@type/string(),
         ", "
-    ) ||
-    ")"
+    ) || 
+    ")" || " as " || $func/returns/@type/string() || docs:cardinality($func/returns/@cardinality)
 };
