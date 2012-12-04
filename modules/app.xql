@@ -20,7 +20,7 @@ declare function app:modules-select($node as node(), $model as map(*), $module a
             let $location := $function/xqdoc:control/xqdoc:location/text()
             let $option := concat($uri, if ($location) then ' @ ' else '', $location)
             let $order := (if ($location) then $location else " " || $uri)
-            order by $order
+            order by $uri, $order
             
             return
                 <option value="{$option}">
@@ -48,19 +48,22 @@ function app:action($node as node(), $model as map(*), $action as xs:string, $mo
 declare %private function app:browse($node as node(), $module as xs:string?) {
     let $location := if (contains($module, '@')) then substring-after($module, ' @ ') else ''
     let $module := if (contains($module, '@')) then substring-before($module, ' @ ') else $module
-    let $functions :=        
-        if ($module = ("AllFunctions", "All")) 
-        then collection($config:app-data)/xqdoc:xqdoc//xqdoc:function
-        else
-            if ($module eq "AllCoreFunctions") 
-            then collection($config:app-data)/xqdoc:xqdoc[starts-with(xqdoc:control/xqdoc:location, "java:")]//xqdoc:function
-            else
-                if ($module eq "AllAppFunctions") 
-                then collection($config:app-data)/xqdoc:xqdoc[xqdoc:control/xqdoc:location/text()]//xqdoc:function
-                else
-                    if ($location)
-                    then collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri = $module][xqdoc:control/xqdoc:location = $location]//xqdoc:function
-                    else collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri = $module]//xqdoc:function
+    
+    let $functions := switch ($module)
+        case "AllFunctions" 
+        case "All" 
+            return collection($config:app-data)/xqdoc:xqdoc//xqdoc:function
+        case "AllCoreFunctions" 
+            return collection($config:app-data)/xqdoc:xqdoc[starts-with(xqdoc:control/xqdoc:location, "java:")]//xqdoc:function
+        case "AllAppFunctions"
+            return collection($config:app-data)/xqdoc:xqdoc[xqdoc:control/xqdoc:location/text()]//xqdoc:function
+        default
+            return
+                if ($location)
+                then 
+                    collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri = $module][xqdoc:control/xqdoc:location = $location]//xqdoc:function
+                else 
+                    collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri = $module]//xqdoc:function
     return
         map { "result" := $functions }
 };
