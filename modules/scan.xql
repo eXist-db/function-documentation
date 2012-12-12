@@ -97,7 +97,7 @@ declare function docs:generate-xqdoc($module as element(module)) {
                         <xqdoc:author>{$module/author/string()}</xqdoc:author>
                     else
                         ()
-                }    
+                }
             </xqdoc:comment>
         </xqdoc:module>
         <xqdoc:functions>
@@ -115,6 +115,12 @@ declare function docs:generate-xqdoc($module as element(module)) {
                                 <xqdoc:param>${$param/@var/string()}{docs:cardinality($param/@cardinality)}{" "}{$param/text()}</xqdoc:param>
                         }
                         <xqdoc:return>{$func/returns/@type/string()}{docs:cardinality($func/returns/@cardinality)} - {$func/returns/text()}</xqdoc:return>
+                        {
+                            if ($func/deprecated) then
+                                <xqdoc:deprecated>{$func/deprecated/string()}</xqdoc:deprecated>
+                            else
+                                ()
+                        }  
                     </xqdoc:comment>
                 </xqdoc:function>
         }
