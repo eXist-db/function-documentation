@@ -176,18 +176,16 @@ declare %private function app:print-function($function as element(xqdoc:function
                             else
                                 ""
                     }
-                    <dd>
-                        {
+                    {
                         if($comment/xqdoc:deprecated) then 
-                            <div><dt>Deprecated:</dt>
-                                <dd>
-                                { $comment/xqdoc:deprecated/string() }
-                                </dd>
+                            <div>
+                                <dt>Deprecated:</dt>
+                                <dd>{ $comment/xqdoc:deprecated/string() }</dd>
                             </div>
                         else 
                             ""
                     }
-                    </dd>
+         
                 </dl>
             </div>
         </div>
