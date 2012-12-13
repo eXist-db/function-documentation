@@ -165,14 +165,17 @@ declare %private function app:print-function($function as element(xqdoc:function
                         else 
                             ""
                     }
-                    <dt>Returns:</dt>
-                    <dd>
                     {
                         let $returnValue := $comment/xqdoc:return/node()
                         return
-                            <p>{ if( $returnValue ) then $returnValue else "empty()" }</p>
+                            if($returnValue) then
+                                <div>
+                                    <dt>Returns:</dt>
+                                    <dd>{ $returnValue }</dd>
+                                </div>
+                            else
+                                ""
                     }
-                    </dd>
                     <dd>
                         {
                         if($comment/xqdoc:deprecated) then 
