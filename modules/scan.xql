@@ -108,7 +108,7 @@ declare function docs:generate-xqdoc($module as element(module)) {
                     <xqdoc:name>{$func/@name/string()}</xqdoc:name>
                     <xqdoc:signature>{docs:generate-signature($func)}</xqdoc:signature>
                     <xqdoc:comment>
-                        {$func/description}
+                        <xqdoc:description>{$func/description/string()}</xqdoc:description>
                         {
                             for $param in $func/argument
                             return
