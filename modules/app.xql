@@ -105,7 +105,10 @@ declare %private function app:print-module($module as element(xqdoc:xqdoc), $fun
                     let $location := $module/xqdoc:control/xqdoc:location/text()
                     return
                         if ($location) then
-                            <h4><a href="../eXide/index.html?open={$location}">{$location}</a></h4>
+                            if (starts-with($location, '/db')) then
+                                <h4><a href="../eXide/index.html?open={$location}">{$location}</a></h4>
+                            else
+                                <h4>{$location}</h4>
                         else
                             ()
                 }
