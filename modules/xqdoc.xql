@@ -90,7 +90,7 @@ declare function xqdoc:print-function($function as element(xqdoc:function)) {
                 {
                     for $param in $function/xqdoc:comment/xqdoc:param
                     return
-                        <li>{ $param/node() }</li>
+                        <li>{  $param/node() }</li>
                 }
                 </ul>
             </div>

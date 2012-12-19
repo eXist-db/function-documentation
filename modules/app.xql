@@ -227,3 +227,51 @@ declare function app:import-ace($node as node(), $model as map(*)) {
         }
         </script>
 };
+
+declare 
+    %templates:default("w3c", "false")
+    %templates:default("extensions", "false")
+    %templates:default("appmodules", "false")
+function app:showmodules($node as node(), $model as map(*),  $w3c as xs:boolean, $extensions as xs:boolean, $appmodules as xs:boolean) {
+    
+    for $module in collection($config:app-data)//xqdoc:xqdoc
+    
+    let $uri := $module/xqdoc:module/xqdoc:uri/text()
+    let $location := $module/xqdoc:control/xqdoc:location/text()
+
+    (: path to anchor module :)
+    let $query := "?" || "uri=" || $uri || (if ($location) then ("&amp;location=" || $location) else "#")
+    
+    order by $uri
+    return 
+        if ( 
+            ($w3c and starts-with($uri, 'http://www.w3.org') ) or 
+            ($extensions and starts-with($uri, 'http://exist-db.org/xquery') and not(starts-with($location, '/db'))) or
+            ($extensions and starts-with($uri, 'http://exist-db.org/') and not($location)) or
+            ($appmodules and starts-with($location, '/db'))
+           ) then
+            <tr><td><a href="view.html{$query}">{$uri}</a></td><td>{$location}</td></tr> 
+        else
+            ()
+  
+        
+};
+
+
+declare %templates:default("uri", "http://www.w3.org/2005/xpath-functions")
+function app:view($node as node(), $model as map(*),  $uri as xs:string, $location as xs:string?, $function as xs:string?) {
+    
+    let $modules :=  if ($location)  then
+                        collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri eq $uri][xqdoc:control/xqdoc:location eq $location]
+                     else
+                        collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri eq $uri]
+    return
+        for $module in $modules
+        return
+            if ($function) then
+                    for $xqdocfunction in $module//xqdoc:function[xqdoc:name eq $function]
+                    return
+                        app:print-function($xqdocfunction)
+                else
+                    app:print-module($module, $module//xqdoc:function)
+};
