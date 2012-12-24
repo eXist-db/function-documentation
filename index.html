@@ -5,7 +5,7 @@
         <table>
             <tr>
                 <td class="f-btn" width="10%">
-                    <button id="f-btn-search" type="submit" name="action" value="search" class="btn">Search</button>
+                    <button id="f-btn-search" type="submit" name="action" value="search" class="btn btn-block">Search</button>
                 </td>
                 <td width="10%">
                     <select name="type" class="templates:form-control">
@@ -13,33 +13,29 @@
                         <option value="desc">Description</option>
                     </select>
                 </td>
-                <td width="5%" style="text-align:center">for</td>
+                <td width="3%" style="text-align:center">for</td>
                 <td>
                     <input id="query-field" name="q" type="text" class="templates:form-control"/>
                 </td>
             </tr>
             <tr>
-                <td class="f-btn">
-                    <button id="f-btn-browse" type="submit" name="action" class="btn" value="browse">Browse</button>
+                <td>
+                    <a id="browse" class="btn btn-block" href="browse.html?extensions=true">Browse</a>
                 </td>
-                <td colspan="3">
-                    <select name="module" class="app:modules-select">
-                        <option value="All">All</option>
-                    </select>
-                </td>
+                <td colspan="3">Browse all functions</td>
             </tr>
             <tr>
-                <td>
-                    <button id="f-btn-reindex" class="btn">Regenerate</button>
+                <td class="f-btn" width="10%">
+                    <button id="f-btn-reindex" class="btn btn-block">Regenerate</button>
                 </td>
                 <td colspan="3">XQuery Function Documentation (after modification of functions or addition of functions)</td>
             </tr>
             <tr>
                 <td/>
-                <td/>
                 <td>
                     <img id="f-load-indicator" src="resources/images/ajax-loader.gif"/>
                 </td>
+                <td/>
                 <td/>
             </tr>
         </table>

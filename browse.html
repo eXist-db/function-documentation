@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <div class="templates:surround?with=templates/page.html&amp;at=content">
     <h1>XQuery Function Documentation</h1>
-    <table>
-        <tr>
-            <td>
-                <a id="w3c" class="btn" href="?w3c=true">W3C XPath functions</a>
-            </td>
-            <td>
-                <a id="extensions" class="btn" href="?extensions=true">Extension functions</a>
-            </td>
-            <td>
-                <a id="appmodules" class="btn" href="?appmodules=true">Application modules</a>
-            </td>
-        </tr>
-    </table>
+    <form class="form-inline">
+        <label class="checkbox inline">
+            <input class="templates:form-control" type="checkbox" name="w3c" value="true">W3C XPath functions</input>
+        </label>
+        <label class="checkbox inline">
+            <input class="templates:form-control" type="checkbox" name="extensions" value="true">Extension functions</input>
+        </label>
+        <label class="checkbox inline">
+            <input class="templates:form-control" type="checkbox" name="appmodules" value="true">Application modules</input>
+        </label>
+        <!-- ToDo: add more space -->
+        <button class="btn">Filter</button>
+    </form>
     <br/>
     <div id="results">
         <table class="table table-striped table-hover table-condensed">
