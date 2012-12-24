@@ -115,7 +115,7 @@ declare function docs:generate-xqdoc($module as element(module)) {
                                 <xqdoc:param>${$param/@var/string()}{docs:cardinality($param/@cardinality)}{" "}{$param/text()}</xqdoc:param>
                         }
                         <xqdoc:return>
-                        {$func/returns/@type/string()}{docs:cardinality($func/returns/@cardinality)}{if($func/returns) then " : " || $func/returns/text() else ""}
+                        {$func/returns/@type/string()}{docs:cardinality($func/returns/@cardinality)}{if(empty($func/returns/text())) then "" else " : " || $func/returns/text()}
         
                         </xqdoc:return>
                         {
