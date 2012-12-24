@@ -97,13 +97,14 @@ declare function app:module($node as node(), $model as map(*)) {
 };
 
 declare %private function app:print-module($module as element(xqdoc:xqdoc), $functions as element(xqdoc:function)*) {
+    let $location := $module/xqdoc:control/xqdoc:location/text()
+    let $uri := $module/xqdoc:module/xqdoc:uri/text()
+    return
     <div class="module">
         <div class="module-head">
             <div class="module-head-inner">
-                <h3>{ $module/xqdoc:module/xqdoc:uri/text() }</h3>
+                <h3><a href="view.html?uri={$uri}&amp;location={$location}">{ $uri }</a></h3>
                 {
-                    let $location := $module/xqdoc:control/xqdoc:location/text()
-                    return
                         if ($location) then
                             if (starts-with($location, '/db')) then
                                 <h4><a href="../eXide/index.html?open={$location}">{$location}</a></h4>
