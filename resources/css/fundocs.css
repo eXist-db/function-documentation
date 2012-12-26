@@ -3,7 +3,7 @@
     margin: 10px 0 30px 0;
 }
 
-#fun-query-form input, #fun-query-form select, #fun-query-form button {
+#fun-query-form input, #fun-query-form select, #fun-query-form button, #fun-query-form a.btn {
     font-size: 14px;
 }
 
