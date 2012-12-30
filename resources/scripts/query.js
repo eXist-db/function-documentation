@@ -32,6 +32,7 @@ $(document).ready(function() {
     
     $("#f-btn-reindex").click(function(ev) {
         ev.preventDefault();
+        $("#messages").empty();
         $("#f-load-indicator").show();
         $.ajax({
             type: "POST",
