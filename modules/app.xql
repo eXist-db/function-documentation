@@ -7,30 +7,6 @@ declare namespace xqdoc="http://www.xqdoc.org/1.0";
 import module namespace templates="http://exist-db.org/xquery/templates" at "templates.xql";
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
 
-declare function app:modules-select($node as node(), $model as map(*), $module as xs:string?) {
-    <select name="module">
-        <option value="AllFunctions">All Functions</option>
-        <option value="AllCoreFunctions">All Core Functions</option>
-        <option value="AllAppFunctions">All App Functions</option>
-        <option value="All">---</option>
-        {
-            let $functions := collection($config:app-data)//xqdoc:xqdoc
-            for $function in $functions[xqdoc:module[xqdoc:uri/text()]]
-            let $uri := $function/xqdoc:module/xqdoc:uri/text()
-            let $location := $function/xqdoc:control/xqdoc:location/text()
-            let $option := concat($uri, if ($location) then ' @ ' else '', $location)
-            let $order := (if ($location) then $location else " " || $uri)
-            order by $uri, $order
-            
-            return
-                <option value="{$option}">
-                { if ($option eq $module) then attribute selected { "true" } else () }
-                { $option }
-                </option>
-        }
-    </select>
-};
-
 declare 
     %templates:default("action", "search")
     %templates:default("type", "name")
@@ -46,24 +22,7 @@ function app:action($node as node(), $model as map(*), $action as xs:string, $mo
 };
 
 declare %private function app:browse($node as node(), $module as xs:string?) {
-    let $location := if (contains($module, '@')) then substring-after($module, ' @ ') else ''
-    let $module := if (contains($module, '@')) then substring-before($module, ' @ ') else $module
-    
-    let $functions := switch ($module)
-        case "AllFunctions" 
-        case "All" 
-            return collection($config:app-data)/xqdoc:xqdoc//xqdoc:function
-        case "AllCoreFunctions" 
-            return collection($config:app-data)/xqdoc:xqdoc[starts-with(xqdoc:control/xqdoc:location, "java:")]//xqdoc:function
-        case "AllAppFunctions"
-            return collection($config:app-data)/xqdoc:xqdoc[xqdoc:control/xqdoc:location/text()]//xqdoc:function
-        default
-            return
-                if ($location)
-                then 
-                    collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri = $module][xqdoc:control/xqdoc:location = $location]//xqdoc:function
-                else 
-                    collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri = $module]//xqdoc:function
+    let $functions := collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri = $module]//xqdoc:function
     return
         map { "result" := $functions }
 };
@@ -84,8 +43,7 @@ declare %private function app:search($node as node(), $module as xs:string?,
 
 declare function app:module($node as node(), $model as map(*)) {
     let $functions := $model("result")
-    for $module in $functions/ancestor::xqdoc:xqdoc
-    
+    for $module in $functions/ancestor::xqdoc:xqdoc    
     let $uri := $module/xqdoc:module/xqdoc:uri/text()
     let $location := $module/xqdoc:control/xqdoc:location/text()
     let $order := (if ($location) then $location else " " || $uri)
