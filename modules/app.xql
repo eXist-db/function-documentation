@@ -159,14 +159,14 @@ declare %private function app:print-function($function as element(xqdoc:function
                 <dl class="parameters">          
                     {
                         if($comment/xqdoc:param) then 
-                            <div>
-                                <dt>Parameters:</dt>
+                            (
+                                <dt>Parameters:</dt>,
                                 <dd>
                                 {
                                     app:print-parameters($comment/xqdoc:param)
                                 }
                                 </dd>
-                            </div>
+                            )
                         else 
                             ""
                     }
@@ -174,19 +174,19 @@ declare %private function app:print-function($function as element(xqdoc:function
                         let $returnValue := $comment/xqdoc:return/node()
                         return
                             if($returnValue) then
-                                <div>
-                                    <dt>Returns:</dt>
+                                (
+                                    <dt>Returns:</dt>,
                                     <dd>{ $returnValue }</dd>
-                                </div>
+                                )
                             else
                                 ""
                     }
                     {
                         if($comment/xqdoc:deprecated) then 
-                            <div>
-                                <dt>Deprecated:</dt>
+                            (
+                                <dt>Deprecated:</dt>,
                                 <dd>{ $comment/xqdoc:deprecated/string() }</dd>
-                            </div>
+                            )
                         else 
                             ""
                     }
