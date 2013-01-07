@@ -105,8 +105,10 @@ declare %private function app:print-module($module as element(xqdoc:xqdoc), $fun
 declare %private function app:print-function($function as element(xqdoc:function)) {
     let $comment := $function/xqdoc:comment
     let $function-name := $function/xqdoc:name/node()
+    let $arity := count($function/xqdoc:comment/xqdoc:param)
+    let $function-identifier := (substring-after($function-name, ":") || '/' || $arity)
     return
-        <div class="function" id="{$function-name}">
+        <div class="function" id="{$function-identifier}">
             <div class="function-head">
                 <h4>{$function-name}</h4>
                 <div class="signature" data-language="xquery">{ $function/xqdoc:signature/node() }</div>
