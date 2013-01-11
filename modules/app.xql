@@ -106,7 +106,7 @@ declare %private function app:print-function($function as element(xqdoc:function
     let $comment := $function/xqdoc:comment
     let $function-name := $function/xqdoc:name/node()
     let $arity := count($function/xqdoc:comment/xqdoc:param)
-    let $function-identifier := (substring-after($function-name, ":") || '/' || $arity)
+    let $function-identifier := (substring-after($function-name, ":") || '.' || $arity)
     return
         <div class="function" id="{$function-identifier}">
             <div class="function-head">
