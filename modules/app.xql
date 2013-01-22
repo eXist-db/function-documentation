@@ -104,9 +104,18 @@ declare %private function app:print-module($module as element(xqdoc:xqdoc), $fun
 
 declare %private function app:print-function($function as element(xqdoc:function)) {
     let $comment := $function/xqdoc:comment
-    let $function-name := $function/xqdoc:name/node()
+    let $function-name := $function/xqdoc:name
     let $arity := count($function/xqdoc:comment/xqdoc:param)
-    let $function-identifier := (substring-after($function-name, ":") || '.' || $arity)
+    let $arity := 
+        (: If there are params in the signature, but these are not listed in comment/param, do not state that the number of params is 0. :)
+        if ($arity eq 0 and contains($function/xqdoc:signature, '$'))
+        then ()
+        else ('.' || $arity)
+    let $function-identifier := 
+        (: If the name has no prefix, use the name as it is. :)
+        if (contains($function-name, ':'))
+        then (substring-after($function-name, ":") || $arity)
+        else ($function-name || $arity)
     return
         <div class="function" id="{$function-identifier}">
             <div class="function-head">
