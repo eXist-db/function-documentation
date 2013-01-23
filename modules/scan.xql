@@ -144,7 +144,7 @@ declare function docs:generate-signature($func as element(function)) {
     string-join(
         for $param in $func/argument
         return
-            "$" || $param/@var/string() || docs:cardinality($param/@cardinality)  || " as " || $param/@type/string(),
+            "$" || $param/@var/string()  || " as " || $param/@type/string() || docs:cardinality($param/@cardinality),
         ", "
     ) || 
     ")" || " as " || $func/returns/@type/string() || docs:cardinality($func/returns/@cardinality)
