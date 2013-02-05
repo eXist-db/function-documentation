@@ -3,7 +3,6 @@ xquery version "3.0";
 module namespace docs="http://exist-db.org/xquery/docs";
 
 import module namespace xdb="http://exist-db.org/xquery/xmldb";
-import module namespace xqdm="http://exist-db.org/xquery/xqdoc";
 import module namespace dbutil="http://exist-db.org/xquery/dbutil" at "dbutils.xql";
 import module namespace inspect="http://exist-db.org/xquery/inspection" at "java:org.exist.xquery.functions.inspect.InspectionModule";
 
@@ -14,11 +13,16 @@ declare %private function docs:create-collection($parent as xs:string, $child as
     return ()
 };
 
-declare %private function docs:load-external($uri as xs:string, $store as function(xs:string, element()) as empty()) {
-    let $xml := xqdm:scan(xs:anyURI($uri))
-    let $moduleURI := $xml//xqdoc:module/xqdoc:uri
+declare %private function docs:load-external($uri as xs:anyURI, $store as function(xs:string, element()) as empty()) {
+    let $meta := inspect:inspect-module-uri($uri)
     return
-        $store($moduleURI, $xml)
+        if ($meta) then
+            let $xml := docs:generate-xqdoc($meta)
+            let $moduleURI := $xml//xqdoc:module/xqdoc:uri
+            return
+                $store($uri, $xml)
+        else
+            ()
 };
 
 declare %private function docs:load-stored($path as xs:anyURI, $store as function(xs:string, element()) as empty()) {
