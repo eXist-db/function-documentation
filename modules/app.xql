@@ -57,6 +57,8 @@ declare function app:module($node as node(), $model as map(*)) {
 declare %private function app:print-module($module as element(xqdoc:xqdoc), $functions as element(xqdoc:function)*) {
     let $location := $module/xqdoc:control/xqdoc:location/text()
     let $uri := $module/xqdoc:module/xqdoc:uri/text()
+    let $description := $module/xqdoc:module/xqdoc:comment/xqdoc:description/node()
+    let $parsed := if (contains($description, '&lt;') or contains($description, '&amp;')) then $description else util:parse("<div>" || replace($description, "\n{2,}", "<br/>") || "</div>")/*/node()
     return
     <div class="module">
         <div class="module-head">
@@ -71,7 +73,7 @@ declare %private function app:print-module($module as element(xqdoc:xqdoc), $fun
                         else
                             ()
                 }
-                <p class="module-description">{ $module/xqdoc:module/xqdoc:comment/xqdoc:description/node() }</p>
+                <p class="module-description">{ $parsed }</p>
                 {
                     let $metadata := $module/xqdoc:module/xqdoc:comment/(xqdoc:author|xqdoc:version|xqdoc:since)
                     return
@@ -116,6 +118,8 @@ declare %private function app:print-function($function as element(xqdoc:function
         if (contains($function-name, ':'))
         then (substring-after($function-name, ":") || $arity)
         else ($function-name || $arity)
+    let $description := $comment/xqdoc:description/node()
+    let $parsed := if (contains($description, '&lt;') or contains($description, '&amp;')) then $description else util:parse("<div>" || replace($description, "\n{2,}", "<br/>") || "</div>")/*/node()
     return
         <div class="function" id="{$function-identifier}">
             <div class="function-head">
@@ -123,7 +127,7 @@ declare %private function app:print-function($function as element(xqdoc:function
                 <div class="signature" data-language="xquery">{ $function/xqdoc:signature/node() }</div>
             </div>
             <div class="function-detail">
-                <p class="description">{ $comment/xqdoc:description/node() }</p>
+                <p class="description">{ $parsed }</p>
                 
                 <dl class="parameters">          
                     {
@@ -218,7 +222,7 @@ function app:showmodules($node as node(), $model as map(*),  $w3c as xs:boolean,
         if ( 
             ($w3c and starts-with($uri, 'http://www.w3.org') ) or 
             ($extensions and starts-with($uri, 'http://exist-db.org/xquery') and not(starts-with($location, '/db'))) or
-            ($extensions and starts-with($uri, 'http://exist-db.org/') and not($location)) or
+            ($extensions and starts-with($uri, 'http://exist-db.org/') and empty($location)) or
             ($appmodules and starts-with($location, '/db'))
            ) then
             <tr><td><a href="view.html{$query}">{$uri}</a></td><td>{$location}</td></tr> 
