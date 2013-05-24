@@ -11,4 +11,5 @@
     <target>fundocs</target>
     <prepare>pre-install.xql</prepare>
     <finish>post-install.xql</finish>
+    <deployed>2013-05-23T23:42:51.385+02:00</deployed>
 </meta>
