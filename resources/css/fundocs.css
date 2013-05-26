@@ -1,3 +1,5 @@
+@import url('$shared/resources/css/exist.css');
+
 #fun-query-form {
     font-size: 14px;
     margin: 10px 0 30px 0;
@@ -9,6 +11,10 @@
 
 #fun-query-form td {
     padding: 4px 8px;
+}
+
+select[name='module'] {
+    width:50em;
 }
 
 .messages {
