@@ -31,7 +31,9 @@ declare %private function app:search($node as node(), $module as xs:string?,
     $q as xs:string?, $type as xs:string) {
     let $functions :=
         switch( $type )
-            case "name" return
+        case "name" return
+            collection($config:app-data)/xqdoc:xqdoc//xqdoc:function[ngram:contains(xqdoc:name, $q)]
+        case "signature" return
             collection($config:app-data)/xqdoc:xqdoc//xqdoc:function[ngram:contains(xqdoc:signature, $q)]
         case "desc" return
             collection($config:app-data)/xqdoc:xqdoc//xqdoc:function[ngram:contains(xqdoc:comment/xqdoc:description, $q)]
