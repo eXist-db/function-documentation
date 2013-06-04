@@ -11,5 +11,6 @@
     <target>fundocs</target>
     <prepare>pre-install.xql</prepare>
     <finish>post-install.xql</finish>
-    <deployed>2013-05-23T23:42:51.385+02:00</deployed>
+    <note>When upgrading, please make sure you also updated the shared-resources package to > 0.3.5.</note>
+    <deployed>2013-05-26T20:07:28.513+02:00</deployed>
 </meta>
