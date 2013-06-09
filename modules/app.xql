@@ -7,6 +7,15 @@ declare namespace xqdoc="http://www.xqdoc.org/1.0";
 import module namespace templates="http://exist-db.org/xquery/templates" at "templates.xql";
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
 
+declare function app:check-user($node as node(), $model as map(*)) {
+    let $user := xmldb:get-current-user()
+    return
+        if (sm:is-dba($user)) then
+            ()
+        else
+            $node
+};
+
 declare 
     %templates:default("action", "search")
     %templates:default("type", "name")

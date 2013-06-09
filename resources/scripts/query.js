@@ -17,9 +17,60 @@ function search() {
     });
 }
 
+function checkLogin() {
+    $.ajax({
+        url: "login",
+        dataType: "json",
+        success: function(data) {
+            reindex();
+        },
+        error: function (xhr, textStatus) {
+            $("#loginDialog").modal("show");
+        }
+    });
+}
+
+function reindex() {
+    $("#messages").empty();
+    $("#f-load-indicator").show();
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "modules/reindex.xql",
+        success: function (data) {
+            $("#f-load-indicator").hide();
+            if (data.status == "failed") {
+                $("#messages").text(data.message);
+            } else {
+                window.location.href = ".";
+            }
+        }
+    });
+}
+
 var timeout = null;
 
 $(document).ready(function() {
+    var loginDialog = $("#loginDialog");
+    loginDialog.modal({
+        show: false
+    });
+    $("form", loginDialog).submit(function(ev) {
+        var params = $(this).serialize();
+        $.ajax({
+            url: "login",
+            data: params,
+            dataType: "json",
+            success: function(data) {
+                loginDialog.modal("hide");
+                reindex();
+            },
+            error: function(xhr, textStatus) {
+                $(".login-message", loginDialog).show().text("Login failed!");
+            }
+        });
+        return false;
+    });
     $("#f-load-indicator").hide();
     $("#query-field").keyup(function() {
         var val = $(this).val();
@@ -32,21 +83,7 @@ $(document).ready(function() {
     
     $("#f-btn-reindex").click(function(ev) {
         ev.preventDefault();
-        $("#messages").empty();
-        $("#f-load-indicator").show();
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            url: "modules/reindex.xql",
-            success: function (data) {
-                $("#f-load-indicator").hide();
-                if (data.status == "failed") {
-                    $("#messages").text(data.message);
-                } else {
-                    window.location.href = ".";
-                }
-            }
-        })
+        checkLogin();
     });
     
     $(".signature").highlight();

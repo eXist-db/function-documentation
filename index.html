@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <div class="templates:surround?with=templates/page.html&amp;at=content">
     <h1>XQuery Function Documentation</h1>
     <form id="fun-query-form" name="f-query" class="form-horizontal" action="" method="POST">
@@ -31,10 +32,46 @@
             </div>
         </div>
     </form>
+    <div class="alert alert-error" data-template="app:check-user">
+        It seems no function documentation has not been created yet. Please click on the <code>Regenerate</code> button
+        above to index all XQuery modules. This may take a few seconds.
+    </div>
     <div id="messages"/>
     <div id="results">
         <div class="app:action">
             <div class="app:module"/>
         </div>
+    </div>
+    <div class="modal hide fade" id="loginDialog">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">
+                <i class="icon-remove"/>
+            </a>
+            <h3>Login</h3>
+        </div>
+        <div class="alert alert-info">You must login as a dba user (e.g. "admin") to reindex the function documentation.</div>
+        <form class="login content" action="" method="POST">
+            <input type="hidden" name="duration" value="P14D"/>
+            <div class="modal-body">
+                <div class="control-group">
+                    <label for="user" class="control-label">User</label>
+                    <div class="controls">
+                        <input type="text" name="user" placeholder="User" required="required"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="password" class="control-label">Password</label>
+                    <div class="controls">
+                        <input type="password" name="password" placeholder="Password"/>
+                    </div>
+                </div>
+                <div class="alert alert-error hide login-message"/>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-small" type="submit">
+                    <i class="icon-user"/> Login
+                </button>
+            </div>
+        </form>
     </div>
 </div>

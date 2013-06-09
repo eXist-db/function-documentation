@@ -1,6 +1,8 @@
-xquery version "1.0";
+xquery version "3.0";
 
 import module namespace login="http://exist-db.org/xquery/login" at "resource:org/exist/xquery/modules/persistentlogin/login.xql";
+
+declare namespace json="http://www.json.org";
 
 declare variable $exist:root external;
 declare variable $exist:prefix external;
@@ -18,16 +20,32 @@ else if ($exist:path eq "/") then
         <redirect url="index.html"/>
     </dispatch>
 
+else if ($exist:resource eq "login") then
+    let $loggedIn := login:set-user("org.exist.login", (), true())
+    return
+        try {
+            util:declare-option("exist:serialize", "method=json"),
+            <status>
+                <user>{request:get-attribute("org.exist.login.user")}</user>
+                <isAdmin json:literal="true">{ xmldb:is-admin-user(request:get-attribute("org.exist.login.user")) }</isAdmin>
+            </status>
+        } catch * {
+            response:set-status-code(401),
+            <status>{$err:description}</status>
+        }
+        
 else if (ends-with($exist:resource, ".html")) then
-    (: the html page is run through view.xql to expand templates :)
-    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-        <view>
-            <forward url="{$exist:controller}/modules/view.xql">
-                <set-attribute name="$exist:prefix" value="{$exist:prefix}"/>
-                <set-attribute name="$exist:controller" value="{$exist:controller}"/>
-            </forward>
-        </view>
-    </dispatch>
+    let $loggedIn := login:set-user("org.exist.login", (), true())
+    return
+        (: the html page is run through view.xql to expand templates :)
+        <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
+            <view>
+                <forward url="{$exist:controller}/modules/view.xql">
+                    <set-attribute name="$exist:prefix" value="{$exist:prefix}"/>
+                    <set-attribute name="$exist:controller" value="{$exist:controller}"/>
+                </forward>
+            </view>
+        </dispatch>
 
 else if ($exist:resource = "reindex.xql") then
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
