@@ -8,9 +8,10 @@ import module namespace templates="http://exist-db.org/xquery/templates" at "tem
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
 
 declare function app:check-user($node as node(), $model as map(*)) {
+    let $data := collection($config:app-data)/xqdoc:xqdoc
     let $user := xmldb:get-current-user()
     return
-        if (sm:is-dba($user)) then
+        if (sm:is-dba($user) and exists($data)) then
             ()
         else
             $node
