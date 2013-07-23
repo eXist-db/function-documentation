@@ -26,18 +26,12 @@
                 <filter token="project.version" value="${project.version}"/>
             </filterset>
         </copy>
-        <zip destfile="${build}/${project.app}-${project.version}${git.commit}.xar">
-            <fileset dir=".">
-                <include name="*.*"/>
-                <include name="modules/**"/>
-                <include name="resources/**"/>
-                <include name="templates/**"/>
-                <exclude name="${build}/*"/>
-                <exclude name="${data}/**"/>
-                <exclude name=".git*"/>
-                <exclude name="*.tmpl"/>
-                <exclude name="*.properties"/>
-            </fileset>
+        <zip basedir="." destfile="${build}/${project.app}-${project.version}${git.commit}.xar">
+            <exclude name="${build}/*"/>
+            <exclude name="${data}/**"/>
+            <exclude name=".git*"/>
+            <exclude name="*.tmpl"/>
+            <exclude name="*.properties"/>
         </zip>
     </target>
     <target name="upload">
