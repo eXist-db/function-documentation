@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <div class="templates:surround?with=templates/page.html&amp;at=content">
     <h1>XQuery Function Documentation</h1>
     <form id="fun-query-form" name="f-query" class="form-horizontal" action="" method="POST">
@@ -22,19 +21,32 @@
                 <span class="help-inline">Browse all functions</span>
             </div>
         </div>
-        <div class="control-group">
+        <div class="control-group" data-template="app:check-dba-user-and-not-data">
             <label class="control-label">
                 <img id="f-load-indicator" src="resources/images/ajax-loader.gif"/>
             </label>
             <div class="controls">
                 <button id="f-btn-reindex" class="btn">Generate</button>
-                <span class="help-inline">XQuery Function Documentation (after modification or addition of functions)</span>
+                <span class="help-inline">XQuery Function Documentation after installation</span>
+            </div>
+        </div>
+        <div class="control-group" data-template="app:check-dba-user-and-data">
+            <label class="control-label">
+                <img id="f-load-indicator" src="resources/images/ajax-loader.gif"/>
+            </label>
+            <div class="controls">
+                <button id="f-btn-reindex" class="btn">Regenerate</button>
+                <span class="help-inline">XQuery Function Documentation after modification or addition of functions</span>
             </div>
         </div>
     </form>
-    <div class="alert alert-error" data-template="app:check-user">
-        The function documentation has not been generated yet. Please click on the <code>Generate</code> button
-        above to index all XQuery modules. This may take a few seconds.
+    <div class="alert alert-error" data-template="app:check-dba-user-and-not-data">
+        The function documentation has not been generated yet. Click on the <code>Generate</code> button
+        above to index all XQuery modules. This should take less than a minute.
+    </div>
+    <div class="alert alert-error" data-template="app:check-not-dba-user-and-not-data">
+        The function documentation has not been generated yet. Please contact the database administrator in order to have the the function documentation generated.
+        
     </div>
     <div id="messages"/>
     <div id="results">
