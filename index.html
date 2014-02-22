@@ -1,42 +1,52 @@
-<div class="templates:surround?with=templates/page.html&amp;at=content">
+<?xml version="1.0" encoding="UTF-8"?>
+<div class="templates:surround?with=templates/page.html&amp;at=main">
     <h1>XQuery Function Documentation</h1>
     <form id="fun-query-form" name="f-query" class="form-horizontal" action="" method="POST">
-        <div class="control-group">
-            <label class="control-label">Search</label>
-            <div class="controls">
-                <div class="input-prepend input-append">
-                    <select name="type" class="templates:form-control">
-                        <option value="name">Name</option>
-                        <option value="signature">Signature</option>
-                        <option value="desc">Description</option>
-                    </select>
-                    <input id="query-field" name="q" type="text" class="templates:form-control"/>
-                    <button id="f-btn-search" type="submit" name="action" value="search" class="btn btn-primary">Search</button>
-                </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Search</label>
+            <div class="col-md-2">
+                <select name="type" class="templates:form-control form-control">
+                    <option value="name">Name</option>
+                    <option value="signature">Signature</option>
+                    <option value="desc">Description</option>
+                </select>
+            </div>
+            <span class="input-group col-md-4">
+                <input id="query-field" name="q" type="text" autofocus="autofocus" class="templates:form-control form-control"/>
+                <span class="input-group-btn">
+                    <button id="f-btn-search" type="submit" name="action" value="search" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-search"/> Search
+                    </button>
+                </span>
+            </span>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">
+                Browse all functions
+            </label>
+            <div class="col-md-2">
+                <a id="browse" class="btn btn-primary" href="browse.html?extensions=true">
+                    <span class="glyphicon glyphicon-globe"/> Browse</a>
             </div>
         </div>
-        <div class="control-group">
-            <div class="controls">
-                <a id="browse" class="btn" href="browse.html?extensions=true">Browse</a>
-                <span class="help-inline">Browse all functions</span>
-            </div>
-        </div>
-        <div class="control-group" data-template="app:check-dba-user-and-not-data">
-            <label class="control-label">
+        <div class="form-group" data-template="app:check-not-data">
+            <label class="control-label col-md-2">
                 <img id="f-load-indicator" src="resources/images/ajax-loader.gif"/>
             </label>
-            <div class="controls">
-                <button id="f-btn-reindex" class="btn">Generate</button>
-                <span class="help-inline">XQuery Function Documentation after installation</span>
+            <div class="col-md-10">
+                <button id="f-btn-reindex" class="btn btn-warning">
+                    <span class="glyphicon glyphicon-import"/> Generate</button>
+                <div class="help-block">Generate XQuery Function Documentation after installation</div>
             </div>
         </div>
-        <div class="control-group" data-template="app:check-dba-user-and-data">
-            <label class="control-label">
+        <div class="form-group" data-template="app:check-dba-user-and-data">
+            <label class="control-label col-md-2">
                 <img id="f-load-indicator" src="resources/images/ajax-loader.gif"/>
             </label>
-            <div class="controls">
-                <button id="f-btn-reindex" class="btn">Regenerate</button>
-                <span class="help-inline">XQuery Function Documentation after modification or addition of functions</span>
+            <div class="col-md-10">
+                <button id="f-btn-reindex" class="btn btn-warning">
+                    <span class="glyphicon glyphicon-refresh"/> Regenerate</button>
+                <div class="help-block">Regenerate XQuery Function Documentation after modification or addition of functions</div>
             </div>
         </div>
     </form>
@@ -54,36 +64,40 @@
             <div class="app:module"/>
         </div>
     </div>
-    <div class="modal hide fade" id="loginDialog">
-        <div class="modal-header">
-            <a class="close" data-dismiss="modal">
-                <i class="icon-remove"/>
-            </a>
-            <h3>Login</h3>
+    <div class="modal fade" id="loginDialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">
+                        <i class="icon-remove"/>
+                    </a>
+                    <h3>Login</h3>
+                </div>
+                <form class="login content form-horizontal" action="" method="POST">
+                    <div class="modal-body">
+                        <div class="alert alert-info">You must login as a dba user (e.g. "admin") to reindex the function documentation.</div>
+                        <div class="form-group">
+                            <label for="user" class="control-label col-md-2">User</label>
+                            <div class="col-md-6">
+                                <input type="text" name="user" placeholder="User" required="required" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="control-label col-md-2">Password</label>
+                            <div class="col-md-4">
+                                <input type="password" name="password" placeholder="Password" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="alert alert-error hide login-message"/>
+                        <input type="hidden" name="duration" value="P14D"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="icon-user"/> Login
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="alert alert-info">You must login as a dba user (e.g. "admin") to reindex the function documentation.</div>
-        <form class="login content" action="" method="POST">
-            <input type="hidden" name="duration" value="P14D"/>
-            <div class="modal-body">
-                <div class="control-group">
-                    <label for="user" class="control-label">User</label>
-                    <div class="controls">
-                        <input type="text" name="user" placeholder="User" required="required"/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="password" class="control-label">Password</label>
-                    <div class="controls">
-                        <input type="password" name="password" placeholder="Password"/>
-                    </div>
-                </div>
-                <div class="alert alert-error hide login-message"/>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-small" type="submit">
-                    <i class="icon-user"/> Login
-                </button>
-            </div>
-        </form>
     </div>
 </div>

@@ -1,20 +1,27 @@
-<div class="templates:surround?with=templates/page.html&amp;at=content">
+<?xml version="1.0" encoding="UTF-8"?>
+<div class="templates:surround?with=templates/page.html&amp;at=main">
     <h1>XQuery Function Documentation</h1>
     <p>
         <a href="index.html">Back to Search Page</a>
     </p>
     <form class="form-inline">
-        <label class="checkbox inline">
-            <input class="templates:form-control" type="checkbox" name="w3c" value="true">W3C XPath functions</input>
-        </label>
-        <label class="checkbox inline">
-            <input class="templates:form-control" type="checkbox" name="extensions" value="true">Extension functions</input>
-        </label>
-        <label class="checkbox inline">
-            <input class="templates:form-control" type="checkbox" name="appmodules" value="true">Application modules</input>
-        </label>
+        <div class="checkbox">
+            <label>
+                <input class="templates:form-control" type="checkbox" name="w3c" value="true"/> W3C XPath functions
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input class="templates:form-control" type="checkbox" name="extensions" value="true"/> Extension functions
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input class="templates:form-control" type="checkbox" name="appmodules" value="true"/> Application modules
+            </label>
+        </div>
         <!-- ToDo: add more space -->
-        <button class="btn">Filter</button>
+        <button class="btn btn-default">Filter</button>
     </form>
     <br/>
     <div id="results">

@@ -1,4 +1,4 @@
-@import url('$shared/resources/css/exist.css');
+@import url('$shared/resources/css/exist-2.2.css');
 
 #fun-query-form {
     font-size: 14px;
@@ -74,22 +74,27 @@ select[name='module'] {
 .function .signature {
     font-family: "Ubuntu Mono", "Menlo", "Consolas", monospace;
     font-size: 1.125em;
-    background: #555555 url(../images/noise.png);
+    margin: 8px 16px;
+    padding: 8px 8px;
+    background-color: #ffffff;
+}
+
+.function .function-detail {
     margin-left: 16px;
     margin-right: 16px;
-    padding: 8px 8px;
 }
 
 .function .description {
     text-align: justify;
-    margin: 8px 16px;
+    margin-bottom: 8px;
+    margin-top: 8px;
 }
 
-.function table {
+.function .parameters table {
     width: 100%;
 }
 
-.function td {
+.function .parameters td {
     padding: 0 0 .85em 0;
 }
 
@@ -114,3 +119,7 @@ form td {
 }
 .itemhead { background: #E0E0E0; padding-left: 8px; }
 .hi { background: #FFED3D; }
+
+.extended-docs {
+    margin: 0 0 16px 0;
+}

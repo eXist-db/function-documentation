@@ -9,7 +9,7 @@ function search() {
             $("#results").fadeOut(100, function() {
                 $(this).html(data);
                 $(this).fadeIn(100, function() {
-                    $(".signature").highlight();
+                    $(".signature").highlight({theme: "clouds"});
                 });
                 timeout = null;
             });
@@ -86,5 +86,5 @@ $(document).ready(function() {
         checkLogin();
     });
     
-    $(".signature").highlight();
+    $(".signature").highlight({theme: "clouds"});
 });
