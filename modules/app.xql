@@ -6,6 +6,18 @@ declare namespace xqdoc="http://www.xqdoc.org/1.0";
 
 import module namespace templates="http://exist-db.org/xquery/templates" at "templates.xql";
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
+import module namespace md="http://exist-db.org/xquery/markdown";
+
+declare variable $app:MD_CONFIG := map {
+    "code-block" := function($language as xs:string, $code as xs:string) {
+        <div class="signature" data-language="{$language}">{$code}</div>
+    },
+    "heading" := function($level as xs:int, $content as xs:string*) {
+        element { "h" || 1 + $level } {
+            $content
+        }
+    }
+};
 
 declare function app:check-dba-user($node as node(), $model as map(*)) {
     let $user := xmldb:get-current-user()
@@ -31,6 +43,15 @@ declare function app:check-dba-user-and-data($node as node(), $model as map(*)) 
     let $user := xmldb:get-current-user()
     return
         if (sm:is-dba($user) and ($data)) then
+            $node
+        else
+            ()
+};
+
+declare function app:check-not-data($node as node(), $model as map(*)) {
+    let $data := collection($config:app-data)/xqdoc:xqdoc
+    return
+        if (not($data)) then
             $node
         else
             ()
@@ -101,7 +122,7 @@ declare %private function app:print-module($module as element(xqdoc:xqdoc), $fun
     let $description := $module/xqdoc:module/xqdoc:comment/xqdoc:description/node()
     let $parsed := if (contains($description, '&lt;') or contains($description, '&amp;')) then $description else util:parse("<div>" || replace($description, "\n{2,}", "<br/>") || "</div>")/*/node()
     return
-    <div class="module">
+    <div class="module" data-xqdoc="{document-uri(root($module))}">
         <div class="module-head">
             <div class="module-head-inner">
                 <h3><a href="view.html?uri={$uri}&amp;location={$location}">{ $uri }</a></h3>
@@ -139,13 +160,13 @@ declare %private function app:print-module($module as element(xqdoc:xqdoc), $fun
                 for $function in $functions
                 order by $function/xqdoc:name
                 return
-                    app:print-function($function)
+                    app:print-function($function, false())
             }
         </div>
     </div>
 };
 
-declare %private function app:print-function($function as element(xqdoc:function)) {
+declare %private function app:print-function($function as element(xqdoc:function), $details as xs:boolean) {
     let $comment := $function/xqdoc:comment
     let $function-name := $function/xqdoc:name
     let $arity := count($function/xqdoc:comment/xqdoc:param)
@@ -161,6 +182,7 @@ declare %private function app:print-function($function as element(xqdoc:function
         else ($function-name || $arity)
     let $description := $comment/xqdoc:description/node()
     let $parsed := if (contains($description, '&lt;') or contains($description, '&amp;')) then $description else util:parse("<div>" || replace($description, "\n{2,}", "<br/>") || "</div>")/*/node()
+    let $extDocs := app:get-extended-doc($function)[1]
     return
         <div class="function" id="{$function-identifier}">
             <div class="function-head">
@@ -169,7 +191,21 @@ declare %private function app:print-function($function as element(xqdoc:function
             </div>
             <div class="function-detail">
                 <p class="description">{ $parsed }</p>
-                
+                {
+                    if (exists($extDocs) and not($details)) then
+                        let $module := $function/ancestor::xqdoc:xqdoc
+                        let $uri := $module/xqdoc:module/xqdoc:uri/text()
+                        let $location := $module/xqdoc:control/xqdoc:location/text()
+                        let $arity := count($function/xqdoc:comment/xqdoc:param)
+                        let $query := "?" || "uri=" || $uri ||
+                            "&amp;function=" || $function-name || "&amp;arity=" || $arity ||
+                            (if ($location) then ("&amp;location=" || $location) else "#")
+                        return
+                            <a href="view.html{$query}" class="extended-docs btn btn-primary">
+                                <span class="glyphicon glyphicon-info-sign"></span> Read more</a>
+                    else
+                        ()
+                }
                 <dl class="parameters">          
                     {
                         if($comment/xqdoc:param) then 
@@ -206,6 +242,15 @@ declare %private function app:print-function($function as element(xqdoc:function
                     }
          
                 </dl>
+                {
+                    if ($details and exists($extDocs)) then
+                        <div class="extended">
+                            <h1>Detailed Description</h1>
+                            { md:parse(util:binary-to-string(util:binary-doc($extDocs)), $app:MD_CONFIG) }
+                        </div>
+                    else
+                        ()
+                }
             </div>
         </div>
 };
@@ -221,6 +266,25 @@ declare %private function app:print-parameters($params as element(xqdoc:param)*)
             </tr>
     }
     </table>
+};
+
+declare %private function app:get-extended-doc($function as element(xqdoc:function)) {
+    let $name := replace($function/xqdoc:name, "([^:]+:)?(.*)$", "$2")
+    let $arity := count($function/xqdoc:comment/xqdoc:param)
+    let $prefix := $function/ancestor::xqdoc:xqdoc/xqdoc:module/xqdoc:name
+    let $prefix := if ($prefix/text()) then $prefix else "fn"
+    let $paths := (
+        (: Search for file with arity :)
+        $config:ext-doc || "/" || $prefix || "/" || $name || "_" || $arity || ".md",
+        (: General file without arity :)
+        $config:ext-doc || "/" || $prefix || "/" || $name || ".md"
+    )
+    for $path in $paths
+    return
+        if (util:binary-doc-available($path)) then
+            $path
+        else
+            ()
 };
 
 (: ~
@@ -275,19 +339,25 @@ function app:showmodules($node as node(), $model as map(*),  $w3c as xs:boolean,
 
 
 declare %templates:default("uri", "http://www.w3.org/2005/xpath-functions")
-function app:view($node as node(), $model as map(*),  $uri as xs:string, $location as xs:string?, $function as xs:string?) {
+function app:view($node as node(), $model as map(*),  $uri as xs:string, $location as xs:string?, $function as xs:string?,
+    $arity as xs:int?) {
     
-    let $modules :=  if ($location)  then
-                        collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri eq $uri][xqdoc:control/xqdoc:location eq $location]
-                     else
-                        collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri eq $uri]
+    let $modules :=  
+        if ($location)  then
+            collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri eq $uri][xqdoc:control/xqdoc:location eq $location]
+        else
+            collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri eq $uri]
     return
         for $module in $modules
         return
             if ($function) then
-                    for $xqdocfunction in $module//xqdoc:function[xqdoc:name eq $function]
-                    return
-                        app:print-function($xqdocfunction)
-                else
-                    app:print-module($module, $module//xqdoc:function)
+                for $xqdocfunction in
+                    if (exists($arity)) then
+                        $module//xqdoc:function[xqdoc:name eq $function][count(xqdoc:comment/xqdoc:param)=$arity]
+                    else
+                        $module//xqdoc:function[xqdoc:name eq $function]
+                return
+                    app:print-function($xqdocfunction, exists($function))
+            else
+                app:print-module($module, $module//xqdoc:function)
 };

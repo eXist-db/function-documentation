@@ -31,6 +31,8 @@ declare variable $config:app-root :=
 
 declare variable $config:app-data := $config:app-root || "/data";
 
+declare variable $config:ext-doc := $config:app-data || "/docs";
+
 declare variable $config:repo-descriptor := doc(concat($config:app-root, "/repo.xml"))/repo:meta;
 
 declare variable $config:expath-descriptor := doc(concat($config:app-root, "/expath-pkg.xml"))/expath:package;
