@@ -3,7 +3,7 @@ xquery version "3.0";
 module namespace docs="http://exist-db.org/xquery/docs";
 
 import module namespace xdb="http://exist-db.org/xquery/xmldb";
-import module namespace dbutil="http://exist-db.org/xquery/dbutil" at "dbutils.xql";
+import module namespace dbutil="http://exist-db.org/xquery/dbutil";
 import module namespace inspect="http://exist-db.org/xquery/inspection" at "java:org.exist.xquery.functions.inspect.InspectionModule";
 
 declare namespace xqdoc="http://www.xqdoc.org/1.0";
