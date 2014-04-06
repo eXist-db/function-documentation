@@ -64,6 +64,7 @@ select[name='module'] {
 
 .module-head h4 {
     margin: 4px 0 4px 50px;
+    word-wrap: break-word;
 }
 
 .function-head h4 {
@@ -77,6 +78,7 @@ select[name='module'] {
     margin: 8px 16px;
     padding: 8px 8px;
     background-color: #ffffff;
+    word-wrap: break-word;
 }
 
 .function .function-detail {

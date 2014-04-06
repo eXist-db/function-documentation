@@ -154,6 +154,42 @@
                 <p>Copyright eXist-db Project 2013</p>
             </div>
         </div>
+        <div class="modal fade" id="loginDialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a class="close" data-dismiss="modal">
+                            <i class="icon-remove"/>
+                        </a>
+                        <h3>Login</h3>
+                    </div>
+                    <form class="login content form-horizontal" action="" method="POST">
+                        <div class="modal-body">
+                            <div class="alert alert-info">You must login as a dba user (e.g. "admin") to reindex the function documentation.</div>
+                            <div class="form-group">
+                                <label for="user" class="control-label col-md-2">User</label>
+                                <div class="col-md-6">
+                                    <input type="text" name="user" placeholder="User" required="required" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="control-label col-md-2">Password</label>
+                                <div class="col-md-4">
+                                    <input type="password" name="password" placeholder="Password" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="alert alert-error hide login-message"/>
+                            <input type="hidden" name="duration" value="P14D"/>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="icon-user"/> Login
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <script type="text/javascript" src="$shared/resources/scripts/jquery/jquery-1.7.1.min.js"/>
         <script type="text/javascript" src="$shared/resources/scripts/bootstrap-3.0.3.min.js"/>
         <script type="text/javascript" src="$shared/resources/scripts/ace/ace.js"/>
