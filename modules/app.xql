@@ -4,10 +4,18 @@ module namespace app="http://exist-db.org/xquery/app";
 
 declare namespace xqdoc="http://www.xqdoc.org/1.0";
 
-import module namespace templates="http://exist-db.org/xquery/templates" at "templates.xql";
+import module namespace templates="http://exist-db.org/xquery/templates";
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
-import module namespace md="http://exist-db.org/xquery/markdown";
 
+declare variable $app:MD_MODULE_URI := "http://exist-db.org/xquery/markdown";
+
+declare variable $app:MD_HAS_MODULE :=
+    try {
+        inspect:inspect-module-uri(xs:anyURI($app:MD_MODULE_URI))
+    } catch * {
+        ()
+    };
+    
 declare variable $app:MD_CONFIG := map {
     "code-block" := function($language as xs:string, $code as xs:string) {
         <div class="signature" data-language="{$language}">{$code}</div>
@@ -33,7 +41,9 @@ declare function app:check-dba-user-and-not-data($node as node(), $model as map(
     let $user := xmldb:get-current-user()
     return
         if (sm:is-dba($user) and not($data)) then
-            $node
+            element { node-name($node) } {
+                $node/@* except $node/@data-template, $node/node()
+            }
         else
             ()
 };
@@ -43,7 +53,9 @@ declare function app:check-dba-user-and-data($node as node(), $model as map(*)) 
     let $user := xmldb:get-current-user()
     return
         if (sm:is-dba($user) and ($data)) then
-            $node
+            element { node-name($node) } {
+                $node/@* except $node/@data-template, $node/node()
+            }
         else
             ()
 };
@@ -186,7 +198,7 @@ declare %private function app:print-function($function as element(xqdoc:function
     return
         <div class="function" id="{$function-identifier}">
             <div class="function-head">
-                <h4>{$function-name}</h4>
+                <h4>{$function-name/node()}</h4>
                 <div class="signature" data-language="xquery">{ $function/xqdoc:signature/node() }</div>
             </div>
             <div class="function-detail">
@@ -246,13 +258,24 @@ declare %private function app:print-function($function as element(xqdoc:function
                     if ($details and exists($extDocs)) then
                         <div class="extended">
                             <h1>Detailed Description</h1>
-                            { md:parse(util:binary-to-string(util:binary-doc($extDocs)), $app:MD_CONFIG) }
+                            { app:parse-markdown($extDocs) }
                         </div>
                     else
                         ()
                 }
             </div>
         </div>
+};
+
+declare %private function app:parse-markdown($path as xs:string) {
+    if ($app:MD_HAS_MODULE) then
+        let $expr := 
+            'import module namespace md="http://exist-db.org/xquery/markdown";' ||
+            'md:parse(util:binary-to-string(util:binary-doc($path)), $app:MD_CONFIG)'
+        return
+            util:eval($expr)
+    else
+        <div class="alert alert-warning">Install markdown parser module via dashboard to display extended documentation.</div>
 };
 
 declare %private function app:print-parameters($params as element(xqdoc:param)*) {
