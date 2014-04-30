@@ -87,4 +87,6 @@ $(document).ready(function() {
     });
     
     $(".signature").highlight({theme: "clouds"});
+    
+    $("#fun-query-form *[data-toggle='tooltip']").tooltip();
 });

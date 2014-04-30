@@ -2,15 +2,26 @@
 
 #fun-query-form {
     font-size: 14px;
-    margin: 10px 0 30px 0;
+    margin: 10px 15px 30px 15px;
+}
+
+#f-load-indicator {
+    margin-left: 8px;
+}
+
+@media (max-width: 767px) {
+    #main>h1 {
+        padding: 0 8px;
+    }
+    
+    #f-load-indicator {
+        display: block;
+        margin: 8px 0;
+    }
 }
 
 #fun-query-form input, #fun-query-form select, #fun-query-form button, #fun-query-form a.btn {
     font-size: 14px;
-}
-
-#fun-query-form td {
-    padding: 4px 8px;
 }
 
 select[name='module'] {
@@ -70,6 +81,12 @@ select[name='module'] {
 .function-head h4 {
     font-size: 1.25em;
     margin-bottom: 10px;
+}
+
+@media (max-width: 767px) {
+    .function-head h4 {
+        margin-left: 16px;
+    }
 }
 
 .function .signature {
