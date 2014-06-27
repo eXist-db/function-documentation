@@ -10,13 +10,17 @@
 }
 
 @media (max-width: 767px) {
-    #main>h1 {
+    #main>h1, #main>p, #main>form {
         padding: 0 8px;
     }
     
     #f-load-indicator {
         display: block;
         margin: 8px 0;
+    }
+    
+    #modules table td:nth-child(2), #modules table th:nth-child(2) {
+        display: none;
     }
 }
 
