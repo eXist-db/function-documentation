@@ -44,7 +44,7 @@ select[name='module'] {
 
 .module .module-head {
     padding: 4px 0;
-    background: #E0E0E0 url(../images/noise.png);
+    background-color: #E0E0E0;
 }
 
 .module .module-head-inner {
