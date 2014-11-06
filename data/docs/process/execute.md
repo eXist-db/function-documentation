@@ -50,7 +50,7 @@ let $options := \<option>
 				    \</option>
 
 return 
-	process:execute(("wc", "-l"), $options)   xquery
+	process:execute(("wc", "-l"), $options)   
 ```
 
 ### Result
