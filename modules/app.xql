@@ -350,7 +350,7 @@ function app:showmodules($node as node(), $model as map(*),  $w3c as xs:boolean,
         if ( 
             ($w3c and starts-with($uri, 'http://www.w3.org') ) or 
             ($extensions and starts-with($uri, 'http://exist-db.org/xquery') and not(starts-with($location, '/db'))) or
-            ($extensions and starts-with($uri, 'http://exist-db.org/') and empty($location)) or
+            ($extensions and starts-with($uri, 'http://exist-db.org/') and (empty($location) or starts-with($location, 'java:'))) or
             ($appmodules and starts-with($location, '/db'))
            ) then
             <tr><td><a href="view.html{$query}">{$uri}</a></td><td>{$location}</td></tr> 
