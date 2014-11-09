@@ -48,18 +48,26 @@ select[name='module'] {
 }
 
 .module .module-head-inner {
-    background: url(../images/1331160322_expand_right.png) no-repeat left top;
     color: #707070;
+    min-height: 48px;
+}
+
+.module-info-icon {
+    display: block;
+    text-align: center;
+    margin-top: 1em;
+}
+
+.module-head .glyphicon-info-sign {
+    font-size: 2em;
 }
 
 .module-head p {
     font-size: 1.33em;
     line-height: 1.5em;
-    margin-left: 50px;
 }
 
 .module-head table {
-	margin-left: 50px;
 }
 
 .module-head td {
@@ -73,18 +81,26 @@ select[name='module'] {
 
 .module-head h3 {
     border: 0;
-    margin: 4px 0 4px 50px;
+    margin: 1em 0 4px 0;
     padding: 0;
 }
 
 .module-head h4 {
-    margin: 4px 0 4px 50px;
+    margin: 4px 0 4px 0;
     word-wrap: break-word;
 }
 
 .function-head h4 {
     font-size: 1.25em;
     margin-bottom: 10px;
+}
+
+.module .extended {
+    margin: 2em 0;
+}
+
+.extended .signature {
+    margin: 1em 0;
 }
 
 @media (max-width: 767px) {

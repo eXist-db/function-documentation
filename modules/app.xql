@@ -115,7 +115,9 @@ declare %private function app:search($node as node(), $module as xs:string?,
         map { "result" := $functions }
 };
 
-declare function app:module($node as node(), $model as map(*)) {
+declare 
+    %templates:default("details", "false")
+function app:module($node as node(), $model as map(*), $details as xs:boolean) {
     let $functions := $model("result")
     for $module in $functions/ancestor::xqdoc:xqdoc    
     let $uri := $module/xqdoc:module/xqdoc:uri/text()
@@ -125,49 +127,74 @@ declare function app:module($node as node(), $model as map(*)) {
     
     order by $order
     return
-        app:print-module($module, $funcsInModule)
+        app:print-module($module, $funcsInModule, $details)
 };
 
-declare %private function app:print-module($module as element(xqdoc:xqdoc), $functions as element(xqdoc:function)*) {
+declare %private function app:print-module($module as element(xqdoc:xqdoc), $functions as element(xqdoc:function)*, 
+    $details as xs:boolean) {
     let $location := $module/xqdoc:control/xqdoc:location/text()
     let $uri := $module/xqdoc:module/xqdoc:uri/text()
+    let $extDocs := app:get-extended-module-doc($module)[1]
     let $description := $module/xqdoc:module/xqdoc:comment/xqdoc:description/node()
     let $parsed := if (contains($description, '&lt;') or contains($description, '&amp;')) then $description else util:parse("<div>" || replace($description, "\n{2,}", "<br/>") || "</div>")/*/node()
     return
     <div class="module" data-xqdoc="{document-uri(root($module))}">
         <div class="module-head">
             <div class="module-head-inner">
-                <h3><a href="view.html?uri={$uri}&amp;location={$location}">{ $uri }</a></h3>
-                {
-                        if ($location) then
-                            if (starts-with($location, '/db')) then
-                                <h4><a href="../eXide/index.html?open={$location}">{$location}</a></h4>
-                            else
-                                <h4>{$location}</h4>
-                        else
-                            ()
-                }
-                <p class="module-description">{ $parsed }</p>
-                {
-                    let $metadata := $module/xqdoc:module/xqdoc:comment/(xqdoc:author|xqdoc:version|xqdoc:since)
-                    return
-                        if (exists($metadata)) then
-                            <table>
-                            {
-                                for $meta in $metadata
-                                return
-                                    <tr>
-                                        <td>{local-name($meta)}</td>
-                                        <td>{$meta/string()}</td>
-                                    </tr>
-                            }
-                            </table>
-                        else
-                            ()
-                }
+                <div class="row">
+                    <div class="col-md-1 hidden-xs">
+                        <a href="view.html?uri={$uri}&amp;location={$location}&amp;details=true" 
+                            class="module-info-icon"><span class="glyphicon glyphicon-info-sign"/></a>
+                    </div>
+                    <div class="col-md-11 col-xs-12">
+                        <h3><a href="view.html?uri={$uri}&amp;location={$location}&amp;details=true">{ $uri }</a></h3>
+                        {
+                                if ($location) then
+                                    if (starts-with($location, '/db')) then
+                                        <h4><a href="../eXide/index.html?open={$location}">{$location}</a></h4>
+                                    else
+                                        <h4>{$location}</h4>
+                                else
+                                    ()
+                        }
+                        <p class="module-description">{ $parsed }</p>
+                        {
+                            let $metadata := $module/xqdoc:module/xqdoc:comment/(xqdoc:author|xqdoc:version|xqdoc:since)
+                            return
+                                if (exists($metadata)) then
+                                    <table>
+                                    {
+                                        for $meta in $metadata
+                                        return
+                                            <tr>
+                                                <td>{local-name($meta)}</td>
+                                                <td>{$meta/string()}</td>
+                                            </tr>
+                                    }
+                                    </table>
+                                else
+                                    ()
+                        }
+                    </div>
+                </div>
             </div>
         </div>
+        {
+            if ($details and exists($extDocs)) then
+                <div class="extended">
+                    <h1>Overview</h1>
+                    { app:parse-markdown($extDocs) }
+                </div>
+            else
+                ()
+        }
         <div class="functions">
+            {
+                if ($details and exists($extDocs)) then
+                    <h1>Functions</h1>
+                else
+                    ()
+            }
             {
                 for $function in $functions
                 order by $function/xqdoc:name
@@ -310,6 +337,22 @@ declare %private function app:get-extended-doc($function as element(xqdoc:functi
             ()
 };
 
+declare %private function app:get-extended-module-doc($module as element(xqdoc:xqdoc)) {
+    let $prefix := $module/xqdoc:module/xqdoc:name
+    let $prefix := if ($prefix/text()) then $prefix else "fn"
+    let $paths := (
+        (: Module description is either "_module.md" or prefix.md :)
+        $config:ext-doc || "/" || $prefix || "/_module.md",
+        $config:ext-doc || "/" || $prefix || "/" || $prefix || ".md"
+    )
+    for $path in $paths
+    return
+        if (util:binary-doc-available($path)) then
+            $path
+        else
+            ()
+};
+
 (: ~
  : If eXide is installed, we can load ace locally. If not, download ace
  : from cloudfront.
@@ -361,9 +404,11 @@ function app:showmodules($node as node(), $model as map(*),  $w3c as xs:boolean,
 };
 
 
-declare %templates:default("uri", "http://www.w3.org/2005/xpath-functions")
+declare 
+    %templates:default("uri", "http://www.w3.org/2005/xpath-functions")
+    %templates:default("details", "false")
 function app:view($node as node(), $model as map(*),  $uri as xs:string, $location as xs:string?, $function as xs:string?,
-    $arity as xs:int?) {
+    $arity as xs:int?, $details as xs:boolean) {
     
     let $modules :=  
         if ($location)  then
@@ -382,5 +427,5 @@ function app:view($node as node(), $model as map(*),  $uri as xs:string, $locati
                 return
                     app:print-function($xqdocfunction, exists($function))
             else
-                app:print-module($module, $module//xqdoc:function)
+                app:print-module($module, $module//xqdoc:function, $details)
 };
