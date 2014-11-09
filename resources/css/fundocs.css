@@ -40,6 +40,8 @@ select[name='module'] {
 
 .module {
     margin-bottom: 2em;
+    margin-left: 8px;
+    margin-right: 8px;
 }
 
 .module .module-head {
@@ -101,6 +103,8 @@ select[name='module'] {
 
 .extended .signature {
     margin: 1em 0;
+    word-wrap: break-word;
+    white-space: pre-line;
 }
 
 @media (max-width: 767px) {
@@ -115,6 +119,7 @@ select[name='module'] {
     margin: 8px 16px;
     padding: 8px 8px;
     background-color: #ffffff;
+    white-space: pre-line;
     word-wrap: break-word;
 }
 
@@ -148,6 +153,12 @@ form { margin: 20px 0; }
 form td {
     padding-right: 8px;
 }
+
+code {
+    white-space: pre-line;
+    word-wrap: break-word;
+}
+
 .item { 
     background: #FFFFFF;
     margin: 8px 0;
