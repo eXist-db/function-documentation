@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <html>
     <head>
         <title data-template="config:app-title">App Title</title>
@@ -9,7 +8,7 @@
     </head>
     <body id="grey-top" class="site:expand-links?base=http://exist-db.org/">
         <div class="grey-bot">
-            <div class="container">
+            <div class="container" id="main-container">
                 <div class="row">
                     <div class="col-md-12" id="header">
                         <a href="/" id="logo">eXistDB</a>
@@ -17,6 +16,7 @@
                 </div>
             </div>
             <nav class="navbar navbar-default" role="navigation">
+                <div class="container">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"/>
@@ -67,7 +67,13 @@
                                     <a href="{demo}/examples/tests/test.html">Unit Testing</a>
                                 </li>
                                 <li>
+                                    <a href="{demo}/examples/contacts/html/home.html?browseContacts">RestXQ and AngularJS</a>
+                                </li>
+                                <li>
                                     <a href="{demo}/examples/xforms/">XForms and RestXQ</a>
+                                </li>
+                                <li>
+                                    <a href="{demo}/examples/contacts/html/home.html">Contacts RestXQ Demo</a>
                                 </li>
                             </ul>
                         </li>
@@ -127,8 +133,9 @@
                         </li>
                     </ul>
                 </div>
+			</div>
             </nav>
-            <div class="container" id="main-container">
+            <div class="container">
                 <div id="main" class="row"/>
             </div>
         </div>
@@ -208,7 +215,7 @@
         <script type="text/javascript" src="$shared/resources/scripts/ace/mode-java.js"/>
         <script type="text/javascript" src="$shared/resources/scripts/ace/mode-css.js"/>
         <script type="text/javascript" src="$shared/resources/scripts/ace/mode-xml.js"/>
-        <script type="text/javascript" src="$shared/resources/scripts/ace/theme-clouds.js"/>
+        <script type="text/javascript" src="$shared/resources/scripts/ace/theme-tomorrow_night.js"/>
         <script type="text/javascript" src="$shared/resources/scripts/highlight.js"/>
         <script type="text/javascript" src="resources/scripts/query.js"/>
     </body>
