@@ -17,10 +17,10 @@ declare variable $app:MD_HAS_MODULE :=
     };
     
 declare variable $app:MD_CONFIG := map {
-    "code-block" := function($language as xs:string, $code as xs:string) {
+    "code-block": function($language as xs:string, $code as xs:string) {
         <div class="signature" data-language="{$language}">{$code}</div>
     },
-    "heading" := function($level as xs:int, $content as xs:string*) {
+    "heading": function($level as xs:int, $content as xs:string*) {
         element { "h" || 1 + $level } {
             $content
         }
@@ -297,8 +297,8 @@ declare %private function app:print-function($function as element(xqdoc:function
 declare %private function app:parse-markdown($path as xs:string) {
     if ($app:MD_HAS_MODULE) then
         let $expr := 
-            'import module namespace md="http://exist-db.org/xquery/markdown";' ||
-            'md:parse(util:binary-to-string(util:binary-doc($path)), $app:MD_CONFIG)'
+            'import module namespace markdown="http://exist-db.org/xquery/markdown";' ||
+            'markdown:parse(util:binary-to-string(util:binary-doc($path)), ($markdown:HTML-CONFIG, $app:MD_CONFIG))'
         return
             util:eval($expr)
     else
