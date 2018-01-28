@@ -8,12 +8,12 @@ import module namespace inspect="http://exist-db.org/xquery/inspection" at "java
 
 declare namespace xqdoc="http://www.xqdoc.org/1.0";
  
-declare %private function docs:create-collection($parent as xs:string, $child as xs:string) as empty() {
+declare %private function docs:create-collection($parent as xs:string, $child as xs:string) as empty-sequence() {
     let $null := xdb:create-collection($parent, $child)
     return ()
 };
 
-declare %private function docs:load-external($uri as xs:anyURI, $store as function(xs:string, element()) as empty()) {
+declare %private function docs:load-external($uri as xs:anyURI, $store as function(xs:string, element()) as empty-sequence()) {
     let $meta := inspect:inspect-module-uri($uri)
     return
         if ($meta) then
@@ -25,7 +25,7 @@ declare %private function docs:load-external($uri as xs:anyURI, $store as functi
             ()
 };
 
-declare %private function docs:load-stored($path as xs:anyURI, $store as function(xs:string, element()) as empty()) {
+declare %private function docs:load-stored($path as xs:anyURI, $store as function(xs:string, element()) as empty-sequence()) {
     let $meta := inspect:inspect-module($path)
     return
         if ($meta) then
@@ -37,7 +37,7 @@ declare %private function docs:load-stored($path as xs:anyURI, $store as functio
             ()
 };
 
-declare %private function docs:load-external-modules($store as function(xs:string, element()) as empty()) {
+declare %private function docs:load-external-modules($store as function(xs:string, element()) as empty-sequence()) {
     for $uri in util:mapped-modules()
     return
         docs:load-external($uri, $store),
@@ -51,7 +51,7 @@ declare %private function docs:load-external-modules($store as function(xs:strin
         }
 };
 
-declare %private function docs:load-internal-modules($store as function(xs:string, element()) as empty()) {
+declare %private function docs:load-internal-modules($store as function(xs:string, element()) as empty-sequence()) {
     for $moduleURI in util:registered-modules()
     let $meta := inspect:inspect-module-uri($moduleURI)
     return

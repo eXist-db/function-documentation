@@ -11,4 +11,11 @@
     <target>fundocs</target>
     <prepare>pre-install.xql</prepare>
     <finish/>
+    <changelog>
+        <change version="0.8.1">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>Adopt correct syntax for empty-sequence node test, supported from eXist-db 4.0.0</li>
+            </ul>
+        </change>
+    </changelog>
 </meta>
