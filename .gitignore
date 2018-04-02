@@ -1,2 +1,3 @@
-expath-pkg.xml
-build
+target/
+*.iml
+.idea/
