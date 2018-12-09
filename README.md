@@ -1,5 +1,5 @@
 # eXist-db Function Documentation Browser App
-[![Build Status](https://travis-ci.org/eXist-db/function-documentation.svg?branch=master)](https://travis-ci.org/eXist-db/function-documentation)
+[![Build Status](https://travis-ci.com/eXist-db/function-documentation.svg?branch=master)](https://travis-ci.com/eXist-db/function-documentation)
 [![eXist-db version](https://img.shields.io/badge/eXist_db-4.0.0-blue.svg)](http://www.exist-db.org/exist/apps/homepage/index.html)
 
 <img src="src/main/xar-resources/icon.png" align="left" width="15%"/>
