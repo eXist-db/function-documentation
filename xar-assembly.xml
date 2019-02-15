@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://expath.org/ns/pkg" name="${package-name}" abbrev="${package-abbrev}" version="${project.version}" spec="1.0">
+  <title>${package-title}</title>
+  <author id="exist-db">eXist-db</author>
+  <website>${project.url}</website>
+  <license>GNU Lesser General Public License, version 2.1</license>
+  <copyright>true</copyright>
+  <type>application</type>
+  <target>fundocs</target>
+  <status>stable</status>
+  <tag>${project.artifactId}</tag>
+  <tag>application</tag>
+  <tag>documentation</tag>
+  <category id="apps">Applications</category>
+  <category id="doc">Documentation</category>
+  <dependency processor="http://exist-db.org" semver-min="${exist.version}"/>
+  <dependency package="http://exist-db.org/apps/shared" semver-min="0.4.0"/>
+  <dependency package="http://exist-db.org/apps/markdown" semver-min="0.5"/>
+  <prepare>pre-install.xql</prepare>
+  <changelog>
+    <change version="1.0.0">
+       <ul xmlns="http://www.w3.org/1999/xhtml">
+        <li>Adopt correct syntax for empty-sequence node test, supported from eXist-db 4.0.0</li>
+      </ul>
+    </change>
+  </changelog>
+
+  <fileSets>
+    <fileSet>
+      <directory>${basedir}</directory>
+      <includes>
+        <include>README.md</include>
+        <include>LICENSE</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.outputDirectory}</directory>
+    </fileSet>
+  </fileSets>
+
+</package>
