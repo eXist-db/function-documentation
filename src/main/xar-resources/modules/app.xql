@@ -28,7 +28,7 @@ declare variable $app:MD_CONFIG := map {
 };
 
 declare function app:check-dba-user($node as node(), $model as map(*)) {
-    let $user := xmldb:get-current-user()
+    let $user := sm:id()/sm:id/(sm:effective|sm:real)[1]/sm:username
     return
         if (sm:is-dba($user)) then
             $node
@@ -38,7 +38,7 @@ declare function app:check-dba-user($node as node(), $model as map(*)) {
 
 declare function app:check-dba-user-and-not-data($node as node(), $model as map(*)) {
     let $data := collection($config:app-data)/xqdoc:xqdoc
-    let $user := xmldb:get-current-user()
+    let $user := sm:id()/sm:id/(sm:effective|sm:real)[1]/sm:username
     return
         if (sm:is-dba($user) and not($data)) then
             element { node-name($node) } {
@@ -50,7 +50,7 @@ declare function app:check-dba-user-and-not-data($node as node(), $model as map(
 
 declare function app:check-dba-user-and-data($node as node(), $model as map(*)) {
     let $data := collection($config:app-data)/xqdoc:xqdoc
-    let $user := xmldb:get-current-user()
+    let $user := sm:id()/sm:id/(sm:effective|sm:real)[1]/sm:username
     return
         if (sm:is-dba($user) and ($data)) then
             element { node-name($node) } {
@@ -71,7 +71,7 @@ declare function app:check-not-data($node as node(), $model as map(*)) {
 
 declare function app:check-not-dba-user-and-not-data($node as node(), $model as map(*)) {
     let $data := collection($config:app-data)/xqdoc:xqdoc
-    let $user := xmldb:get-current-user()
+    let $user := sm:id()/sm:id/(sm:effective|sm:real)[1]/sm:username
     return
         if (not(sm:is-dba($user)) and not($data)) then
             $node
@@ -136,7 +136,7 @@ declare %private function app:print-module($module as element(xqdoc:xqdoc), $fun
     let $uri := $module/xqdoc:module/xqdoc:uri/text()
     let $extDocs := app:get-extended-module-doc($module)[1]
     let $description := $module/xqdoc:module/xqdoc:comment/xqdoc:description/node()
-    let $parsed := if (contains($description, '&lt;') or contains($description, '&amp;')) then $description else util:parse("<div>" || replace($description, "\n{2,}", "<br/>") || "</div>")/*/node()
+    let $parsed := if (contains($description, '&lt;') or contains($description, '&amp;')) then $description else parse-xml("<div>" || replace($description, "\n{2,}", "<br/>") || "</div>")/*/node()
     return
     <div class="module" data-xqdoc="{document-uri(root($module))}">
         <div class="module-head">
@@ -220,7 +220,7 @@ declare %private function app:print-function($function as element(xqdoc:function
         then (substring-after($function-name, ":") || $arity)
         else ($function-name || $arity)
     let $description := $comment/xqdoc:description/node()
-    let $parsed := if (contains($description, '&lt;') or contains($description, '&amp;')) then $description else util:parse("<div>" || replace($description, "\n{2,}", "<br/>") || "</div>")/*/node()
+    let $parsed := if (contains($description, '&lt;') or contains($description, '&amp;')) then $description else parse-xml("<div>" || replace($description, "\n{2,}", "<br/>") || "</div>")/*/node()
     let $extDocs := app:get-extended-doc($function)[1]
     return
         <div class="function" id="{$function-identifier}">
