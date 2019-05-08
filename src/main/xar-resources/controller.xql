@@ -27,7 +27,7 @@ else if ($exist:resource eq "login") then
             util:declare-option("exist:serialize", "method=json"),
             <status>
                 <user>{request:get-attribute("org.exist.login.user")}</user>
-                <isAdmin json:literal="true">{ xmldb:is-admin-user(request:get-attribute("org.exist.login.user")) }</isAdmin>
+                <isAdmin json:literal="true">{ sm:is-dba(request:get-attribute("org.exist.login.user")) }</isAdmin>
             </status>
         } catch * {
             response:set-status-code(401),
