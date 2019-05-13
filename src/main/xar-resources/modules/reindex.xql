@@ -5,7 +5,7 @@ import module namespace config="http://exist-db.org/xquery/apps/config" at "conf
 
 declare option exist:serialize "method=json media-type=application/javascript";
 
-let $isDba := sm:is-dba(xsm:id()/sm:id/(sm:effective|sm:real)[1]/sm:username)
+let $isDba := sm:is-dba(sm:id()/sm:id/(sm:effective|sm:real)[1]/sm:username)
 return
     if ($isDba) then
         <response status="ok">
