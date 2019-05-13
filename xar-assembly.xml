@@ -18,6 +18,12 @@
   <dependency package="http://exist-db.org/apps/markdown" semver-min="0.5"/>
   <prepare>pre-install.xql</prepare>
   <changelog>
+    <change version="1.1.0">
+      <ul xmlns="http://www.w3.org/1999/xhtml">
+        <li>Improved process:execute examples - <a href="https://github.com/eXist-db/function-documentation/pull/28">#28</a></li>
+        <li>Fix use of deprecated functions for compatibility with 5.0 - <a href="https://github.com/eXist-db/function-documentation/pull/30">#30</a></li>
+      </ul>
+    </change>
     <change version="1.0.0">
        <ul xmlns="http://www.w3.org/1999/xhtml">
         <li>Adopt correct syntax for empty-sequence node test, supported from eXist-db 4.0.0</li>
