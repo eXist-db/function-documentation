@@ -8,8 +8,8 @@ import module namespace site="http://exist-db.org/apps/site-utils";
 declare option exist:serialize "method=html5 media-type=text/html";
 
 let $config := map {
-    $templates:CONFIG_APP_ROOT := $config:app-root,
-    $templates:CONFIG_STOP_ON_ERROR := true()
+    $templates:CONFIG_APP_ROOT : $config:app-root,
+    $templates:CONFIG_STOP_ON_ERROR : true()
 }
 let $resolve := function($func as xs:string, $arity as xs:int) {
     try {
