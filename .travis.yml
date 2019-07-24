@@ -1,10 +1,15 @@
 language: java
 
-jdk:
-  - oraclejdk8
-  - oraclejdk9
+dist: xenial
 
-script: mvn -B test package
+matrix:
+  include:
+    - jdk: openjdk8
+    - jdk: openjdk9
+    - jdk: openjdk10
+    - jdk: openjdk11
+    - jdk: openjdk12
 
-notifications:
-  slack: exist-db:IXzUdqA0n11cnxaDz43ZQgdX
+cache:
+  directories:
+  - $HOME/.m2
