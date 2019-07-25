@@ -96,7 +96,7 @@ function app:action($node as node(), $model as map(*), $action as xs:string, $mo
 declare %private function app:browse($node as node(), $module as xs:string?) {
     let $functions := collection($config:app-data)/xqdoc:xqdoc[xqdoc:module/xqdoc:uri = $module]//xqdoc:function
     return
-        map { "result" := $functions }
+        map { "result": $functions }
 };
 
 declare %private function app:search($node as node(), $module as xs:string?, 
@@ -112,7 +112,7 @@ declare %private function app:search($node as node(), $module as xs:string?,
         default return ()
         order by $module/xqdoc:xqdoc/xqdoc:control/xqdoc:location/text(), $module/xqdoc:xqdoc/xqdoc:module/xqdoc:name/text()
     return
-        map { "result" := $functions }
+        map { "result": $functions }
 };
 
 declare 
