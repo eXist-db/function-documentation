@@ -18,6 +18,11 @@
   <dependency package="http://exist-db.org/apps/markdown" semver-min="0.5"/>
   <prepare>pre-install.xql</prepare>
   <changelog>
+    <change version="1.1.2">
+      <ul xmlns="http://www.w3.org/1999/xhtml">
+          <li>New: Implementation-specific notes about fn:xml-to-json</li>
+      </ul>
+    </change>
     <change version="1.1.1">
       <ul xmlns="http://www.w3.org/1999/xhtml">
         <li>Fixed: Removed deprecated draft map constructor for compatibility with forthcoming eXist 5.0.0-RC8</li>
