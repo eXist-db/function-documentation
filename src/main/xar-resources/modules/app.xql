@@ -4,8 +4,9 @@ module namespace app="http://exist-db.org/xquery/app";
 
 declare namespace xqdoc="http://www.xqdoc.org/1.0";
 
-import module namespace templates="http://exist-db.org/xquery/templates";
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
+
+import module namespace templates="http://exist-db.org/xquery/html-templating";
 
 declare variable $app:MD_MODULE_URI := "http://exist-db.org/xquery/markdown";
 
