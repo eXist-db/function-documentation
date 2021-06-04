@@ -48,7 +48,7 @@
         <project.build.source>1.8</project.build.source>
         <project.build.target>1.8</project.build.target>
 
-        <exist.version>5.3.0</exist.version>
+        <exist.version>5.3.0-SNAPSHOT</exist.version>
 
         <package-name>http://exist-db.org/apps/fundocs</package-name>
 	    <package-abbrev>fundocs</package-abbrev>  <!-- override the default which is artifactId :-/ -->
