@@ -5,6 +5,7 @@ import module namespace config="http://exist-db.org/xquery/apps/config" at "conf
 
 import module namespace site="http://exist-db.org/apps/site-utils";
 import module namespace templates="http://exist-db.org/xquery/html-templating";
+import module namespace lib="http://exist-db.org/xquery/html-templating/lib";
 
 declare option exist:serialize "method=html5 media-type=text/html";
 
