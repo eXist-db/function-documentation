@@ -14,8 +14,9 @@
   <category id="apps">Applications</category>
   <category id="doc">Documentation</category>
   <dependency processor="http://exist-db.org" semver-min="${exist.version}"/>
-  <dependency package="http://exist-db.org/apps/shared" semver-min="0.4.0"/>
-  <dependency package="http://exist-db.org/apps/markdown" semver-min="0.5"/>
+  <dependency package="http://exist-db.org/apps/shared" semver-min="${shared-resources.version}"/>
+  <dependency package="http://exist-db.org/apps/markdown" semver-min="${markdown.version}"/>
+  <dependency package="http://exist-db.org/html-templating" semver-min="${templating.version}"/>
   <prepare>pre-install.xql</prepare>
   <changelog>
     <change version="1.1.2">
