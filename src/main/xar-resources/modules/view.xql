@@ -1,4 +1,4 @@
-xquery version "3.0";
+xquery version "3.1";
 
 import module namespace app="http://exist-db.org/xquery/app" at "app.xql";
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
