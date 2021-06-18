@@ -1,3 +1,4 @@
+$(document).on("ready", function() {
 
     function search() {
         const data = $("#fun-query-form").serialize();
@@ -17,46 +18,44 @@
         });
     }
 
-function checkLogin() {
-    $.ajax({
-        url: "login",
-        dataType: "json",
-        success: function(data) {
-            reindex();
-        },
-        error: function (xhr, textStatus) {
-            $("#loginDialog").modal("show");
-        }
-    });
-}
+    function reindexIfLoggedIn(ev) {
+        ev.preventDefault();
 
-function reindex() {
-    $("#messages").empty();
-    $("#f-load-indicator").show();
-    $.ajax({
-        type: "POST",
-        dataType: "json",
-        url: "modules/reindex.xql",
-        success: function (data) {
-            $("#f-load-indicator").hide();
-            if (data.status == "failed") {
-                $("#messages").text(data.message);
-            } else {
-                window.location.href = ".";
+        $.ajax({
+            url: "login",
+            dataType: "json",
+            success: reindex,
+            error: function () {
+                $("#loginDialog").modal("show");
             }
-        }
-    });
-}
+        });
+    }
 
-var timeout = null;
+    function reindex() {
+        $("#messages").empty();
+        $("#f-load-indicator").show();
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "modules/reindex.xql",
+            success: function (data) {
+                $("#f-load-indicator").hide();
+                if (data.status == "failed") {
+                    $("#messages").text(data.message);
+                } else {
+                    window.location.href = ".";
+                }
+            }
+        });
+    }
 
-$(document).ready(function() {
-    var loginDialog = $("#loginDialog");
+    let timeout = 0;
+    const loginDialog = $("#loginDialog");
     loginDialog.modal({
         show: false
     });
-    $("form", loginDialog).submit(function(ev) {
-        var params = $(this).serialize();
+    $("form", loginDialog).on("submit", function(ev) {
+        const params = $(this).serialize();
         $.ajax({
             url: "login",
             data: params,
@@ -72,8 +71,8 @@ $(document).ready(function() {
         return false;
     });
     $("#f-load-indicator").hide();
-    $("#query-field").keyup(function() {
-        var val = $(this).val();
+    $("#query-field").on("keyup", function() {
+        const val = $(this).val();
         if (val.length > 3) {
             if (timeout)
                 clearTimeout(timeout);
@@ -81,11 +80,8 @@ $(document).ready(function() {
         }
     });
     
-    $("#f-btn-reindex").click(function(ev) {
-        ev.preventDefault();
-        checkLogin();
-    });
-    
+    $("#f-btn-reindex").on("click", reindexIfLoggedIn);
+    $("#f-btn-reindex-regen").on("click", reindexIfLoggedIn);
     
     $("#fun-query-form *[data-toggle='tooltip']").tooltip();
 });
