@@ -1,4 +1,5 @@
-#XProc in eXist
+# XProc in eXist
+
 _written by Erik Siegel (erik at xatapult.nl) in March 2014_
 
 
@@ -21,6 +22,7 @@ The XProc module will only work on eXist versions > V2.1! That is, as long as th
 Fire up the package manager from eXist’s dashboard and install it from the public eXist module repository. 
 
 ### Deinstall
+
 De-installing the package is not the easy normal package manager’s routine for this. Because the package includes a jar file, it is (partly) locked by eXist and some extra work is required:
 
 1. De-install the package first through the package manager’s normal de-install command. This seems to work, but when you refresh the list the package still seems to be there.
@@ -32,7 +34,7 @@ De-installing the package is not the easy normal package manager’s routine for
 
 You’ll probably need to use this explicit de-install procedure before you install a new version. Because of the jar file locking, the normal package manager’s effortless update procedure will not work properly.
 
-##Basic usage
+## Basic usage
 
 Here is a very simple “Hello World” XProc in eXist: 
 
@@ -67,6 +69,7 @@ Simply calling *xproc:process* will start Calabash and do the trick. The functio
 
 
 ## xproc:process
+
 The module exposes three xproc:process variants:
 * xproc:process( $xproc-document )
  * See the “basic usage” section above.
@@ -85,9 +88,8 @@ xproc:process( $xproc, (
 ```
   
 ### <g options
+
 You can pass values for XProc options to the pipeline using:
-
-
 
 ```xml
 \<option name="option-name" value="option-value"/>
@@ -133,10 +135,8 @@ Example:
 \<output port="extraresult" url="xmldb:///db/path/to/my/data.xml"/>
 ```
 
-
-
-
 ## Additional features
+
 Relative URL’s inside your XProc script (and inside the XSLT/XQuery scripts used by the pipeline) work as expected: That is: they are resolved against the location of the document they’re in. This is an important feature because it allows you to develop your XProc pipelines outside of eXist and easily integrate them when they’re ready. 
 
 Developing XProc pipelines outside of eXist (using an IDE like for instance oXygen) is usually much easier than doing the same thing directly in/on the database.
@@ -144,6 +144,6 @@ Developing XProc pipelines outside of eXist (using an IDE like for instance oXyg
 The XProc *\<p:store>* step works and can write documents to the database. The URL must be an absolute URL pointing to a location in the database. **Watch out:** It must begin with the pre fix *xmldb://* (instead of the usual *xmldb:exist://*).
 
 ## Known limitations
+
 * Probably the most important limitation is that the XQuery scripts called/used by the XProc pipelines do *not* run on eXist’s XQuery engine but on Saxon inside Calabash. As a consequence, you cannot easily access the database or use eXist’s extension functions. XPath in structions will not use any indexes and will not be optimized. 
 * The *<pxp:zip>* instruction does not work properly (but the *<pxp:unzip>* does).
-
