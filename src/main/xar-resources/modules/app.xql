@@ -19,7 +19,7 @@ declare variable $app:MD_HAS_MODULE :=
     
 declare variable $app:MD_CONFIG := map {
     "code-block": function($language as xs:string, $code as xs:string) {
-        <div class="signature" data-language="{$language}">{$code}</div>
+        <pre class="signature"><code class="language-{$language}">{$code}</code></pre>
     },
     "heading": function($level as xs:int, $content as xs:string*) {
         element { "h" || 1 + $level } {
@@ -227,7 +227,7 @@ declare %private function app:print-function($function as element(xqdoc:function
         <div class="function" id="{$function-identifier}">
             <div class="function-head">
                 <h4>{$function-name/node()}</h4>
-                <div class="signature" data-language="xquery">{ $function/xqdoc:signature/node() }</div>
+                <pre class="signature"><code class="language-xquery">{ $function/xqdoc:signature/node() }</code></pre>
             </div>
             <div class="function-detail">
                 <p class="description">{ $parsed }</p>

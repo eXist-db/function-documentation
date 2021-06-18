@@ -1,5 +1,3 @@
-@import url('$shared/resources/css/exist-2.2.css');
-
 #fun-query-form {
     font-size: 14px;
     margin: 10px 15px 30px 15px;
@@ -113,15 +111,10 @@ select[name='module'] {
     }
 }
 
-.function .signature {
-    font-family: "Ubuntu Mono", "Menlo", "Consolas", monospace;
-    font-size: 1.125em;
-    margin: 8px 16px;
-    padding: 8px 8px;
-    background-color: #ffffff;
-    white-space: pre-line;
-    word-wrap: break-word;
-}
+/* 
+ * function signatures and other code blocks are handled in
+ * prism-theme (./prism-fundocs.css)
+ */
 
 .function .function-detail {
     margin-left: 16px;

@@ -52,12 +52,6 @@ else if ($exist:resource = "reindex.xql") then
         {login:set-user("org.exist.login", (), false())}
     </dispatch>
     
-(: Requests for javascript libraries are resolved to the file system :)
-else if (contains($exist:path, "/$shared/")) then
-    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-        <forward url="/shared-resources/{substring-after($exist:path, '/$shared/')}"/>
-    </dispatch>
-    
 else
     (: everything else is passed through :)
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">

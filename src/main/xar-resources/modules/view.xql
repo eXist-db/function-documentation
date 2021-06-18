@@ -3,7 +3,6 @@ xquery version "3.1";
 import module namespace app="http://exist-db.org/xquery/app" at "app.xql";
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
 
-import module namespace site="http://exist-db.org/apps/site-utils";
 import module namespace templates="http://exist-db.org/xquery/html-templating";
 import module namespace lib="http://exist-db.org/xquery/html-templating/lib";
 

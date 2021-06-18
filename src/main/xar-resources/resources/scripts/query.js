@@ -1,21 +1,21 @@
 
-function search() {
-    var data = $("#fun-query-form").serialize();
-    $.ajax({
-	    type: "POST",
-	    url: "ajax.html",
-	    data: data + "&action=search",
-	    success: function (data) {
-            $("#results").fadeOut(100, function() {
-                $(this).html(data);
-                $(this).fadeIn(100, function() {
-                    $(".signature").highlight({theme: "clouds"});
+    function search() {
+        const data = $("#fun-query-form").serialize();
+        $.ajax({
+            type: "POST",
+            url: "ajax.html",
+            data: data + "&action=search",
+            success: function (data) {
+                $("#results").fadeOut(100, function() {
+                    $(this).html(data);
+                    $(this).fadeIn(100, function() {
+                        Prism.highlightAll()
+                    });
+                    timeout = null;
                 });
-                timeout = null;
-            });
-	    }
-    });
-}
+            }
+        });
+    }
 
 function checkLogin() {
     $.ajax({
@@ -86,7 +86,6 @@ $(document).ready(function() {
         checkLogin();
     });
     
-    $(".signature").highlight({theme: "clouds"});
     
     $("#fun-query-form *[data-toggle='tooltip']").tooltip();
 });
