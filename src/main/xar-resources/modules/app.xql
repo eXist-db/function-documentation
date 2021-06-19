@@ -331,27 +331,6 @@ declare %private function app:get-extended-module-doc($module as element(xqdoc:x
             ()
 };
 
-(: ~
- : If eXide is installed, we can load ace locally. If not, download ace
- : from cloudfront.
- :)
-declare function app:import-ace($node as node(), $model as map(*)) {
-    let $eXideInstalled := doc-available("/db/eXide/repo.xml")
-    let $path :=
-        if ($eXideInstalled) then
-            "../eXide/resources/scripts/ace/"
-        else
-            "//d1n0x3qji82z53.cloudfront.net/src-min-noconflict/"
-    for $script in $node/script
-    return
-        <script>
-        {
-            $script/@* except $script/@src,
-            attribute src { $path || $script/@src }
-        }
-        </script>
-};
-
 declare 
     %templates:default("w3c", "false")
     %templates:default("extensions", "false")
