@@ -8,26 +8,6 @@ import module namespace config="http://exist-db.org/xquery/apps/config" at "conf
 
 import module namespace templates="http://exist-db.org/xquery/html-templating";
 
-declare variable $app:MD_MODULE_URI := "http://exist-db.org/xquery/markdown";
-
-declare variable $app:MD_HAS_MODULE :=
-    try {
-        inspect:inspect-module-uri(xs:anyURI($app:MD_MODULE_URI))
-    } catch * {
-        ()
-    };
-    
-declare variable $app:MD_CONFIG := map {
-    "code-block": function($language as xs:string, $code as xs:string) {
-        <pre class="signature"><code class="language-{$language}">{$code}</code></pre>
-    },
-    "heading": function($level as xs:int, $content as xs:string*) {
-        element { "h" || 1 + $level } {
-            $content
-        }
-    }
-};
-
 declare function app:check-dba-user($node as node(), $model as map(*)) {
     let $user := sm:id()/sm:id/(sm:effective|sm:real)[1]/sm:username
     return
@@ -184,7 +164,7 @@ declare %private function app:print-module($module as element(xqdoc:xqdoc), $fun
             if ($details and exists($extDocs)) then
                 <div class="extended">
                     <h1>Overview</h1>
-                    { app:parse-markdown($extDocs) }
+                    { app:include-markdown($extDocs) }
                 </div>
             else
                 ()
@@ -286,7 +266,7 @@ declare %private function app:print-function($function as element(xqdoc:function
                     if ($details and exists($extDocs)) then
                         <div class="extended">
                             <h1>Detailed Description</h1>
-                            { app:parse-markdown($extDocs) }
+                            { app:include-markdown($extDocs) }
                         </div>
                     else
                         ()
@@ -295,15 +275,12 @@ declare %private function app:print-function($function as element(xqdoc:function
         </div>
 };
 
-declare %private function app:parse-markdown($path as xs:string) {
-    if ($app:MD_HAS_MODULE) then
-        let $expr := 
-            'import module namespace markdown="http://exist-db.org/xquery/markdown";' ||
-            'markdown:parse(util:binary-to-string(util:binary-doc($path)), ($markdown:HTML-CONFIG, $app:MD_CONFIG))'
-        return
-            util:eval($expr)
-    else
-        <div class="alert alert-warning">Install markdown parser module via dashboard to display extended documentation.</div>
+declare %private
+function app:include-markdown ($path as xs:string) as element(div) {
+    element div {
+        attribute class { "markdown" },
+        $path => util:binary-doc() => util:binary-to-string()
+    }
 };
 
 declare %private function app:print-parameters($params as element(xqdoc:param)*) {

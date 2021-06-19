@@ -82,6 +82,13 @@ $(document).on("ready", function() {
     
     $("#f-btn-reindex").on("click", reindexIfLoggedIn);
     $("#f-btn-reindex-regen").on("click", reindexIfLoggedIn);
-    
+
     $("#fun-query-form *[data-toggle='tooltip']").tooltip();
+
+    // replace markdown element content with rendered HTML
+    const mdContentElement = document.querySelector(".markdown")
+    if (mdContentElement) {
+        const markdown = marked(mdContentElement.textContent)
+        mdContentElement.innerHTML = markdown    
+    }
 });

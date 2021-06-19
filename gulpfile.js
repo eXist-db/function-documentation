@@ -34,6 +34,7 @@ const paths = {
       "node_modules/prismjs/prism.js",
       "node_modules/prismjs/components/prism-xquery.min.js",
       "node_modules/prismjs/components/prism-java.min.js",
+      "node_modules/marked/lib/marked.js"
     ],
     styles: [
       "src/main/xar-resources/resources/vendor/styles/*",
