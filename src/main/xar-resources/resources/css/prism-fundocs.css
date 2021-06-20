@@ -13,11 +13,8 @@ pre[class*="language-"] {
   direction: ltr;
   text-align: left;
 
-  /* white-space: pre;
-    word-spacing: normal; */
-
-  white-space: pre-line;
-  word-wrap: break-word;
+  white-space: pre;
+  word-spacing: normal;
 
   word-break: normal;
   font-size: 0.9em;
@@ -31,6 +28,12 @@ pre[class*="language-"] {
   -moz-hyphens: none;
   -ms-hyphens: none;
   hyphens: none;
+}
+
+.signature code[class*="language-"],
+pre[class*="language-"].signature {
+  white-space: pre-line;
+  word-wrap: break-word;
 }
 
 pre > code[class*="language-"] {
@@ -83,7 +86,7 @@ pre[class*="language-"] {
 }
 
 .token.string {
-  color: #a31515;
+  color: #4193b9;
 }
 
 .token.builtin {
