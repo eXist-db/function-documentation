@@ -1,4 +1,5 @@
 $(document).on("ready", function() {
+    const markedOptions = { "gfm": true }
     const loginDialog = $("#loginDialog");
     let timeout = 0;
 
@@ -91,8 +92,24 @@ $(document).on("ready", function() {
 
     // replace markdown element content with rendered HTML
     const mdContentElement = document.querySelector(".markdown")
+
     if (mdContentElement) {
-        const markdown = marked(mdContentElement.textContent)
+        const renderer = {
+            table(header, body) {            
+                if (body) body = `<tbody>${body}</tbody>`
+                return `<table class="table table-bordered">
+                    <thead>
+                    ${header}
+                    </thead>
+                    ${body}
+                    </table>
+                `;
+            }
+        };
+          
+        marked.use({ renderer });
+          
+        const markdown = marked(mdContentElement.textContent, markedOptions)
         mdContentElement.innerHTML = markdown    
     }
 });
