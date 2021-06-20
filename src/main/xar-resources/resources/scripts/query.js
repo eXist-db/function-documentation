@@ -47,9 +47,10 @@ $(document).on("ready", function() {
             success: function (data) {
                 $("#f-load-indicator").hide();
                 if (data.status == "failed") {
+                    // FIXME the server should respond with an error status code
                     $("#messages").text(data.message);
                 } else {
-                    window.location.href = ".";
+                    window.location.reload();
                 }
             }
         });
