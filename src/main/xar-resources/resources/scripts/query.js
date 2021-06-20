@@ -1,4 +1,10 @@
 $(document).on("ready", function() {
+    const loginDialog = $("#loginDialog");
+    let timeout = 0;
+
+    loginDialog.modal({
+        show: false
+    });
 
     function search() {
         const data = $("#fun-query-form").serialize();
@@ -49,11 +55,6 @@ $(document).on("ready", function() {
         });
     }
 
-    let timeout = 0;
-    const loginDialog = $("#loginDialog");
-    loginDialog.modal({
-        show: false
-    });
     $("form", loginDialog).on("submit", function(ev) {
         const params = $(this).serialize();
         $.ajax({
@@ -73,6 +74,8 @@ $(document).on("ready", function() {
     $("#f-load-indicator").hide();
     $("#query-field").on("keyup", function() {
         const val = $(this).val();
+        // fixme search request is delayed by 300ms
+        // replace with proper debounce
         if (val.length > 3) {
             if (timeout)
                 clearTimeout(timeout);
