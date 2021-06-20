@@ -1,3 +1,7 @@
 target/
+node_modules/
+node/
 *.iml
 .idea/
+.settings/
+.vscode/

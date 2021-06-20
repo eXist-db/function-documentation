@@ -26,7 +26,7 @@ frequency of each name in the collection and the number of documents it appears 
 To list all terms starting with the string "kin" in the lucene index for a given node set, use the following code:
 
 ```xquery
-xquery version "3.0";
+xquery version "3.1";
 
 declare namespace tei="http://www.tei-c.org/ns/1.0";
 

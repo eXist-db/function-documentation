@@ -1,4 +1,4 @@
-xquery version "3.0";
+xquery version "3.1";
 
 module namespace app="http://exist-db.org/xquery/app";
 
@@ -7,26 +7,6 @@ declare namespace xqdoc="http://www.xqdoc.org/1.0";
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
 
 import module namespace templates="http://exist-db.org/xquery/html-templating";
-
-declare variable $app:MD_MODULE_URI := "http://exist-db.org/xquery/markdown";
-
-declare variable $app:MD_HAS_MODULE :=
-    try {
-        inspect:inspect-module-uri(xs:anyURI($app:MD_MODULE_URI))
-    } catch * {
-        ()
-    };
-    
-declare variable $app:MD_CONFIG := map {
-    "code-block": function($language as xs:string, $code as xs:string) {
-        <div class="signature" data-language="{$language}">{$code}</div>
-    },
-    "heading": function($level as xs:int, $content as xs:string*) {
-        element { "h" || 1 + $level } {
-            $content
-        }
-    }
-};
 
 declare function app:check-dba-user($node as node(), $model as map(*)) {
     let $user := sm:id()/sm:id/(sm:effective|sm:real)[1]/sm:username
@@ -184,7 +164,7 @@ declare %private function app:print-module($module as element(xqdoc:xqdoc), $fun
             if ($details and exists($extDocs)) then
                 <div class="extended">
                     <h1>Overview</h1>
-                    { app:parse-markdown($extDocs) }
+                    { app:include-markdown($extDocs) }
                 </div>
             else
                 ()
@@ -227,7 +207,7 @@ declare %private function app:print-function($function as element(xqdoc:function
         <div class="function" id="{$function-identifier}">
             <div class="function-head">
                 <h4>{$function-name/node()}</h4>
-                <div class="signature" data-language="xquery">{ $function/xqdoc:signature/node() }</div>
+                <pre class="signature"><code class="language-xquery">{ $function/xqdoc:signature/node() }</code></pre>
             </div>
             <div class="function-detail">
                 <p class="description">{ $parsed }</p>
@@ -286,7 +266,7 @@ declare %private function app:print-function($function as element(xqdoc:function
                     if ($details and exists($extDocs)) then
                         <div class="extended">
                             <h1>Detailed Description</h1>
-                            { app:parse-markdown($extDocs) }
+                            { app:include-markdown($extDocs) }
                         </div>
                     else
                         ()
@@ -295,15 +275,12 @@ declare %private function app:print-function($function as element(xqdoc:function
         </div>
 };
 
-declare %private function app:parse-markdown($path as xs:string) {
-    if ($app:MD_HAS_MODULE) then
-        let $expr := 
-            'import module namespace markdown="http://exist-db.org/xquery/markdown";' ||
-            'markdown:parse(util:binary-to-string(util:binary-doc($path)), ($markdown:HTML-CONFIG, $app:MD_CONFIG))'
-        return
-            util:eval($expr)
-    else
-        <div class="alert alert-warning">Install markdown parser module via dashboard to display extended documentation.</div>
+declare %private
+function app:include-markdown ($path as xs:string) as element(div) {
+    element div {
+        attribute class { "markdown" },
+        $path => util:binary-doc() => util:binary-to-string()
+    }
 };
 
 declare %private function app:print-parameters($params as element(xqdoc:param)*) {
@@ -352,27 +329,6 @@ declare %private function app:get-extended-module-doc($module as element(xqdoc:x
             $path
         else
             ()
-};
-
-(: ~
- : If eXide is installed, we can load ace locally. If not, download ace
- : from cloudfront.
- :)
-declare function app:import-ace($node as node(), $model as map(*)) {
-    let $eXideInstalled := doc-available("/db/eXide/repo.xml")
-    let $path :=
-        if ($eXideInstalled) then
-            "../eXide/resources/scripts/ace/"
-        else
-            "//d1n0x3qji82z53.cloudfront.net/src-min-noconflict/"
-    for $script in $node/script
-    return
-        <script>
-        {
-            $script/@* except $script/@src,
-            attribute src { $path || $script/@src }
-        }
-        </script>
 };
 
 declare 

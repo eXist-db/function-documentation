@@ -1,15 +1,15 @@
-xquery version "3.0";
+xquery version "3.1";
 
 module namespace docs="http://exist-db.org/xquery/docs";
 
-import module namespace xdb="http://exist-db.org/xquery/xmldb";
-import module namespace dbutil="http://exist-db.org/xquery/dbutil";
+import module namespace xmldb="http://exist-db.org/xquery/xmldb";
+import module namespace dbutil="http://exist-db.org/xquery/dbutil" at "dbutil.xqm";
 import module namespace inspect="http://exist-db.org/xquery/inspection" at "java:org.exist.xquery.functions.inspect.InspectionModule";
 
 declare namespace xqdoc="http://www.xqdoc.org/1.0";
  
 declare %private function docs:create-collection($parent as xs:string, $child as xs:string) as empty-sequence() {
-    let $null := xdb:create-collection($parent, $child)
+    let $null := xmldb:create-collection($parent, $child)
     return ()
 };
 
@@ -64,12 +64,12 @@ declare %private function docs:load-internal-modules($store as function(xs:strin
 };
 
 declare function docs:load-fundocs($target as xs:string) {
-    let $dataColl := xdb:create-collection($target, "data")
+    let $dataColl := xmldb:create-collection($target, "data")
     let $store := function($moduleURI as xs:string, $data as element()) {
         let $name := util:hash($moduleURI, "md5") || ".xml"
         return
         (
-            xdb:store($dataColl, $name, $data),
+            xmldb:store($dataColl, $name, $data),
             sm:chmod(xs:anyURI($dataColl || "/" || $name), "rw-rw-r--")
         )[2]
     }

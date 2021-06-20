@@ -1,0 +1,37 @@
+{
+  "name": "function-documentation",
+  "version": "1.2.0-SNAPSHOT",
+  "description": "Function documentation for eXist-db",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eXist-db/function-documentation.git"
+  },
+  "keywords": [
+    "eXist-db",
+    "expath",
+    "xar",
+    "xquery",
+    "documentation",
+    "fundocs",
+    "functions"
+  ],
+  "author": "exist-db",
+  "license": "LGPL-2.1",
+  "bugs": {
+    "url": "https://github.com/eXist-db/function-documentation/issues"
+  },
+  "homepage": "https://github.com/eXist-db/function-documentation#readme",
+  "dependencies": {
+    "bootstrap": "^3.4.1",
+    "jquery": "^1.12.4",
+    "marked": "^2.1.1",
+    "prismjs": "^1.23.0"
+  },
+  "devDependencies": {
+    "delete": "^1.1.0",
+    "gulp": "^4.0.2"
+  }
+}

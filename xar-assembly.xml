@@ -14,8 +14,6 @@
   <category id="apps">Applications</category>
   <category id="doc">Documentation</category>
   <dependency processor="http://exist-db.org" semver-min="${exist.version}"/>
-  <dependency package="http://exist-db.org/apps/shared" semver-min="${shared-resources.version}"/>
-  <dependency package="http://exist-db.org/apps/markdown" semver-min="${markdown.version}"/>
   <dependency package="http://exist-db.org/html-templating" semver-min="${templating.version}"/>
   <prepare>pre-install.xql</prepare>
   <changelog>
@@ -42,17 +40,31 @@
     </change>
   </changelog>
 
-  <fileSets>
-    <fileSet>
-      <directory>${basedir}</directory>
-      <includes>
-        <include>README.md</include>
-        <include>LICENSE</include>
-      </includes>
-    </fileSet>
-    <fileSet>
-      <directory>${project.build.outputDirectory}</directory>
-    </fileSet>
+    <!-- includes everything in src/main/xar-resources, README.md, and LICENSE -->
+    <fileSets>
+      <fileSet>
+          <directory>${basedir}</directory>
+          <includes>
+              <include>README.md</include>
+              <include>LICENSE</include>
+          </includes>
+      </fileSet>
+      <fileSet>
+          <directory>${basedir}/src/main/xar-resources</directory>
+          <excludes>
+            <!--
+              These are not needed from this fileSet,
+              instead they are taken from the fileSet
+              of the Gulp transform output in ${project.build.directory}/generated-resources/frontend/xar-resources
+              see the fileSet below.
+            -->
+            <exclude>**.js</exclude>
+            <exclude>**.css</exclude>
+          </excludes>
+        </fileSet>
+        <fileSet>
+          <directory>${project.build.directory}/generated-resources/frontend/xar-resources</directory>
+        </fileSet>
   </fileSets>
 
 </package>

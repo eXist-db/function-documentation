@@ -1,4 +1,4 @@
-xquery version "3.0";
+xquery version "3.1";
 
 import module namespace login="http://exist-db.org/xquery/login" at "resource:org/exist/xquery/modules/persistentlogin/login.xql";
 
@@ -50,12 +50,6 @@ else if (ends-with($exist:resource, ".html")) then
 else if ($exist:resource = "reindex.xql") then
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
         {login:set-user("org.exist.login", (), false())}
-    </dispatch>
-    
-(: Requests for javascript libraries are resolved to the file system :)
-else if (contains($exist:path, "/$shared/")) then
-    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-        <forward url="/shared-resources/{substring-after($exist:path, '/$shared/')}"/>
     </dispatch>
     
 else
