@@ -6,7 +6,31 @@ or a map of options.
 
 ## Options Map
 
-The map has three keys at the moment:
+Serialization options (only applies to XML files at the moment) lets you
+override some defaults that are set in `file:serialize` for backwards
+compatibility.
+
+- `indent`: xs:boolean default `true()`
+  Wether to remove line-endings and extra whitespace from XML-files with
+  the exception of those in mixed content nodes.
+- `omit-xml-declaration`: xs:boolean default `true()`
+  Set this to `false()` if you wish to have the XML declaration at the
+  beginning of each XML file.
+- `exist:expand-x-includes`: xs:boolean default `false()`
+  Setting this to `true()` will expand X-includes in files where
+  they are present.
+
+There are additional serialization options that apply to XML-files and can now be set in the options map. Most notably:
+
+- `exist:insert-final-newline`: xs:boolean default `false()`
+  With this option set to `true()` a newline character will be added 
+  to the very end of the document. Useful when syncing data to a git
+  repository.
+
+A list of all serialization options can be found in [the exist-db documentation on XQuery serialization](http://exist-db.org/exist/apps/doc/xquery.xml?field=all&id=D3.3.6.2#serialization)
+
+In addition to all serialization settings, the map lets you specify
+three additional options:
 
 - `after`: xs:dateTime? default `()`
     - synchronise only files newer than the dateTime provided
