@@ -60,10 +60,17 @@
             -->
             <exclude>**.js</exclude>
             <exclude>**.css</exclude>
+            <exclude>**/page.html</exclude>
           </excludes>
         </fileSet>
         <fileSet>
           <directory>${project.build.directory}/generated-resources/frontend/xar-resources</directory>
+        </fileSet>
+        <fileSet>
+          <directory>${project.build.directory}/classes</directory>
+          <includes>
+            <include>templates/page.html</include>
+        </includes>
         </fileSet>
   </fileSets>
 
