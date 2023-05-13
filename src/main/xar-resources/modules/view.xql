@@ -12,7 +12,7 @@ let $config := map {
     $templates:CONFIG_APP_ROOT : $config:app-root,
     $templates:CONFIG_STOP_ON_ERROR : true()
 }
-let $resolve := function($func as xs:string, $arity as xs:int) {
+let $resolve := function($func as xs:string, $arity as xs:integer) {
     try {
         function-lookup(xs:QName($func), $arity)
     } catch * {

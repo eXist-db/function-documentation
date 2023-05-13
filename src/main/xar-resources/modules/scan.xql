@@ -40,7 +40,7 @@ declare %private function docs:load-stored($path as xs:anyURI, $store as functio
 declare %private function docs:load-external-modules($store as function(xs:string, element()) as empty-sequence()) {
     for $uri in util:mapped-modules()
     return
-        docs:load-external($uri, $store),
+        docs:load-external(xs:anyURI($uri), $store),
     for $path in dbutil:find-by-mimetype(xs:anyURI("/db"), "application/xquery")
     return
         try {
@@ -53,7 +53,7 @@ declare %private function docs:load-external-modules($store as function(xs:strin
 
 declare %private function docs:load-internal-modules($store as function(xs:string, element()) as empty-sequence()) {
     for $moduleURI in util:registered-modules()
-    let $meta := inspect:inspect-module-uri($moduleURI)
+    let $meta := inspect:inspect-module-uri(xs:anyURI($moduleURI))
     return
         if ($meta) then
             let $xml := docs:generate-xqdoc($meta)
