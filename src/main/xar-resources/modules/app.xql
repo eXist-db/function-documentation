@@ -108,7 +108,7 @@ function app:module($node as node(), $model as map(*), $details as xs:boolean) {
     
     order by $order
     return
-        app:print-module($module, $funcsInModule, boolean($details))
+        app:print-module($module, $funcsInModule, $details)
 };
 
 declare %private function app:print-module($module as element(xqdoc:xqdoc), $functions as element(xqdoc:function)*, 
