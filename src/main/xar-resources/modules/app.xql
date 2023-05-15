@@ -297,7 +297,7 @@ declare %private function app:print-parameters($params as element(xqdoc:param)*)
 };
 
 declare %private function app:get-extended-doc($function as element(xqdoc:function)) {
-    let $name := replace($function/xqdoc:name, "([^:]+:)?(.*)$", "$2")
+    let $name := replace($function/xqdoc:name, "([^:]+:)?(.+)$", "$2")
     let $arity := count($function/xqdoc:comment/xqdoc:param)
     let $prefix := $function/ancestor::xqdoc:xqdoc/xqdoc:module/xqdoc:name
     let $prefix := if ($prefix/text()) then $prefix else "fn"
