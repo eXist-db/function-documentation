@@ -17,6 +17,20 @@
   <dependency package="http://exist-db.org/html-templating" semver-min="${templating.version}"/>
   <prepare>pre-install.xql</prepare>
   <changelog>
+    <change version="1.2.1">
+      <ul xmlns="http://www.w3.org/1999/xhtml">
+        <li>Added article for file:sync#3 - <a href="https://github.com/eXist-db/function-documentation/pull/54">#54</a></li>
+        <li>Added serialization options to file:sync - <a href="https://github.com/eXist-db/function-documentation/pull/58">#58</a></li>
+        <li>Fixed types for eXist 7 compatibility - <a href="https://github.com/eXist-db/function-documentation/pull/64">#64</a></li>
+        <li>Fixed regex for compatibility with eXist develop branches - <a href="https://github.com/eXist-db/function-documentation/pull/65">#65</a></li>
+      </ul>
+    </change>
+    <change version="1.2.0">
+      <ul xmlns="http://www.w3.org/1999/xhtml">
+        <li>Removed dependencies on shared-resources and markdown packages</li>
+        <li>Improved header</li>
+      </ul>
+    </change>
     <change version="1.1.2">
       <ul xmlns="http://www.w3.org/1999/xhtml">
           <li>New: Implementation-specific notes about fn:xml-to-json</li>
