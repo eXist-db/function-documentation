@@ -2,17 +2,15 @@ name: CI
 on: [push, pull_request]
 jobs:
   build:
-    name: Build and Test (${{ matrix.os }} / OpenJDK ${{ matrix.jdk }})
+    name: Exist ${{ matrix.exist-version }} (Java ${{ matrix.java-version }}) build and test
     strategy:
       fail-fast: true
       matrix:
-        exist-version: [latest, 6.2.0, 5.3.0]
-        jdk: ['8', '17']
+        exist-version: [latest, 6.2.0]
+        java-version: ['8', '17']
         os: [ubuntu-latest]
         exclude:
            - exist-version: 6.2.0
-             java-version: 17
-           - exist-version: 5.3.0
              java-version: 17
            - exist-version: latest
              java-version: 11
@@ -20,12 +18,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK ${{ matrix.jdk }}
+      - name: Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           cache: maven
-          java-version: ${{ matrix.jdk }}
+          java-version: ${{ matrix.java-version }}
       - name: Maven Build
         run: mvn clean package
 
