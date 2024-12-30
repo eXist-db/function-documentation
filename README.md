@@ -1,7 +1,7 @@
 # eXist-db Function Documentation Browser App
 
-[![Build Status](https://travis-ci.com/eXist-db/function-documentation.svg?branch=master)](https://travis-ci.com/eXist-db/function-documentation)
-[![eXist-db version](https://img.shields.io/badge/eXist_db-4.0.0-blue.svg)](http://www.exist-db.org/exist/apps/homepage/index.html)
+[![CI](https://github.com/eXist-db/function-documentation/actions/workflows/ci.yml/badge.svg)](https://github.com/eXist-db/function-documentation/actions/workflows/ci.yml)
+[![eXist-db version](https://img.shields.io/badge/eXist_db-6.2.0-blue.svg)](http://www.exist-db.org/exist/apps/homepage/index.html)
 
 <img src="src/main/xar-resources/icon.png" align="left" width="15%"/>
 
@@ -10,7 +10,7 @@ This repository contains the function documentation browser app for the [eXist-d
 ## Dependencies
 
 - [Maven](https://maven.apache.org): `3.5.2`
-- [eXist-db](http://exist-db.org): `4.0.0`
+- [eXist-db](http://exist-db.org): `6.2.0`
 
 ## Installation
 

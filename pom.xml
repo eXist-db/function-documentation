@@ -48,7 +48,7 @@
         <project.build.source>1.8</project.build.source>
         <project.build.target>1.8</project.build.target>
 
-        <exist.version>5.3.0-SNAPSHOT</exist.version>
+        <exist.version>6.2.0</exist.version>
         <templating.version>1.1.0</templating.version>
 
         <node.version>v18.18.2</node.version>
