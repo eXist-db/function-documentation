@@ -6,8 +6,17 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
+        exist-version: [latest, 6.2.0, 5.3.0]
         jdk: ['8', '17']
         os: [ubuntu-latest]
+        exclude:
+           - exist-version: 6.2.0
+             java-version: 17
+           - exist-version: 5.3.0
+             java-version: 17
+           - exist-version: latest
+             java-version: 11
+
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -18,8 +27,33 @@ jobs:
           cache: maven
           java-version: ${{ matrix.jdk }}
       - name: Maven Build
-        run: mvn clean package -DskipTests
-      - name: Test
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-        run: mvn verify
+        run: mvn clean package
+
+      - name: Add expath dependencies
+        working-directory: target
+        run: |
+          wget http://exist-db.org/exist/apps/public-repo/public/templating-1.1.0.xar -O 001.xar
+
+
+      # Install
+      - name: Start exist-ci containers
+        run: |
+          docker run -dit -p 8080:8080 -v ${{ github.workspace }}/target:/exist/autodeploy \
+          --name exist --rm --health-interval=2s --health-start-period=4s \
+          duncdrum/existdb:${{ matrix.exist-version }}
+      
+      - name: wait for install to finish
+        timeout-minutes: 5
+        run: |
+          while ! docker logs exist | grep -q "Server has started"; \
+          do sleep 2s; \
+          done
+
+      # Test       
+      - name: Run e2e test
+        run: npx cypress run
+
+      # - name: Test
+      #   env:
+      #     CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      #   run: mvn verify
