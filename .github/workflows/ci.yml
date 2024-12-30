@@ -1,0 +1,25 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  build:
+    name: Build and Test (${{ matrix.os }} / OpenJDK ${{ matrix.jdk }})
+    strategy:
+      fail-fast: true
+      matrix:
+        jdk: ['8', '17']
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK ${{ matrix.jdk }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          cache: maven
+          java-version: ${{ matrix.jdk }}
+      - name: Maven Build
+        run: mvn clean package -DskipTests
+      - name: Test
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+        run: mvn verify
