@@ -28,7 +28,7 @@ const paths = {
   },
   vendor: {
     scripts: [
-      "src/main/xar-resources/resources/vendor/scripts/*",
+      "src/main/xar-resources/resources/scripts/*",
       "node_modules/bootstrap/dist/js/bootstrap.min.*",
       "node_modules/jquery/dist/jquery.min.*",
       "node_modules/prismjs/prism.js",
@@ -37,7 +37,7 @@ const paths = {
       "node_modules/marked/lib/marked.js"
     ],
     styles: [
-      "src/main/xar-resources/resources/vendor/styles/*",
+      "src/main/xar-resources/resources/css/*",
       "node_modules/bootstrap/dist/css/bootstrap.min.*",
       // 'node_modules/prismjs/themes/*.css'
     ],

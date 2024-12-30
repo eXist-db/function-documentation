@@ -32,6 +32,6 @@
   },
   "devDependencies": {
     "delete": "^1.1.0",
-    "gulp": "^4.0.2"
+    "gulp": "^5.0.0"
   }
 }
