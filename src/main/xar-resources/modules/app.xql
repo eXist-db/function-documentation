@@ -386,5 +386,5 @@ function app:view($node as node(), $model as map(*),  $uri as xs:string, $locati
                 return
                     app:print-function($xqdocfunction, exists($function))
             else
-                app:print-module($module, $module//xqdoc:function, $details)
+                app:print-module($module, $module//xqdoc:function, $details cast as xs:boolean)
 };

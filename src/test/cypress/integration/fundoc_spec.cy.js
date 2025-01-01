@@ -7,9 +7,13 @@ context('Function Documentation', () => {
     // TODO: Generate index in beforeAll
   })
   describe('landing page', () => {
-    it('should show heading', () => {
+    it.only('should contain major parts', () => {
+      cy.get('.navbar')
+        .contains('Home')
       cy.get('h1')
         .contains('Function Documentation')
+      cy.get('#fun-query-form')
+        .should('exist')
     })
   })
 
@@ -31,5 +35,20 @@ context('Function Documentation', () => {
       cy.get('zero-md')
         .should('exist')
     })
-  })  
+  })
+  
+  describe('browse', () => {
+    it('should find local modules', () => {
+      cy.get('#browse')
+        .click()
+      cy.get('.form-inline > .btn')
+        .should('be.visible')
+      // check module from fundocs itself 
+      cy.get('#modules')
+        .contains('http://exist-db.org/xquery/docs')
+        .click()
+      cy.get('.module')
+        .should('exist')
+    })
+  })
 })

@@ -26,8 +26,9 @@
   "homepage": "https://github.com/eXist-db/function-documentation#readme",
   "dependencies": {
     "@highlightjs/cdn-assets": "^11.11.1",
-    "bootstrap": "^3.4.1",
-    "jquery": "^1.12.4",
+    "@neos21/bootstrap3-glyphicons": "^1.0.7",
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.3",
     "zero-md": "^3.1.6"
   },
   "devDependencies": {
