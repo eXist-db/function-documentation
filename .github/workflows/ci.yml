@@ -13,7 +13,7 @@ jobs:
            - exist-version: 6.2.0
              java-version: 17
            - exist-version: latest
-             java-version: 11
+             java-version: 8
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -24,6 +24,10 @@ jobs:
           distribution: temurin
           cache: maven
           java-version: ${{ matrix.java-version }}
+      - name: Install Test Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bats
       - name: Maven Build
         run: mvn clean package
 
@@ -37,17 +41,20 @@ jobs:
       - name: Start exist-ci containers
         run: |
           docker run -dit -p 8080:8080 -v ${{ github.workspace }}/target:/exist/autodeploy \
-          --name exist --rm --health-interval=2s --health-start-period=4s \
+          --name exist --rm --health-interval=1s --health-start-period=1s \
           duncdrum/existdb:${{ matrix.exist-version }}
       
       - name: wait for install to finish
         timeout-minutes: 5
         run: |
           while ! docker logs exist | grep -q "Server has started"; \
-          do sleep 2s; \
+          do sleep 4s; \
           done
 
-      # Test       
+      # Test
+      - name: Run smoke test
+        run: bats --tap src/test/bats/*.bats
+
       - name: Run e2e test
         run: npx cypress run
 

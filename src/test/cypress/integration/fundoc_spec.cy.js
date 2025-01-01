@@ -4,10 +4,10 @@
 context('Function Documentation', () => {
   beforeEach(() => {
     cy.visit('')
-    // TODO: Generate index in beforeAll
   })
+
   describe('landing page', () => {
-    it.only('should contain major parts', () => {
+    it('should contain major parts', () => {
       cy.get('.navbar')
         .contains('Home')
       cy.get('h1')
@@ -36,7 +36,7 @@ context('Function Documentation', () => {
         .should('exist')
     })
   })
-  
+
   describe('browse', () => {
     it('should find local modules', () => {
       cy.get('#browse')

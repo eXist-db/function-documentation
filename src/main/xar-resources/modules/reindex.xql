@@ -2,6 +2,7 @@ xquery version "3.1";
 
 import module namespace docs="http://exist-db.org/xquery/docs" at "scan.xql";
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
+import module namespace sm="http://exist-db.org/xquery/securitymanager";
 
 declare option exist:serialize "method=json media-type=application/javascript";
 
