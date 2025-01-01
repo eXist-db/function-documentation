@@ -1,91 +1,110 @@
-$(document).on("ready", function() {
-    const markedOptions = { "gfm": true }
-    const loginDialog = $("#loginDialog");
+document.addEventListener("DOMContentLoaded", function () {
+    const markedOptions = { gfm: true };
+    const loginDialog = document.getElementById("loginDialog");
     let timeout = 0;
 
-    loginDialog.modal({
-        show: false
-    });
-
-    function search() {
-        const data = $("#fun-query-form").serialize();
-        $.ajax({
-            type: "POST",
-            url: "ajax.html",
-            data: data + "&action=search",
-            success: function (data) {
-                $("#results").fadeOut(100, function() {
-                    $(this).html(data);
-                    $(this).fadeIn(100);
-                    timeout = null;
-                });
-            }
-        });
+    // Modal handling
+    function showModal(element) {
+        element.style.display = "block";
     }
 
-    function reindexIfLoggedIn(ev) {
-        ev.preventDefault();
+    function hideModal(element) {
+        element.style.display = "none";
+    }
 
-        $.ajax({
-            url: "login",
-            dataType: "json",
-            success: reindex,
-            error: function () {
-                $("#loginDialog").modal("show");
-            }
-        });
+    hideModal(loginDialog);
+
+    function search() {
+        const formData = new FormData(document.getElementById("fun-query-form"));
+        formData.append("action", "search");
+
+        fetch("ajax.html", {
+            method: "POST",
+            body: new URLSearchParams(formData),
+        })
+            .then((response) => response.text())
+            .then((data) => {
+                const results = document.getElementById("results");
+                results.style.display = "none";
+                results.innerHTML = data;
+                results.style.display = "block";
+                timeout = null;
+            });
+    }
+
+    function reindexIfLoggedIn(event) {
+        event.preventDefault();
+
+        fetch("login", { headers: { Accept: "application/json" } })
+            .then((response) => {
+                if (!response.ok) throw new Error();
+                return response.json();
+            })
+            .then(reindex)
+            .catch(() => showModal(loginDialog));
     }
 
     function reindex() {
-        $("#messages").empty();
-        $("#f-load-indicator").show();
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            url: "modules/reindex.xql",
-            success: function (data) {
-                $("#f-load-indicator").hide();
-                if (data.status == "failed") {
-                    // FIXME the server should respond with an error status code
-                    $("#messages").text(data.message);
+        const messages = document.getElementById("messages");
+        const loadIndicator = document.getElementById("f-load-indicator");
+        messages.innerHTML = "";
+        loadIndicator.style.display = "block";
+
+        fetch("modules/reindex.xql", {
+            method: "POST",
+            headers: { Accept: "application/json" },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                loadIndicator.style.display = "none";
+                if (data.status === "failed") {
+                    messages.textContent = data.message;
                 } else {
                     window.location.reload();
                 }
-            }
-        });
+            });
     }
 
-    $("form", loginDialog).on("submit", function(ev) {
-        const params = $(this).serialize();
-        $.ajax({
-            url: "login",
-            data: params,
-            dataType: "json",
-            success: function(data) {
-                loginDialog.modal("hide");
+    loginDialog.querySelector("form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+
+        fetch("login", {
+            method: "POST",
+            body: new URLSearchParams(formData),
+            headers: { Accept: "application/json" },
+        })
+            .then((response) => {
+                if (!response.ok) throw new Error();
+                return response.json();
+            })
+            .then(() => {
+                hideModal(loginDialog);
                 reindex();
-            },
-            error: function(xhr, textStatus) {
-                $(".login-message", loginDialog).show().text("Login failed!");
-            }
-        });
-        return false;
+            })
+            .catch(() => {
+                loginDialog.querySelector(".login-message").style.display = "block";
+                loginDialog.querySelector(".login-message").textContent = "Login failed!";
+            });
     });
-    $("#f-load-indicator").hide();
-    $("#query-field").on("keyup", function() {
-        const val = $(this).val();
-        // fixme search request is delayed by 300ms
-        // replace with proper debounce
+
+    document.getElementById("f-load-indicator").style.display = "none";
+
+    document.getElementById("query-field").addEventListener("keyup", function () {
+        const val = this.value;
         if (val.length > 3) {
-            if (timeout)
-                clearTimeout(timeout);
+            if (timeout) clearTimeout(timeout);
             timeout = setTimeout(search, 300);
         }
     });
-    
-    $("#f-btn-reindex").on("click", reindexIfLoggedIn);
-    $("#f-btn-reindex-regen").on("click", reindexIfLoggedIn);
 
-    $("#fun-query-form *[data-toggle='tooltip']").tooltip();
+    document.getElementById("f-btn-reindex").addEventListener("click", reindexIfLoggedIn);
+    document.getElementById("f-btn-reindex-regen").addEventListener("click", reindexIfLoggedIn);
 
+    const tooltips = document.querySelectorAll("#fun-query-form [data-toggle='tooltip']");
+    tooltips.forEach((tooltip) => {
+        tooltip.addEventListener("mouseover", () => {
+            tooltip.title = tooltip.getAttribute("data-title") || "Tooltip";
+        });
+    });
 });
