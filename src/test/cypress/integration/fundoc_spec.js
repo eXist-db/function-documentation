@@ -11,5 +11,20 @@ context('Function Documentation', () => {
       cy.get('h1')
         .contains('Function Documentation')
     })
+  })
+
+  describe('simple search', () => {
+    it('should find article with extended markdown contents', () => {
+      cy.get('#query-field')
+        .type('file:sync')
+      cy.get('.function-head > h4')
+        .should('exist')
+        .click()
+      cy.get('.extended-docs')
+        .should('exist')
+        .click()
+      cy.get('zero-md')
+        .should('exist')
+    })
   })  
 })

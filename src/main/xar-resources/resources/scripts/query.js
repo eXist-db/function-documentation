@@ -90,26 +90,4 @@ $(document).on("ready", function() {
 
     $("#fun-query-form *[data-toggle='tooltip']").tooltip();
 
-    // replace markdown element content with rendered HTML
-    const mdContentElement = document.querySelector(".markdown")
-
-    if (mdContentElement) {
-        const renderer = {
-            table(header, body) {            
-                if (body) body = `<tbody>${body}</tbody>`
-                return `<table class="table table-bordered">
-                    <thead>
-                    ${header}
-                    </thead>
-                    ${body}
-                    </table>
-                `;
-            }
-        };
-          
-        marked.use({ renderer });
-          
-        const markdown = marked(mdContentElement.textContent, markedOptions)
-        mdContentElement.innerHTML = markdown    
-    }
 });

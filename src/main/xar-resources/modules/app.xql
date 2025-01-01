@@ -276,11 +276,12 @@ declare %private function app:print-function($function as element(xqdoc:function
 };
 
 declare %private
-function app:include-markdown ($path as xs:string) as element(div) {
-    element div {
-        attribute class { "markdown" },
-        $path => util:binary-doc() => util:binary-to-string()
-    }
+function app:include-markdown ($path as xs:string) as element(zero-md) {
+    <zero-md src="{ $path }">
+        <template>
+            <link rel="stylesheet" href="resources/css/exist.css" />
+        </template>
+    </zero-md>
 };
 
 declare %private function app:print-parameters($params as element(xqdoc:param)*) {
@@ -310,7 +311,7 @@ declare %private function app:get-extended-doc($function as element(xqdoc:functi
     for $path in $paths
     return
         if (util:binary-doc-available($path)) then
-            $path
+            ('.' || substring-after($path, $config:app-root))
         else
             ()
 };
