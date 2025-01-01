@@ -31,15 +31,14 @@ const paths = {
       "src/main/xar-resources/resources/scripts/*",
       "node_modules/bootstrap/dist/js/bootstrap.min.*",
       "node_modules/jquery/dist/jquery.min.*",
-      "node_modules/prismjs/prism.js",
-      "node_modules/prismjs/components/prism-xquery.min.js",
-      "node_modules/prismjs/components/prism-java.min.js",
+      "node_modules/@highlightjs/cdn-assets/highlight.min.js", 
+      "node_modules/@highlightjs/cdn-assets/languages/xquery.min.js",
       "node_modules/zero-md/dist/index.min.js"
     ],
     styles: [
       "src/main/xar-resources/resources/css/*",
       "node_modules/bootstrap/dist/css/bootstrap.min.*",
-      // 'node_modules/prismjs/themes/*.css'
+      "node_modules/@highlightjs/cdn-assets/styles/atom-one-dark.min.css"
     ],
     fonts: ["node_modules/bootstrap/dist/fonts/*"],
   },

@@ -279,7 +279,8 @@ declare %private
 function app:include-markdown ($path as xs:string) as element(zero-md) {
     <zero-md src="{ $path }">
         <template>
-            <link rel="stylesheet" href="resources/css/exist.css" />
+            <link rel="stylesheet" type="text/css" href="resources/css/exist.css" />
+            <link rel="stylesheet" type="text/css" href="resources/css/atom-one-dark.min.css" />
         </template>
     </zero-md>
 };

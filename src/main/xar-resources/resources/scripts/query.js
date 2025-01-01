@@ -16,9 +16,7 @@ $(document).on("ready", function() {
             success: function (data) {
                 $("#results").fadeOut(100, function() {
                     $(this).html(data);
-                    $(this).fadeIn(100, function() {
-                        Prism.highlightAll()
-                    });
+                    $(this).fadeIn(100);
                     timeout = null;
                 });
             }
