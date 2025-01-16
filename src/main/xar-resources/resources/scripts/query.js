@@ -1,115 +1,132 @@
-$(document).on("ready", function() {
-    const markedOptions = { "gfm": true }
-    const loginDialog = $("#loginDialog");
+document.addEventListener("DOMContentLoaded", function () {
     let timeout = 0;
 
-    loginDialog.modal({
-        show: false
-    });
-
-    function search() {
-        const data = $("#fun-query-form").serialize();
-        $.ajax({
-            type: "POST",
-            url: "ajax.html",
-            data: data + "&action=search",
-            success: function (data) {
-                $("#results").fadeOut(100, function() {
-                    $(this).html(data);
-                    $(this).fadeIn(100, function() {
-                        Prism.highlightAll()
-                    });
-                    timeout = null;
-                });
-            }
-        });
+    // Modal handling
+    function showModal(element) {
+        if (element) element.style.display = "block";
     }
 
-    function reindexIfLoggedIn(ev) {
-        ev.preventDefault();
+    function hideModal(element) {
+        if (element) element.style.display = "none";
+    }
 
-        $.ajax({
-            url: "login",
-            dataType: "json",
-            success: reindex,
-            error: function () {
-                $("#loginDialog").modal("show");
-            }
-        });
+    const loginDialog = document.getElementById("loginDialog");
+    if (loginDialog) hideModal(loginDialog);
+
+    function search() {
+        const form = document.getElementById("fun-query-form");
+        if (!form) return;
+        const formData = new FormData(form);
+        formData.append("action", "search");
+
+        fetch("ajax.html", {
+            method: "POST",
+            body: new URLSearchParams(formData),
+        })
+            .then((response) => response.text())
+            .then((data) => {
+                const results = document.getElementById("results");
+                if (results) {
+                    results.style.display = "none";
+                    results.innerHTML = data;
+                    results.style.display = "block";
+                }
+                timeout = null;
+            });
+    }
+
+    function reindexIfLoggedIn(event) {
+        event.preventDefault();
+
+        fetch("login", { headers: { Accept: "application/json" } })
+            .then((response) => {
+                if (!response.ok) throw new Error();
+                return response.json();
+            })
+            .then(reindex)
+            .catch(() => showModal(loginDialog));
     }
 
     function reindex() {
-        $("#messages").empty();
-        $("#f-load-indicator").show();
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            url: "modules/reindex.xql",
-            success: function (data) {
-                $("#f-load-indicator").hide();
-                if (data.status == "failed") {
-                    // FIXME the server should respond with an error status code
-                    $("#messages").text(data.message);
+        const messages = document.getElementById("messages");
+        const loadIndicator = document.getElementById("f-load-indicator");
+        if (messages) messages.innerHTML = "";
+        if (loadIndicator) loadIndicator.style.display = "block";
+
+        fetch("modules/reindex.xql", {
+            method: "POST",
+            headers: { Accept: "application/json" },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (loadIndicator) loadIndicator.style.display = "none";
+                if (data.status === "failed") {
+                    if (messages) messages.textContent = data.message;
                 } else {
                     window.location.reload();
                 }
-            }
-        });
+            });
     }
 
-    $("form", loginDialog).on("submit", function(ev) {
-        const params = $(this).serialize();
-        $.ajax({
-            url: "login",
-            data: params,
-            dataType: "json",
-            success: function(data) {
-                loginDialog.modal("hide");
-                reindex();
-            },
-            error: function(xhr, textStatus) {
-                $(".login-message", loginDialog).show().text("Login failed!");
-            }
-        });
-        return false;
-    });
-    $("#f-load-indicator").hide();
-    $("#query-field").on("keyup", function() {
-        const val = $(this).val();
-        // fixme search request is delayed by 300ms
-        // replace with proper debounce
-        if (val.length > 3) {
-            if (timeout)
-                clearTimeout(timeout);
-            timeout = setTimeout(search, 300);
+    if (loginDialog) {
+        const form = loginDialog.querySelector("form");
+        if (form) {
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const formData = new FormData(this);
+
+                fetch("login", {
+                    method: "POST",
+                    body: new URLSearchParams(formData),
+                    headers: { Accept: "application/json" },
+                })
+                    .then((response) => {
+                        if (!response.ok) throw new Error();
+                        return response.json();
+                    })
+                    .then(() => {
+                        hideModal(loginDialog);
+                        reindex();
+                    })
+                    .catch(() => {
+                        const loginMessage = loginDialog.querySelector(".login-message");
+                        if (loginMessage) {
+                            loginMessage.style.display = "block";
+                            loginMessage.textContent = "Login failed!";
+                        }
+                    });
+            });
         }
-    });
-    
-    $("#f-btn-reindex").on("click", reindexIfLoggedIn);
-    $("#f-btn-reindex-regen").on("click", reindexIfLoggedIn);
-
-    $("#fun-query-form *[data-toggle='tooltip']").tooltip();
-
-    // replace markdown element content with rendered HTML
-    const mdContentElement = document.querySelector(".markdown")
-
-    if (mdContentElement) {
-        const renderer = {
-            table(header, body) {            
-                if (body) body = `<tbody>${body}</tbody>`
-                return `<table class="table table-bordered">
-                    <thead>
-                    ${header}
-                    </thead>
-                    ${body}
-                    </table>
-                `;
-            }
-        };
-          
-        marked.use({ renderer });
-          
-        const markdown = marked(mdContentElement.textContent, markedOptions)
-        mdContentElement.innerHTML = markdown    
     }
+
+    const loadIndicator = document.getElementById("f-load-indicator");
+    if (loadIndicator) loadIndicator.style.display = "none";
+
+    const queryField = document.getElementById("query-field");
+    if (queryField) {
+        queryField.addEventListener("keyup", function () {
+            const val = this.value;
+            if (val.length > 3) {
+                if (timeout) clearTimeout(timeout);
+                timeout = setTimeout(search, 300);
+            }
+        });
+    }
+
+    const btnReindex = document.getElementById("f-btn-reindex");
+    if (btnReindex) {
+        btnReindex.addEventListener("click", reindexIfLoggedIn);
+    }
+
+    const btnReindexRegen = document.getElementById("f-btn-reindex-regen");
+    if (btnReindexRegen) {
+        btnReindexRegen.addEventListener("click", reindexIfLoggedIn);
+    }
+
+    const tooltips = document.querySelectorAll("#fun-query-form [data-toggle='tooltip']");
+    tooltips.forEach((tooltip) => {
+        tooltip.addEventListener("mouseover", () => {
+            tooltip.title = tooltip.getAttribute("data-title") || "Tooltip";
+        });
+    });
 });

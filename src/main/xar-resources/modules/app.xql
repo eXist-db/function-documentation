@@ -276,11 +276,13 @@ declare %private function app:print-function($function as element(xqdoc:function
 };
 
 declare %private
-function app:include-markdown ($path as xs:string) as element(div) {
-    element div {
-        attribute class { "markdown" },
-        $path => util:binary-doc() => util:binary-to-string()
-    }
+function app:include-markdown ($path as xs:string) as element(zero-md) {
+    <zero-md src="{ $path }">
+        <template>
+            <link rel="stylesheet" type="text/css" href="resources/css/exist.css" />
+            <link rel="stylesheet" type="text/css" href="resources/css/atom-one-dark.min.css" />
+        </template>
+    </zero-md>
 };
 
 declare %private function app:print-parameters($params as element(xqdoc:param)*) {
@@ -310,7 +312,7 @@ declare %private function app:get-extended-doc($function as element(xqdoc:functi
     for $path in $paths
     return
         if (util:binary-doc-available($path)) then
-            $path
+            ('.' || substring-after($path, $config:app-root))
         else
             ()
 };
@@ -351,6 +353,8 @@ function app:showmodules($node as node(), $model as map(*),  $w3c as xs:boolean,
             ($w3c and starts-with($uri, 'http://www.w3.org') ) or 
             ($extensions and starts-with($uri, 'http://exist-db.org/xquery') and not(starts-with($location, '/db'))) or
             ($extensions and starts-with($uri, 'http://exist-db.org/') and (empty($location) or starts-with($location, 'java:'))) or
+            ($extensions and starts-with($uri, 'http://expath.org/ns/')) or
+            ($extensions and starts-with($uri, 'http://exquery.org/ns/') and (empty($location) or starts-with($location, 'java:'))) or
             ($appmodules and starts-with($location, '/db'))
            ) then
             <tr><td><a href="view.html{$query}">{$uri}</a></td><td>{$location}</td></tr> 
@@ -384,5 +388,5 @@ function app:view($node as node(), $model as map(*),  $uri as xs:string, $locati
                 return
                     app:print-function($xqdocfunction, exists($function))
             else
-                app:print-module($module, $module//xqdoc:function, $details)
+                app:print-module($module, $module//xqdoc:function, $details cast as xs:boolean)
 };

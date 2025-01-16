@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.exist-db</groupId>
         <artifactId>exist-apps-parent</artifactId>
-        <version>1.10.0</version>
+        <version>1.12.0</version>
         <relativePath />
     </parent>
 
@@ -48,11 +48,11 @@
         <project.build.source>1.8</project.build.source>
         <project.build.target>1.8</project.build.target>
 
-        <exist.version>5.3.0-SNAPSHOT</exist.version>
-        <templating.version>1.0.2</templating.version>
+        <exist.version>6.2.0</exist.version>
+        <templating.version>1.1.0</templating.version>
 
-        <node.version>v14.17.0</node.version>
-        <npm.version>6.14.13</npm.version>
+        <node.version>v18.18.2</node.version>
+        <npm.version>10.2.1</npm.version>
 
         <package-name>http://exist-db.org/apps/fundocs</package-name>
 	    <package-abbrev>fundocs</package-abbrev>  <!-- override the default which is artifactId :-/ -->
@@ -101,7 +101,7 @@
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.12.0</version>
+                <version>1.12.1</version>
                 <executions>
                   <execution>
                     <!-- optional: looks nicer in your build log. -->
