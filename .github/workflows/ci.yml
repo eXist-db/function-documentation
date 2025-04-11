@@ -34,7 +34,7 @@ jobs:
       - name: Add expath dependencies
         working-directory: target
         run: |
-          wget http://exist-db.org/exist/apps/public-repo/public/templating-1.1.0.xar -O 001.xar
+          wget http://exist-db.org/exist/apps/public-repo/public/templating-1.2.1.xar -O 001.xar
 
 
       # Install
