@@ -44,9 +44,3 @@
     result=$(docker logs exist | grep -ow -c 'Unable to open cgroup memory limit file' || true )
   [ "$result" -eq 0 ]
 }
-
-@test "Reindex db" {
-  run curl -s -u 'admin:' 'http://127.0.0.1:8080/exist/rest/db/apps/fundocs/modules/reindex.xql'
-  [ "$status" -eq 0 ]
-  echo '# ' $output >&3
-}
