@@ -2,6 +2,19 @@
 /// <reference types="cypress" />
 
 context('Function Documentation', () => {
+  before (() => {
+    // Creat Index before running test
+      cy.request({
+        url: 'http://127.0.0.1:8080/exist/rest/db/apps/fundocs/modules/reindex.xql',
+        auth: {
+          user: 'admin', 
+          password: ''
+        }
+      })
+        .its('body')
+        .should('equal', '{ "status" : "ok", "message" : "Scan completed! " }')
+  })
+
   beforeEach(() => {
     cy.visit('')
   })
@@ -43,6 +56,10 @@ context('Function Documentation', () => {
         .click()
       cy.get('.form-inline > .btn')
         .should('be.visible')
+      cy.get('[name=appmodules]')
+        .check()
+      cy.get('.form-inline > .btn')
+        .click()
       // check module from fundocs itself 
       cy.get('#modules')
         .contains('http://exist-db.org/xquery/docs')
