@@ -56,6 +56,10 @@ context('Function Documentation', () => {
         .click()
       cy.get('.form-inline > .btn')
         .should('be.visible')
+      cy.get('[name=appmodules]')
+        .check()
+      cy.get('.form-inline > .btn')
+        .click()
       // check module from fundocs itself 
       cy.get('#modules')
         .contains('http://exist-db.org/xquery/docs')
