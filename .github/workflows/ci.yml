@@ -4,14 +4,14 @@ jobs:
   build:
     name: Exist ${{ matrix.exist-version }} (Java ${{ matrix.java-version }}) build and test
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         exist-version: [latest, 6.2.0]
-        java-version: ['8', '17']
+        java-version: ['8', '21']
         os: [ubuntu-latest]
         exclude:
            - exist-version: 6.2.0
-             java-version: 17
+             java-version: 21
            - exist-version: latest
              java-version: 8
 
@@ -28,13 +28,18 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y bats
+
       - name: Maven Build
         run: mvn clean package
+
+      - name: set min templating version from pom
+        run: |
+          echo "TEMPLATING_VERSION=$(mvn help:evaluate -Dexpression=templating.version -q -DforceStdout)" >> $GITHUB_ENV
 
       - name: Add expath dependencies
         working-directory: target
         run: |
-          wget http://exist-db.org/exist/apps/public-repo/public/templating-1.2.1.xar -O 001.xar
+          wget http://exist-db.org/exist/apps/public-repo/public/templating-${{ env.TEMPLATING_VERSION }}.xar -O 001.xar
 
 
       # Install
