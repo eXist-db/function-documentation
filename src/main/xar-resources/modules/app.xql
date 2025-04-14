@@ -337,33 +337,33 @@ declare
     %templates:default("w3c", "false")
     %templates:default("extensions", "false")
     %templates:default("appmodules", "false")
-function app:showmodules($node as node(), $model as map(*),  $w3c as xs:boolean, $extensions as xs:boolean, $appmodules as xs:boolean) {
-    
+function app:showmodules(
+    $node as node(), $model as map(*), 
+    $w3c as xs:boolean, $extensions as xs:boolean, $appmodules as xs:boolean
+) as element(tr)* {
     for $module in collection($config:app-data)//xqdoc:xqdoc
-    
-    let $uri := $module/xqdoc:module/xqdoc:uri/text()
-    let $location := $module/xqdoc:control/xqdoc:location/text()
-
-    (: path to anchor module :)
-    let $query := "?" || "uri=" || $uri || (if ($location) then ("&amp;location=" || $location) else "#")
-    
+    let $uri := $module/xqdoc:module/xqdoc:uri
+    let $location := $module/xqdoc:control/xqdoc:location
     order by $uri
     return 
         if ( 
-            ($w3c and starts-with($uri, 'http://www.w3.org') ) or 
-            ($extensions and starts-with($uri, 'http://exist-db.org/xquery') and not(starts-with($location, '/db'))) or
-            ($extensions and starts-with($uri, 'http://exist-db.org/') and (empty($location) or starts-with($location, 'java:'))) or
-            ($extensions and starts-with($uri, 'http://expath.org/ns/')) or
-            ($extensions and starts-with($uri, 'http://exquery.org/ns/') and (empty($location) or starts-with($location, 'java:'))) or
-            ($appmodules and starts-with($location, '/db'))
-           ) then
-            <tr><td><a href="view.html{$query}">{$uri}</a></td><td>{$location}</td></tr> 
-        else
-            ()
-  
-        
+            ($w3c and starts-with($uri, 'http://www.w3.org')) or 
+            ($appmodules and starts-with($location, '/db')) or
+            ($extensions and app:is-extension($uri, $location))
+        ) then (
+            <tr>
+                <td><a href="view.html?uri={$uri}&amp;location={$location}#">{$uri}</a></td>
+                <td>{$location}</td>
+            </tr> 
+        ) else ()
 };
 
+declare function app:is-extension($uri as xs:string, $location as xs:string?) as xs:boolean {
+    (starts-with($uri, 'http://exist-db.org/') and (empty($location) or starts-with($location, 'java:'))) or
+    (starts-with($uri, 'http://exist-db.org/xquery') and not(starts-with($location, '/db'))) or
+    (starts-with($uri, 'http://expath.org/ns/')) or
+    (starts-with($uri, 'http://exquery.org/ns/') and (empty($location) or starts-with($location, 'java:')))
+};
 
 declare 
     %templates:default("uri", "http://www.w3.org/2005/xpath-functions")
