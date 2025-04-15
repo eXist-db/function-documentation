@@ -365,7 +365,11 @@ function app:view(
 ) {
     let $modules :=
         if ($location) then
-            $app:data[xqdoc:module/xqdoc:uri eq $uri][xqdoc:control/xqdoc:location eq $location]
+            (: We need to re-read the collection here to avoid an NPE in exist-7.0.0-SNAPSHOT
+              see https://github.com/eXist-db/exist/issues/5707 :)
+            collection($config:app-data)/xqdoc:xqdoc
+                [xqdoc:module/xqdoc:uri eq $uri]
+                [xqdoc:control/xqdoc:location eq $location]
         else
             $app:data[xqdoc:module/xqdoc:uri eq $uri]
 
