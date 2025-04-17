@@ -6,4 +6,5 @@ node/
 .settings/
 .vscode/
 .DS_Store
+.tool-versions
 src/test/cypress/screenshots/

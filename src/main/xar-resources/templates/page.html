@@ -1,28 +1,24 @@
-<html data-template="lib:resolve-apps" data-template-abbrev="dashboard, eXide, fundocs, exist-documentation, demo">
+<html data-template="lib:resolve-apps" data-template-abbrev="dashboard, eXide, fundocs, documentation, demo">
+    <head>
+        <title data-template="config:app-title">App Title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta data-template="config:app-meta" />
+        <link rel="shortcut icon" href="resources/images/exist_icon_16x16.ico" />
+        <link rel="stylesheet" type="text/css" href="resources/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="resources/css/atom-one-dark.min.css" />
+        <link rel="stylesheet" type="text/css" href="resources/css/bootstrap3-glyphicons.min.css" />
+        <link rel="stylesheet" type="text/css" href="resources/css/fundocs.min.css" />
+        <script type="module" src="resources/scripts/index.min.js?register"></script>
+    </head>
 
-<head>
-    <title data-template="config:app-title">App Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta data-template="config:app-meta" />
-    <link rel="shortcut icon" href="resources/images/exist_icon_16x16.ico" />
-    <link rel="stylesheet" type="text/css" href="resources/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="resources/css/atom-one-dark.min.css" />
-    <link rel="stylesheet" type="text/css" href="resources/css/exist.css" />
-    <link rel="stylesheet" type="text/css" href="resources/css/fundocs.css" />
-    <script type="module" src="resources/scripts/index.min.js?register" />
-</head>
-
-<body id="grey-top" data-template="lib:parse-params" data-template-start="\{">
-    <div class="grey-bot">
+    <body data-template="lib:parse-params" data-template-start="\{">
         <div class="container" id="main-container">
-            <div class="row">
-                <div class="col-md-12" id="header">
-                    <a href="/" id="logo">eXistDB</a>
-                </div>
+            <div class="col-md-12" id="header">
+                <a href="/" id="logo">eXistDB</a>
             </div>
         </div>
         <nav class="navbar navbar-dark bg-dark navbar-expand-md" role="navigation">
-            <div class="container-fluid">
+            <div class="container navbar-container">
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-target="#navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                 </button>
@@ -115,83 +111,44 @@
             </div>
         </nav>
         <div class="container">
-            <div id="main" class="row" />
+            <main id="main" class="row"></main>
         </div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <a id="poweredby" href="http://exist-db.org" />
-            </div>
-        </div>
-    </div>
-    <div id="footer">
         <div class="container">
-            <ul>
-                <li>
-                    <a href="http://exist-db.org">eXist-db.org</a>
-                </li>
-                <li>
-                    <a href="{${documentation.pkg.abbrev}}/documentation.xml">Documentation</a>
-                </li>
-                <li>
-                    <a href="{${demo.pkg.abbrev}}/index.html">Demo</a>
-                </li>
-                <li class="hidden-xs-inline">
-                    <a href="/status">Status</a>
-                </li>
-                <li>
-                    <a href="{${documentation.pkg.abbrev}}/legal.xml">Legal</a>
-                </li>
-            </ul>
-            <div id="copyright" class="hidden-xs">
-                <p>Copyright eXist-db Project 2013</p>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="loginDialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <a class="close" data-dismiss="modal">
-                        <i class="icon-remove" />
-                    </a>
-                    <h3>Login</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <a id="poweredby" href="http://exist-db.org"></a>
                 </div>
-                <form class="login content form-horizontal" action="" method="POST">
-                    <div class="modal-body">
-                        <div class="alert alert-info">You must login as a dba user (e.g. "admin") to reindex the
-                            function documentation.</div>
-                        <div class="form-group">
-                            <label for="user" class="control-label col-md-2">User</label>
-                            <div class="col-md-6">
-                                <input type="text" name="user" placeholder="User" required="required"
-                                    class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="control-label col-md-2">Password</label>
-                            <div class="col-md-4">
-                                <input type="password" name="password" placeholder="Password" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="alert alert-error hide login-message" />
-                        <input type="hidden" name="duration" value="P14D" />
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" type="submit">
-                            <i class="icon-user" /> Login
-                        </button>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
-    <script type="text/javascript" src="resources/scripts/popper.min.js" />
-    <script type="text/javascript" src="resources/scripts/bootstrap.min.js" />
-    <script type="text/javascript" src="resources/scripts/highlight.min.js" />
-    <script type="text/javascript" src="resources/scripts/xquery.min.js" />
-    <script type="text/javascript" src="resources/scripts/query.js" />
-    <script type="text/javascript">hljs.highlightAll();</script>
-</body>
+        <div id="footer">
+            <div class="container d-flex">
+                <ul class="me-auto">
+                    <li>
+                        <a href="http://exist-db.org">eXist-db.org</a>
+                    </li>
+                    <li>
+                        <a href="{${documentation.pkg.abbrev}}/documentation.xml">Documentation</a>
+                    </li>
+                    <li>
+                        <a href="{${demo.pkg.abbrev}}/index.html">Demo</a>
+                    </li>
+                    <li class="hidden-xs-inline">
+                        <a href="/status">Status</a>
+                    </li>
+                    <li>
+                        <a href="{${documentation.pkg.abbrev}}/legal.xml">Legal</a>
+                    </li>
+                </ul>
+                <div id="copyright" class="hidden-s">
+                    <p>Copyright eXist-db Project 2013</p>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="resources/scripts/popper.min.js"></script>
+        <script type="text/javascript" src="resources/scripts/bootstrap.min.js"></script>
+        <script type="text/javascript" src="resources/scripts/highlight.min.js"></script>
+        <script type="text/javascript" src="resources/scripts/xquery.min.js"></script>
+        <script type="text/javascript" src="resources/scripts/query.js"></script>
+        <script type="text/javascript">hljs.highlightAll();</script>
+    </body>
 </html>

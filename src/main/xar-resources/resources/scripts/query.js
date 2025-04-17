@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     results.style.display = "none";
                     results.innerHTML = data;
                     results.style.display = "block";
+                    hljs.highlightAll();
                 }
                 timeout = null;
             });

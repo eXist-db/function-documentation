@@ -1,0 +1,162 @@
+#f-load-indicator {
+  margin-left: .5rem;
+}
+
+@media (max-width: 767px) {
+  #f-load-indicator {
+      display: block;
+      margin: .5rem 0;
+  }
+  
+  #modules table td:nth-child(2), #modules table th:nth-child(2) {
+      display: none;
+  }
+}
+
+select[name='module'] {
+  width: 50em;
+}
+
+.messages {
+  margin: 1rem;
+  padding: 1rem;
+  border: thin solid red;
+}
+
+.module {
+  margin-block: 2rem;
+}
+
+.module .module-head {
+  background-color: var(--lightgrey);
+  border-radius: .25rem;
+}
+
+.module .module-head-inner {
+  color: var(--darkgrey);
+  min-height: 3rem;
+}
+
+.module-info-icon {
+  display: block;
+  text-align: center;
+  margin-top: 1em;
+}
+
+.module-info-icon .glyphicon-info-sign {
+  font-size: 3rem;
+}
+
+.module-head p {
+  font-size: 1.33em;
+  line-height: 1.5em;
+}
+
+.module-head td {
+  padding-right: 2em;
+}
+
+.module-head td:first-child {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.module-head h3 {
+  margin-block-start: 1rem;
+}
+
+.module-head h4 {
+  word-wrap: break-word;
+}
+
+.function-head h4 {
+  font-size: 1.25em;
+  margin-block-end: .8rem;
+  margin-inline-start: 1rem;
+}
+
+.module .extended {
+  margin: 2em 0;
+}
+
+.extended .signature {
+  margin: 1em 0;
+  word-wrap: break-word;
+  white-space: pre-line;
+}
+
+@media (max-width: 767px) {
+  .function-head h4 {
+      margin-left: 1rem;
+  }
+}
+
+/* 
+* function signatures and other code blocks are handled in
+* prism-theme (./prism-fundocs.css)
+*/
+
+/* code listings (syntax highlighted) */
+pre > code {
+  background-color: var(--black);
+  color: var(--white);
+  font-size: 1.25em;
+  border-radius: .375rem; /* var(--bs-alert-border-radius) */
+  padding: 1rem; /* var(--bs-alert-padding-y) var(--bs-alert-padding-x) */
+  border: thin solid var(--lightgrey);
+}
+
+/* inline code */
+code {
+  background-color: inherit;
+  color: inherit;
+  border: 0;
+}
+
+.function .function-detail {
+  margin-inline: 1rem;
+}
+
+.function .description {
+  text-align: justify;
+  margin-block: .5rem;
+}
+
+.function .parameters table {
+  width: 100%;
+}
+
+.function .parameters td {
+  padding: 0 0 .85em 0;
+}
+
+.function .parameter-name {
+  width: 8rem;
+  padding-right: 1em;
+  vertical-align: top;
+  font-family: "Ubuntu Mono", "Menlo", "Consolas", monospace;
+}
+
+form { margin: 20px 0; }
+form td {
+  padding-right: 8px;
+}
+
+code {
+  white-space: pre-line;
+  word-wrap: break-word;
+}
+
+.item { 
+  background: var(--white);
+  margin: .5rem 0;
+  padding: .5rem;
+  border: thin solid var(--secondary);
+  border-radius: 1rem;
+}
+.itemhead { background: #E0E0E0; padding-left: .5rem; }
+.hi { background: var(--lightersecondary) }
+
+.extended-docs {
+  margin: 0 0 1rem 0;
+}
