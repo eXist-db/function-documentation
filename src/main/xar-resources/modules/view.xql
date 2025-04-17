@@ -14,6 +14,7 @@ declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";
 declare option output:method "html";
 declare option output:html-version "5.0";
 declare option output:media-type "text/html";
+declare option output:indent "no";
 
 declare function local:lookup ($func as xs:string, $arity as xs:integer) as function(*)? {
     function-lookup(xs:QName($func), $arity)
