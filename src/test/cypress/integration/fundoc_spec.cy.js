@@ -33,11 +33,13 @@ context('Function Documentation', () => {
   describe('simple search', () => {
     it('should find article with extended markdown contents and code highlighting', () => {
       cy.get('#query-field')
-        .type('file:sync')
+        .type('file:sync{enter}')
       cy.get('.function-head > h4')
         .should('exist')
         .click()
-      // code is highlighted 
+      cy.url()
+        .should('include', 'q=file')
+      // code is highlighted
       cy.get('.language-xquery')
         .should('exist')
       // button is visible
