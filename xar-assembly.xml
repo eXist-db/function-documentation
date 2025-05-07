@@ -17,6 +17,12 @@
   <dependency package="http://exist-db.org/html-templating" semver-min="${templating.version}"/>
   <prepare>pre-install.xql</prepare>
   <changelog>
+    <change version="1.3.0">
+      <ul xmlns="http://www.w3.org/1999/xhtml">
+        <li>Improve page layout and performance - <a href="https://github.com/eXist-db/function-documentation/pull/78">#78</a></li>
+        <li>Improve build, add testing - <a href="https://github.com/eXist-db/function-documentation/pull/69">#69</a></li>
+      </ul>
+    </change>
     <change version="1.2.1">
       <ul xmlns="http://www.w3.org/1999/xhtml">
         <li>Added article for file:sync#3 - <a href="https://github.com/eXist-db/function-documentation/pull/54">#54</a></li>
