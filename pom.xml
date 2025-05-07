@@ -209,4 +209,18 @@
             <url>http://clojars.org/repo</url>
         </pluginRepository>
     </pluginRepositories>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>exist-db-snapshots</id>
+            <name>exist-db.org - eXist-db Snapshots</name>
+            <url>https://repo.exist-db.org/repository/exist-db-snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <name>Nexus Release Repository</name>
+            <url>https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
 </project>
