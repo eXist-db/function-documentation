@@ -53,7 +53,7 @@ jobs:
         timeout-minutes: 5
         run: |
           while ! docker logs exist | grep -q "Server has started"; \
-          do sleep 4s; \
+          do sleep 6s; \
           done
 
       # Test
