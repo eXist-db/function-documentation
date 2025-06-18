@@ -40,7 +40,7 @@
     "zero-md": "^3.1.7"
   },
   "devDependencies": {
-    "cypress": "^14.4.1",
+    "cypress": "^14.5.0",
     "delete": "^1.1.0",
     "gulp": "^5.0.1"
   },
