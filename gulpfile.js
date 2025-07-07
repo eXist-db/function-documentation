@@ -169,7 +169,7 @@ exports.minify = minifyEs;
 
 // copy fonts
 function copyFonts() {
-  return src(paths.fonts.input).pipe(
+  return src(paths.fonts.input, {encoding: false}).pipe(
     dest(paths.fonts.output)
   );
 }
@@ -186,7 +186,7 @@ function copyVendorStyles() {
 
 // copy vendor fonts
 function copyVendorFonts() {
-  return src(paths.vendor.fonts).pipe(
+  return src(paths.vendor.fonts, {encoding: false}).pipe(
     dest(paths.fonts.output)
   );
 }
