@@ -17,7 +17,7 @@
 
 #main {
   margin-block-start: 1.75rem;
-  min-height: 40vh;
+  min-height: calc(100vh - 18.5rem);
 }
 
 .navbar-dark {
