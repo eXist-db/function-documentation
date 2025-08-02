@@ -6,7 +6,7 @@ import module namespace lib="http://exist-db.org/xquery/html-templating/lib";
 
 (: The following modules provide functions which will be called by the templating :)
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
-import module namespace app="http://exist-db.org/xquery/app" at "app.xql";
+import module namespace app="http://exist-db.org/xquery/app" at "app.xqm";
 
 
 declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";
