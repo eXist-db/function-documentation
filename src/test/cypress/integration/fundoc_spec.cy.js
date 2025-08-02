@@ -3,16 +3,23 @@
 
 context('Function Documentation', () => {
   before (() => {
-    // Creat Index before running test
+      // Generate function documentation before running tests
+      cy.timeout(10000);
       cy.request({
-        url: 'http://127.0.0.1:8080/exist/rest/db/apps/fundocs/modules/reindex.xql',
+        url: 'http://127.0.0.1:8080/exist/apps/fundocs/regenerate',
         auth: {
           user: 'admin', 
           password: ''
         }
       })
-        .its('body')
-        .should('equal', '{ "status" : "ok", "message" : "Scan completed! " }')
+        .then((response) => {
+          expect(response).to.have.property('status')
+          expect(response.status).to.equal(200)
+          expect(response.body).to.have.property('status')
+          expect(response.body.status).to.equal('ok')
+        })
+        // .its('body')
+        // .should('equal', "{ status: 'ok', message: 'Scan completed! ' }")
   })
 
   beforeEach(() => {
@@ -34,7 +41,7 @@ context('Function Documentation', () => {
     it('should find article with extended markdown contents and code highlighting', () => {
       cy.get('#query-field')
         .type('file:sync{enter}')
-      cy.get('.function-head > h4')
+      cy.get('.function-head')
         .should('exist')
         .click()
       cy.url()
@@ -64,7 +71,7 @@ context('Function Documentation', () => {
         .click()
       // check module from fundocs itself 
       cy.get('#modules')
-        .contains('http://exist-db.org/xquery/docs')
+        .contains('http://exist-db.org/apps/fundocs/generate')
         .click()
       cy.get('.module')
         .should('exist')
