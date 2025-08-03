@@ -1,41 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <div data-template="templates:surround" data-template-with="templates/page.html" data-template-at="main">
-    <h1>XQuery Function Documentation</h1>
-    <p>
-        <a href="index.html">
-            <i class="glyphicon glyphicon-chevron-left"/> Back to Search Page</a>
-    </p>
-    <form class="form-inline">
-        <div class="row mb-3 col-auto">
-            <div class="checkbox">
-                <label>
-                    <input data-template="templates:form-control" type="checkbox" name="w3c" value="true"/> W3C XPath functions
-                </label>
+    <article class="col-12-md">
+        <h1>XQuery Function Documentation</h1>
+        <p>
+            <a href="index.html">
+                <i class="glyphicon glyphicon-chevron-left"/> Back to Search Page</a>
+        </p>
+        <form class="form-inline">
+            <div class="row mb-3 col-auto">
+                <div class="checkbox">
+                    <label>
+                        <input data-template="templates:form-control" type="checkbox" name="w3c" value="true"/> W3C XPath functions
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input data-template="templates:form-control" type="checkbox" name="extensions" value="true"/> Extension functions
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input data-template="templates:form-control" type="checkbox" name="appmodules" value="true"/> Application modules
+                    </label>
+                </div>
             </div>
-            <div class="checkbox">
-                <label>
-                    <input data-template="templates:form-control" type="checkbox" name="extensions" value="true"/> Extension functions
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input data-template="templates:form-control" type="checkbox" name="appmodules" value="true"/> Application modules
-                </label>
-            </div>
+            <button class="btn btn-primary">Filter</button>
+        </form>
+        <div id="modules">
+            <table class="table table-striped table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>Namespace</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-template="app:showmodules"></tr>
+                </tbody>
+            </table>
         </div>
-        <button class="btn btn-primary">Filter</button>
-    </form>
-    <div id="modules">
-        <table class="table table-striped table-hover table-condensed">
-            <thead>
-                <tr>
-                    <th>Namespace</th>
-                    <th>Location</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-template="app:showmodules"></tr>
-            </tbody>
-        </table>
-    </div>
+    </article>
+
 </div>
