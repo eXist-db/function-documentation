@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const formData = new FormData(form);
         formData.append("action", "search");
 
-        fetch("ajax.html", {
+        fetch("query", {
             method: "POST",
             body: new URLSearchParams(formData),
         })

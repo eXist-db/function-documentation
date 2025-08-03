@@ -117,11 +117,11 @@ function app:print-module(
         <div class="module-head">
             <div class="module-head-inner row">
                 <div class="col-md-1 hidden-xs">
-                    <a href="view.html?uri={$uri}&amp;location={$location}&amp;details=true" 
+                    <a href="view?uri={$uri}&amp;location={$location}&amp;details=true" 
                         class="module-info-icon"><span class="glyphicon glyphicon-info-sign"/></a>
                 </div>
                 <div class="col-md-11 col-xs-12">
-                    <h3><a href="view.html?uri={$uri}&amp;location={$location}&amp;details=true">{ $uri }</a></h3>
+                    <h3><a href="view?uri={$uri}&amp;location={$location}&amp;details=true">{ $uri }</a></h3>
                     {
                         if (empty($location)) then (
                         ) else if (starts-with($location, '/db')) then (
@@ -223,7 +223,7 @@ function app:print-function(
                             "&amp;function=" || $function-name || "&amp;arity=" || $arity ||
                             (if ($location) then ("&amp;location=" || $location) else "#")
                         return
-                            <a href="view.html{$query}" class="extended-docs btn btn-primary">
+                            <a href="view{$query}" class="extended-docs btn btn-primary">
                                 <span class="glyphicon glyphicon-info-sign"></span> Read more</a>
                     )
                 }
@@ -339,7 +339,7 @@ function app:showmodules(
             ($extensions and app:is-extension($uri, $location))
         ) then (
             <tr>
-                <td><a href="view.html?uri={$uri}&amp;location={$location}#">{$uri}</a></td>
+                <td><a href="view?uri={$uri}&amp;location={$location}#">{$uri}</a></td>
                 <td>{$location}</td>
             </tr> 
         ) else ()
