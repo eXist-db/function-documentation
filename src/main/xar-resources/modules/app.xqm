@@ -47,55 +47,107 @@ declare function app:check-not-dba-user-and-not-data($node as node(), $model as 
 
 declare 
     %templates:default("action", "search")
-    %templates:default("type", "name")
+    %templates:default("where", "everywhere")
 function app:action(
     $node as node(), $model as map(*),
     $action as xs:string,
     $module as xs:string?,
-    $q as xs:string?, $type as xs:string
+    $q as xs:string?, $where as xs:string
 ) as map(*) {
     switch ($action)
-    case "browse" return app:browse($node, $module)
-    case "search" return app:search($node, $q, $type)
+    case "browse" return app:browse($module)
+    case "search" return
+        switch ($where)
+            case "description" return app:search-in-description($q)
+            case "location" return app:search-in-module-location($q)
+            case "signature" return app:search-in-signature($q)
+            case "name" return app:search-in-module-name($q)
+            case "everywhere" return app:search-everywhere($q)
+            default return app:search-everywhere($q)
     default return map { "result": () }
 };
 
 declare %private
-function app:browse($node as node(), $module as xs:string?) as map(*) {
+function app:browse($module as xs:string?) as map(*) {
     let $module := $app:data[xqdoc:module/xqdoc:uri = $module]
     return map { "result": $module//xqdoc:function }
 };
 
 declare %private
-function app:search(
-    $node as node(), $q as xs:string?, $type as xs:string
-) as map(*) {
-    let $functions :=
-        switch( $type )
-        case "name" return
-            $app:data//xqdoc:function[ngram:contains(xqdoc:name, $q)]
-        case "signature" return
-            $app:data//xqdoc:function[ngram:contains(xqdoc:signature, $q)]
-        case "desc" return
-            $app:data//xqdoc:function[ngram:contains(xqdoc:comment/xqdoc:description, $q)]
-        default return ()
-    return
-        map { "result": $functions }
+function app:search-in-module-location($q as xs:string?) as map(*) {
+    map {
+        "result": $app:data//(
+            xqdoc:control[contains(xqdoc:location, $q)]/..//xqdoc:function
+        ) 
+    }
+};
+
+declare %private
+function app:search-in-module-name($q as xs:string?) as map(*) {
+    map {
+        "result": $app:data//(
+            xqdoc:module[contains(xqdoc:uri, $q)]/..//xqdoc:function
+        ) 
+    }
+};
+
+declare %private
+function app:search-in-description($q as xs:string?) as map(*) {
+    map {
+        "result": $app:data//(
+            xqdoc:function[ngram:contains(xqdoc:comment/xqdoc:description, $q)]
+            |
+            xqdoc:module[ngram:contains(xqdoc:comment/xqdoc:description, $q)]
+        ) 
+    }
+};
+
+declare %private
+function app:search-in-signature($q as xs:string?) as map(*) {
+    map {
+        "result": $app:data//(
+            xqdoc:function[ngram:contains(xqdoc:name, $q)]
+            |
+            xqdoc:function[ngram:contains(xqdoc:signature, $q)]
+        ) 
+    }
+};
+
+declare %private
+function app:search-everywhere($q as xs:string?) as map(*) {
+    map {
+        "result": $app:data//(
+            xqdoc:function[ngram:contains(xqdoc:name, $q)]
+            |
+            xqdoc:function[ngram:contains(xqdoc:signature, $q)]
+            |
+            xqdoc:function[ngram:contains(xqdoc:comment/xqdoc:description, $q)]
+            |
+            xqdoc:control[contains(xqdoc:location, $q)]/..//xqdoc:function
+            |
+            xqdoc:module[contains(xqdoc:uri, $q)]/..//xqdoc:function
+            |
+            xqdoc:module[ngram:contains(xqdoc:comment/xqdoc:description, $q)]
+            |
+            xqdoc:module[ngram:contains(xqdoc:name, $q)]/..//xqdoc:function
+        ) 
+    }
 };
 
 declare 
     %templates:default("details", "false")
 function app:module($node as node(), $model as map(*), $details as xs:boolean) {
     let $functions := $model("result")
-    for $module in $functions/ancestor::xqdoc:xqdoc
-    let $uri := $module/xqdoc:module/xqdoc:uri/text()
-    let $location := $module/xqdoc:control/xqdoc:location/text()
-    let $order := (if ($location) then $location else " " || $uri)
-    let $funcsInModule := $module//xqdoc:function intersect $functions
-    
-    order by $order
     return
-        app:print-module($module, $funcsInModule, $details)
+        for $module in $functions/ancestor::xqdoc:xqdoc
+        let $uri := $module/xqdoc:module/xqdoc:uri/text()
+        let $location := $module/xqdoc:control/xqdoc:location/text()
+        let $order := (if ($location) then $location else " " || $uri)
+        let $funcsInModule := $module//xqdoc:function intersect $functions
+        
+        order by $order
+        return
+            app:print-module($module, $funcsInModule, $details)
 };
 
 declare %private
