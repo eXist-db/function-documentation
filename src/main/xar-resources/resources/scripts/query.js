@@ -113,11 +113,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    const btnReindex = document.getElementById("f-btn-reindex");
-    if (btnReindex) {
-        btnReindex.addEventListener("click", reindexIfLoggedIn);
-    }
-
     const btnReindexRegen = document.getElementById("f-btn-reindex-regen");
     if (btnReindexRegen) {
         btnReindexRegen.addEventListener("click", reindexIfLoggedIn);
