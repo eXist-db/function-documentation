@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const formData = new FormData(form);
         formData.append("action", "search");
 
-        fetch("ajax.html", {
+        fetch("query", {
             method: "POST",
             body: new URLSearchParams(formData),
         })
@@ -54,8 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (messages) messages.innerHTML = "";
         if (loadIndicator) loadIndicator.style.display = "block";
 
-        fetch("modules/reindex.xql", {
-            method: "POST",
+        fetch("regenerate", {
             headers: { Accept: "application/json" },
         })
             .then((response) => response.json())
