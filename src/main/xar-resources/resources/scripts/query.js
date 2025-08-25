@@ -54,8 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (messages) messages.innerHTML = "";
         if (loadIndicator) loadIndicator.style.display = "block";
 
-        fetch("modules/reindex.xql", {
-            method: "POST",
+        fetch("regenerate", {
             headers: { Accept: "application/json" },
         })
             .then((response) => response.json())
