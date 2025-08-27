@@ -28,7 +28,7 @@
     "@highlightjs/cdn-assets": "^11.11.1",
     "@neos21/bootstrap3-glyphicons": "^1.0.7",
     "@popperjs/core": "^2.11.8",
-    "bootstrap": "^5.3.7",
+    "bootstrap": "^5.3.8",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-cssnano": "^2.1.3",
     "gulp-header": "^2.0.9",
