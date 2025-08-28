@@ -6,7 +6,7 @@ context('Function Documentation', () => {
       // Generate function documentation before running tests
       cy.timeout(10000);
       cy.request({
-        url: 'http://127.0.0.1:8080/exist/apps/fundocs/regenerate',
+        url: '/regenerate',
         auth: {
           user: 'admin', 
           password: ''
