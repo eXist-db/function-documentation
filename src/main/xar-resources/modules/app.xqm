@@ -414,7 +414,7 @@ declare
     %templates:default("appmodules", "false")
 function app:showmodules(
     $node as node(), $model as map(*),
-    $w3c as xs:boolean, $extensions as xs:boolean, $appmodules as xs:boolean
+    $w3c as xs:boolean?, $extensions as xs:boolean?, $appmodules as xs:boolean?
 ) as element(tr)* {
     for $module in $app:data
     let $uri := $module/xqdoc:module/xqdoc:uri
