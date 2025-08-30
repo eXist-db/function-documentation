@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const formData = new FormData(form);
         formData.append("action", "search");
 
-        fetch("ajax.html", {
+        fetch("query", {
             method: "POST",
             body: new URLSearchParams(formData),
         })
@@ -54,8 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (messages) messages.innerHTML = "";
         if (loadIndicator) loadIndicator.style.display = "block";
 
-        fetch("modules/reindex.xql", {
-            method: "POST",
+        fetch("regenerate", {
             headers: { Accept: "application/json" },
         })
             .then((response) => response.json())
@@ -112,11 +111,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 timeout = setTimeout(search, 300);
             }
         });
-    }
-
-    const btnReindex = document.getElementById("f-btn-reindex");
-    if (btnReindex) {
-        btnReindex.addEventListener("click", reindexIfLoggedIn);
     }
 
     const btnReindexRegen = document.getElementById("f-btn-reindex-regen");

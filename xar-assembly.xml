@@ -15,7 +15,8 @@
   <category id="doc">Documentation</category>
   <dependency processor="http://exist-db.org" semver-min="${exist.version}"/>
   <dependency package="http://exist-db.org/html-templating" semver-min="${templating.version}"/>
-  <prepare>pre-install.xql</prepare>
+  <prepare>prepare.xq</prepare>
+  <finish>finish.xq</finish>
   <changelog>
     <change version="1.3.1">
       <ul xmlns="http://www.w3.org/1999/xhtml">
