@@ -30,6 +30,7 @@ select[name='module'] {
 .module .module-head {
   background-color: var(--lightgrey);
   border-radius: .25rem;
+  padding-block-end: 1rem;
 }
 
 .module .module-head-inner {
@@ -39,17 +40,16 @@ select[name='module'] {
 
 .module-info-icon {
   display: block;
-  text-align: center;
+  text-align: right;
   margin-top: 1em;
 }
 
 .module-info-icon .glyphicon-info-sign {
-  font-size: 3rem;
+  font-size: 2.5rem;
 }
 
-.module-head p {
-  font-size: 1.33em;
-  line-height: 1.5em;
+.module-description {
+  margin-inline-end: 1rem;
 }
 
 .module-head td {
@@ -62,17 +62,15 @@ select[name='module'] {
 }
 
 .module-head h3 {
-  margin-block-start: 1rem;
+  margin-block-start: 1.25rem;
 }
 
 .module-head h4 {
   word-wrap: break-word;
 }
 
-.function-head h4 {
-  font-size: 1.25em;
-  margin-block-end: .8rem;
-  margin-inline-start: 1rem;
+.function-head {
+  margin-block-start: 2rem;
 }
 
 .module .extended {

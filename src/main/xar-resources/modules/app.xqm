@@ -115,41 +115,39 @@ function app:print-module(
     return
     <div class="module" data-xqdoc="{document-uri(root($module))}">
         <div class="module-head">
-            <div class="module-head-inner">
-                <div class="row">
-                    <div class="col-md-1 hidden-xs">
-                        <a href="view.html?uri={$uri}&amp;location={$location}&amp;details=true" 
-                            class="module-info-icon"><span class="glyphicon glyphicon-info-sign"/></a>
-                    </div>
-                    <div class="col-md-11 col-xs-12">
-                        <h3><a href="view.html?uri={$uri}&amp;location={$location}&amp;details=true">{ $uri }</a></h3>
-                        {
-                            if (empty($location)) then (
-                            ) else if (starts-with($location, '/db')) then (
-                                <h4><a href="../eXide/index.html?open={$location}">{$location}</a></h4>
+            <div class="module-head-inner row">
+                <div class="col-md-1 hidden-xs">
+                    <a href="view.html?uri={$uri}&amp;location={$location}&amp;details=true" 
+                        class="module-info-icon"><span class="glyphicon glyphicon-info-sign"/></a>
+                </div>
+                <div class="col-md-11 col-xs-12">
+                    <h3><a href="view.html?uri={$uri}&amp;location={$location}&amp;details=true">{ $uri }</a></h3>
+                    {
+                        if (empty($location)) then (
+                        ) else if (starts-with($location, '/db')) then (
+                            <h4><a href="../eXide/index.html?open={$location}">{$location}</a></h4>
+                        ) else (
+                            <h4>{$location}</h4>
+                        )
+                    }
+                    <p class="module-description">{ $parsed }</p>
+                    {
+                        let $metadata := $module/xqdoc:module/xqdoc:comment/(xqdoc:author|xqdoc:version|xqdoc:since)
+                        return
+                            if (empty($metadata)) then (
                             ) else (
-                                <h4>{$location}</h4>
+                                <table>
+                                {
+                                    for $meta in $metadata
+                                    return
+                                        <tr>
+                                            <td>{local-name($meta)}</td>
+                                            <td>{$meta/string()}</td>
+                                        </tr>
+                                }
+                                </table>
                             )
-                        }
-                        <p class="module-description">{ $parsed }</p>
-                        {
-                            let $metadata := $module/xqdoc:module/xqdoc:comment/(xqdoc:author|xqdoc:version|xqdoc:since)
-                            return
-                                if (empty($metadata)) then (
-                                ) else (
-                                    <table>
-                                    {
-                                        for $meta in $metadata
-                                        return
-                                            <tr>
-                                                <td>{local-name($meta)}</td>
-                                                <td>{$meta/string()}</td>
-                                            </tr>
-                                    }
-                                    </table>
-                                )
-                        }
-                    </div>
+                    }
                 </div>
             </div>
         </div>
@@ -209,10 +207,9 @@ function app:print-function(
     let $extDocs := app:get-extended-doc($function)[1]
     return
         <div class="function" id="{$function-identifier}">
-            <div class="function-head">
-                <h4>{$function-name/node()}</h4>
+            <header class="function-head">
                 <pre class="signature"><code class="language-xquery">{ $function/xqdoc:signature/node() }</code></pre>
-            </div>
+            </header>
             <div class="function-detail">
                 <p class="description">{ $parsed }</p>
                 {
