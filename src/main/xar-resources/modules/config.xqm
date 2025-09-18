@@ -6,8 +6,7 @@ xquery version "3.1";
  :)
 module namespace config="http://exist-db.org/xquery/apps/config";
 
-import module namespace templates="http://exist-db.org/xquery/html-templating";
-
+declare namespace templates="http://exist-db.org/xquery/html-templating";
 declare namespace repo="http://exist-db.org/xquery/repo";
 declare namespace expath="http://expath.org/ns/pkg";
 
@@ -28,6 +27,11 @@ declare variable $config:app-root :=
     return
         substring-before($modulePath, "/modules")
 ;
+
+(:~
+ : Calculate the base URL set on all HTML pages
+ :)
+declare variable $config:base := request:get-context-path() || substring-after($config:app-root, "/db") || "/";
 
 declare variable $config:app-data := $config:app-root || "/data";
 
@@ -64,6 +68,10 @@ declare function config:expath-descriptor() as element(expath:package) {
 
 declare %templates:wrap function config:app-title($node as node(), $model as map(*)) as text() {
     $config:expath-descriptor/expath:title/text()
+};
+
+declare %templates:wrap function config:base-url ($node as node(), $model as map(*)) as attribute(href) {
+    attribute href { $config:base }
 };
 
 declare function config:app-meta($node as node(), $model as map(*)) as element()* {

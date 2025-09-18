@@ -71,6 +71,7 @@ declare %private function generate:has-definition($module-info as array(*)) as x
 declare %private function generate:generate-and-store-xqdoc ($module-info as array(*)) {
     let $filename := concat(util:hash($module-info?1, "md5"), ".xml"),
         $xqdoc := generate:module-to-xqdoc($module-info?2)
+
     return
         xmldb:store($generate:doc-collection, $filename, $xqdoc)
             => xs:anyURI()
@@ -98,8 +99,19 @@ declare %private function generate:module-to-xqdoc($module as element(module)) a
                     else
                         <xqdoc:author>{$module/author/string()}</xqdoc:author>
                 }
+                {
+                    if (empty($module/see)) then ()
+                    else
+                        <xqdoc:see>{$module/see/string()}</xqdoc:see>
+                }
             </xqdoc:comment>
         </xqdoc:module>
+        <xqdoc:variables>
+        {
+            for $variable in $module/variable
+            return <xqdoc:variable><xqdoc:name>{ $variable/@name/string() }</xqdoc:name></xqdoc:variable>
+        }
+        </xqdoc:variables>
         <xqdoc:functions>
         {
             for $function in $module/function
@@ -113,15 +125,34 @@ declare %private function generate:function-to-xqdoc($function as element(functi
     <xqdoc:function>
         <xqdoc:name>{$function/@name/string()}</xqdoc:name>
         <xqdoc:signature>{generate:signature($function)}</xqdoc:signature>
+        <xqdoc:parameters>{$function/argument ! generate:parameter(.)}</xqdoc:parameters>
+        <xqdoc:arity>{count($function/argument)}</xqdoc:arity>
+        <xqdoc:return>
+            <xqdoc:type occurrence="{generate:cardinality($function/returns/@cardinality)}">{ 
+                $function/returns/@type/string() }</xqdoc:type>
+        </xqdoc:return>
+        {
+        if (empty($function/annotation)) then () else
+            <xqdoc:annotations>
+            {
+                for $annotation in $function/annotation 
+                return
+                    <xqdoc:annotation>
+                        <xqdoc:name>{ $annotation/@name/string() }</xqdoc:name>
+                        <xqdoc:literal>{
+                            if (empty($annotation/value)) then () else
+                                "(" || string-join($annotation/value, ", ") || ")"
+                        }</xqdoc:literal>
+                    </xqdoc:annotation>
+            }
+            </xqdoc:annotations>
+        }
         <xqdoc:comment>
             <xqdoc:description>{$function/description/string()}</xqdoc:description>
             {
                 for $argument in $function/argument
                 return
-                    <xqdoc:param>{
-                        "$" || $argument/@var || generate:cardinality($argument/@cardinality) ||
-                            " " || $argument/text()
-                    }</xqdoc:param>
+                    <xqdoc:param>{ "$" || $argument/@var || " " || $argument/text() }</xqdoc:param>
             }
             <xqdoc:return>
             {
@@ -146,6 +177,14 @@ declare %private function generate:cardinality($cardinality as xs:string) as xs:
         case "zero or more" return "*"
         case "one or more" return "+"
         default return ()
+};
+
+declare %private function generate:parameter($argument as element(argument)) as element(xqdoc:parameter) {
+    <xqdoc:parameter>
+        <xqdoc:name>{ "$" || $argument/@var }</xqdoc:name>
+        <xqdoc:type occurrence="{generate:cardinality($argument/@cardinality)}">{
+            $argument/@type/string() }</xqdoc:type>
+    </xqdoc:parameter>
 };
 
 declare %private function generate:signature($function as element(function)) as xs:string {

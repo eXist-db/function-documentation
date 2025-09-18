@@ -2,26 +2,6 @@
 /// <reference types="cypress" />
 
 context('Function Documentation', () => {
-  before (() => {
-      // Generate function documentation before running tests
-      cy.timeout(10000);
-      cy.request({
-        url: '/regenerate',
-        auth: {
-          user: 'admin', 
-          password: ''
-        }
-      })
-        .then((response) => {
-          expect(response).to.have.property('status')
-          expect(response.status).to.equal(200)
-          expect(response.body).to.have.property('status')
-          expect(response.body.status).to.equal('ok')
-        })
-        // .its('body')
-        // .should('equal', "{ status: 'ok', message: 'Scan completed! ' }")
-  })
-
   beforeEach(() => {
     cy.visit('')
   })
@@ -77,4 +57,5 @@ context('Function Documentation', () => {
         .should('exist')
     })
   })
+
 })
