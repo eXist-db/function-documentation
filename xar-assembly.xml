@@ -18,6 +18,17 @@
   <prepare>prepare.xq</prepare>
   <finish>finish.xq</finish>
   <changelog>
+    <change version="2.0.0">
+      <ul xmlns="http://www.w3.org/1999/xhtml">
+        <li>Generate docs on install, nicer URLs and some caching - <a href="https://github.com/eXist-db/function-documentation/pull/107">#107</a></li>
+        <li>Improve controller security, error handling and page layout - <a href="https://github.com/eXist-db/function-documentation/pull/105">#105</a></li>
+        <li>Fixed cross links to documantation apps - <a href="https://github.com/eXist-db/function-documentation/issues/16">#16</a></li>
+        <li>Update dependency exist-apps-parent to v2.0.0 - <a href="https://github.com/eXist-db/function-documentation/pull/104">#104</a></li>
+        <li>Update dependency bootstrap to v5.3.8 - <a href="https://github.com/eXist-db/function-documentation/pull/115">#115</a></li>
+        <li>Update dependency sass to v1.92.1 - <a href="https://github.com/eXist-db/function-documentation/pull/118">#118</a></li>
+        <li>Update dependency cypress to v15.2.0 - <a href="https://github.com/eXist-db/function-documentation/pull/119">#119</a></li>
+      </ul>
+    </change>
     <change version="1.3.1">
       <ul xmlns="http://www.w3.org/1999/xhtml">
         <li>Fixed icon font display in Chrome and Firefox - <a href="https://github.com/eXist-db/function-documentation/pull/99">#99</a></li>
