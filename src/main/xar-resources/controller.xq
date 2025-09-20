@@ -13,18 +13,18 @@ declare variable $local:method := lower-case(request:get-method());
 declare variable $local:is-get := $local:method eq 'get';
 declare variable $local:user := login:set-user("org.exist.login", (), false());
 
+declare variable $local:type-to-where :=
+    map {
+        "name": "everywhere",
+        "signature": "signature",
+        "desc": "description"
+    };
+
 declare function local:map-type-to-where ($type as xs:string?) as xs:string {
-    (
-        map:get(
-            map {
-                "name": "everywhere",
-                "signature": "signature",
-                "desc": "description"
-            },
-            $type
-        ),
-        'everywhere'
-    )[1]
+    head((
+        $local:type-to-where?($type),
+            'everywhere'
+    ))
 };
 
 declare function local:render-view($view as xs:string) {
