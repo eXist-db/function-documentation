@@ -1,6 +1,5 @@
 {
   "name": "function-documentation",
-  "version": "1.2.2-SNAPSHOT",
   "description": "Function documentation for eXist-db",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
