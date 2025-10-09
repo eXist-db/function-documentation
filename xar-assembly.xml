@@ -18,6 +18,11 @@
   <prepare>prepare.xq</prepare>
   <finish>finish.xq</finish>
   <changelog>
+    <change version="2.0.1">
+      <ul xmlns="http://www.w3.org/1999/xhtml">
+        <li>Fix an edge case in legacy URL handling - <a href="https://github.com/eXist-db/function-documentation/pull/123">#123</a></li>
+      </ul>
+    </change>
     <change version="2.0.0">
       <ul xmlns="http://www.w3.org/1999/xhtml">
         <li>Generate docs on install, nicer URLs and some caching - <a href="https://github.com/eXist-db/function-documentation/pull/107">#107</a></li>
