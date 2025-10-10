@@ -7,5 +7,7 @@
         <ngram qname="xqdoc:name"/>
         <ngram qname="xqdoc:signature"/>
         <ngram qname="xqdoc:description"/>
+        <ngram qname="xqdoc:param"/>
+        <ngram qname="xqdoc:return"/>
     </index>
 </collection>
