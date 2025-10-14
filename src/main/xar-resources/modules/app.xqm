@@ -45,7 +45,7 @@ declare function app:check-not-dba-user-and-not-data($node as node(), $model as 
     if (app:check-user-is-dba() or exists($app:data)) then () else $node
 };
 
-declare 
+declare
     %templates:default("action", "search")
     %templates:default("where", "everywhere")
 function app:action(
@@ -78,7 +78,7 @@ function app:search-in-module-location($q as xs:string?) as map(*) {
     map {
         "result": $app:data//(
             xqdoc:control[contains(xqdoc:location, $q)]/..//xqdoc:function
-        ) 
+        )
     }
 };
 
@@ -87,7 +87,7 @@ function app:search-in-module-name($q as xs:string?) as map(*) {
     map {
         "result": $app:data//(
             xqdoc:module[contains(xqdoc:uri, $q)]/..//xqdoc:function
-        ) 
+        )
     }
 };
 
@@ -98,7 +98,7 @@ function app:search-in-description($q as xs:string?) as map(*) {
             xqdoc:function[ngram:contains(xqdoc:comment/xqdoc:description, $q)]
             |
             xqdoc:module[ngram:contains(xqdoc:comment/xqdoc:description, $q)]
-        ) 
+        )
     }
 };
 
@@ -109,7 +109,7 @@ function app:search-in-signature($q as xs:string?) as map(*) {
             xqdoc:function[ngram:contains(xqdoc:name, $q)]
             |
             xqdoc:function[ngram:contains(xqdoc:signature, $q)]
-        ) 
+        )
     }
 };
 
@@ -123,6 +123,10 @@ function app:search-everywhere($q as xs:string?) as map(*) {
             |
             xqdoc:function[ngram:contains(xqdoc:comment/xqdoc:description, $q)]
             |
+            xqdoc:function[ngram:contains(xqdoc:comment/xqdoc:param, $q)]
+            |
+            xqdoc:function[ngram:contains(xqdoc:comment/xqdoc:return, $q)]
+            |
             xqdoc:control[contains(xqdoc:location, $q)]/..//xqdoc:function
             |
             xqdoc:module[contains(xqdoc:uri, $q)]/..//xqdoc:function
@@ -130,11 +134,11 @@ function app:search-everywhere($q as xs:string?) as map(*) {
             xqdoc:module[ngram:contains(xqdoc:comment/xqdoc:description, $q)]
             |
             xqdoc:module[ngram:contains(xqdoc:name, $q)]/..//xqdoc:function
-        ) 
+        )
     }
 };
 
-declare 
+declare
     %templates:default("details", "false")
 function app:module($node as node(), $model as map(*), $details as xs:boolean) {
     let $functions := $model("result")
@@ -144,7 +148,7 @@ function app:module($node as node(), $model as map(*), $details as xs:boolean) {
         let $location := $module/xqdoc:control/xqdoc:location/text()
         let $order := (if ($location) then $location else " " || $uri)
         let $funcsInModule := $module//xqdoc:function intersect $functions
-        
+
         order by $order
         return
             app:print-module($module, $funcsInModule, $details)
@@ -153,7 +157,7 @@ function app:module($node as node(), $model as map(*), $details as xs:boolean) {
 declare %private
 function app:print-module(
     $module as element(xqdoc:xqdoc),
-    $functions as element(xqdoc:function)*, 
+    $functions as element(xqdoc:function)*,
     $details as xs:boolean
 ) as element(div) {
     let $location := $module/xqdoc:control/xqdoc:location/text()
@@ -169,7 +173,7 @@ function app:print-module(
         <div class="module-head">
             <div class="module-head-inner row">
                 <div class="col-md-1 hidden-xs">
-                    <a href="view?uri={$uri}&amp;location={$location}&amp;details=true" 
+                    <a href="view?uri={$uri}&amp;location={$location}&amp;details=true"
                         class="module-info-icon"><span class="glyphicon glyphicon-info-sign"/></a>
                 </div>
                 <div class="col-md-11 col-xs-12">
@@ -237,7 +241,7 @@ function app:print-function(
     let $comment := $function/xqdoc:comment
     let $function-name := $function/xqdoc:name
     let $arity := xs:integer($function/xqdoc:arity)
-    let $function-identifier := 
+    let $function-identifier :=
         (: If the name has no prefix, use the name as it is. :)
         if (contains($function-name, ':')) then (
             substring-after($function-name, ":") || "." || $arity
@@ -245,11 +249,11 @@ function app:print-function(
             $function-name || $arity
         )
     let $description := $comment/xqdoc:description/node()
-    let $parsed := 
+    let $parsed :=
         if (contains($description, '&lt;') or contains($description, '&amp;')) then (
-            $description 
+            $description
         ) else (
-            let $constructed-xml := "<div>" || replace($description, "\n{2,}", "<br/>") || "</div>" 
+            let $constructed-xml := "<div>" || replace($description, "\n{2,}", "<br/>") || "</div>"
             return parse-xml($constructed-xml)/*/node()
         )
     let $extDocs := app:get-extended-doc($function)[1]
@@ -408,7 +412,7 @@ function app:get-extended-module-doc($module as element(xqdoc:xqdoc)) as xs:stri
             ()
 };
 
-declare 
+declare
     %templates:default("w3c", "false")
     %templates:default("extensions", "false")
     %templates:default("appmodules", "false")
@@ -420,16 +424,16 @@ function app:showmodules(
     let $uri := $module/xqdoc:module/xqdoc:uri
     let $location := $module/xqdoc:control/xqdoc:location
     order by $uri
-    return 
-        if ( 
-            ($w3c and starts-with($uri, 'http://www.w3.org')) or 
+    return
+        if (
+            ($w3c and starts-with($uri, 'http://www.w3.org')) or
             ($appmodules and starts-with($location, '/db')) or
             ($extensions and app:is-extension($uri, $location))
         ) then (
             <tr>
                 <td><a href="view?uri={$uri}&amp;location={$location}#">{$uri}</a></td>
                 <td>{$location}</td>
-            </tr> 
+            </tr>
         ) else ()
 };
 
@@ -440,7 +444,7 @@ declare function app:is-extension($uri as xs:string, $location as xs:string?) as
     (starts-with($uri, 'http://exquery.org/ns/') and (empty($location) or starts-with($location, 'java:')))
 };
 
-declare 
+declare
     %templates:default("uri", "http://www.w3.org/2005/xpath-functions")
     %templates:default("details", "false")
 function app:view(
@@ -464,7 +468,7 @@ function app:view(
             if (empty($function)) then (
                 app:print-module($module, $module//xqdoc:function, $details cast as xs:boolean)
             ) else (
-                let $functions := 
+                let $functions :=
                     if (exists($arity)) then (
                         $module//xqdoc:function[xqdoc:name eq $function][count(xqdoc:comment/xqdoc:param) = $arity]
                     ) else (
