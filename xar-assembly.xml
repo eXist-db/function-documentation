@@ -20,7 +20,7 @@
   <changelog>
     <change version="2.0.2-SNAPSHOT">
       <ul xmlns="http://www.w3.org/1999/xhtml">
-        <li>Improve search, looking at parameters and return's comments - </li>
+        <li>Improve search, looking at parameters and return's comments - <a href="https://github.com/eXist-db/function-documentation/pull/130">#130</a></li>
       </ul>
     </change>
     <change version="2.0.1">
