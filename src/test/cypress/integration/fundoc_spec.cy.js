@@ -39,6 +39,28 @@ context('Function Documentation', () => {
     })
   })
 
+  describe('searching everywhere includes parameter description', () => {
+    it('should find file:sync with search term "exist_home"', () => {
+      cy.get('#query-field')
+        .type('exist_home{enter}')
+      cy.get('.function-head')
+        .should('exist')
+        .click()
+      cy.url()
+        .should('include', 'q=exist_home')
+      // code is highlighted
+      cy.get('.language-xquery')
+        .should('exist')
+      // button is visible
+      cy.get('.extended-docs')
+        .should('exist')
+        .click()
+      // displays MD 
+      cy.get('zero-md')
+        .should('exist')
+    })
+  })
+
   describe('browse', () => {
     it('should find local modules', () => {
       cy.get('#browse')
