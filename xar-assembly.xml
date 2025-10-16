@@ -18,7 +18,7 @@
   <prepare>prepare.xq</prepare>
   <finish>finish.xq</finish>
   <changelog>
-    <change version="2.0.2-SNAPSHOT">
+    <change version="2.1.0">
       <ul xmlns="http://www.w3.org/1999/xhtml">
         <li>Improve search, looking at parameters and return's comments - <a href="https://github.com/eXist-db/function-documentation/pull/130">#130</a></li>
       </ul>
