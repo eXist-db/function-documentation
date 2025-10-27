@@ -327,7 +327,7 @@ function app:print-function-header($function as element(xqdoc:function)) as elem
                         <span class="hljs-type">{$para/xqdoc:type/string()}</span>,
                         $para/xqdoc:type/@occurrence/string() || $comma
                     )
-            }) <span class="hljs-keyword">as</span>&#160;<span class="hljs-type">{$function/xqdoc:return/xqdoc:type/string()}</span>
+            }) <span class="hljs-keyword">as</span>&#160;<span class="hljs-type">{$function/xqdoc:return/xqdoc:type/string()}</span>{$function/xqdoc:return/xqdoc:type/@occurrence/string()}
         </code></pre>
     </header>
 };
