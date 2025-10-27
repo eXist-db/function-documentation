@@ -61,6 +61,15 @@ context('Function Documentation', () => {
     })
   })
 
+  describe('Searching for a specific function, map:keys', () => {
+    it('should show the correct function signature', () => {
+      cy.visit('?q=map%3Akeys').get('.signature')
+        .should('have.text', 'map:keys($map as map(*)) as xs:anyAtomicType*')
+    })
+  })
+
+
+
   describe('browse', () => {
     it('should find local modules', () => {
       cy.get('#browse')
