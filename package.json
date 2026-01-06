@@ -35,7 +35,7 @@
     "gulp-sass": "^6.0.1",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-svgmin": "^4.1.0",
-    "sass": "^1.97.1",
+    "sass": "^1.97.2",
     "zero-md": "^3.1.7"
   },
   "devDependencies": {
