@@ -46,7 +46,7 @@ had been defined (otherwise nothing will be returned).
 
 # Index names
 
-The default names for indexes are as follows (some of them can be found in the eXist-db `config.xml` file under `eixst/indexer/modules` element):
+The default names for indexes are as follows (some of them can be found in the eXist-db `conf.xml` file under `exist/indexer/modules` element):
 
 Name|Index
 ----|-----
