@@ -1,0 +1,21 @@
+{
+  "plugins": [
+    ["@semantic-release/commit-analyzer", {
+      "preset": "conventionalcommits"
+    }],
+    ["@semantic-release/release-notes-generator", {
+      "preset": "conventionalcommits"
+    }],
+    ["@semantic-release/exec", {
+      "prepareCmd": "npm version ${nextRelease.version} --no-git-tag-version --allow-same-version && node scripts/update-repo-changelog.js --version=${nextRelease.version} --prev-tag=${lastRelease.version}",
+      "publishCmd": "npm run build"
+    }],
+    ["@semantic-release/github", {
+      "assets": [{
+        "path": "dist/exist-function-documentation-*.xar",
+        "name": "exist-function-documentation-${nextRelease.version}.xar",
+        "label": "Expath package (exist-function-documentation-${nextRelease.version}.xar)"
+      }]
+    }]
+  ]
+}
