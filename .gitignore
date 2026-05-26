@@ -1,6 +1,10 @@
 target/
+.build/
+dist/
 node_modules/
 node/
+.env
+.claude/
 *.iml
 .idea/
 .settings/
