@@ -28,6 +28,9 @@ const SECTION_PREFIX = {
   Reverts: 'Revert'
 }
 
+// Render the scope (when present) as a parenthesised qualifier on the prefix:
+// "Fix (documentation): add ngram-index..." rather than the awkward double-colon
+// "Fix: documentation: add ngram-index...".
 const XML_MAIN_TEMPLATE =
   '{{#each noteGroups}}' +
   '{{#each notes}}' +
@@ -36,9 +39,27 @@ const XML_MAIN_TEMPLATE =
   '{{/each}}' +
   '{{#each commitGroups}}' +
   '{{#each commits}}' +
-  '{{#unless isBreaking}}<li>{{prefix}}: {{#if scope}}{{scope}}: {{/if}}{{subject}}</li>\n{{/unless}}' +
+  '{{#unless isBreaking}}<li>{{prefix}}{{#if scope}} ({{scope}}){{/if}}: {{subject}}</li>\n{{/unless}}' +
   '{{/each}}' +
   '{{/each}}'
+
+/**
+ * Tidy up a commit-derived <li> text node for display in the in-app changelog.
+ *
+ *  - Collapse hard-wrapped newlines from the commit body (which would otherwise
+ *    break the sentence mid-line in the rendered <li>).
+ *  - Strip backslash-escapes that immediately precede backticks. Commit bodies
+ *    written via shell heredocs sometimes end up with literal `\`` sequences
+ *    in the stored message; they're meaningless once the text reaches an HTML
+ *    list item.
+ *  - Collapse consecutive whitespace and trim.
+ */
+function normalizeItem (text) {
+  return text
+    .replace(/\\`/g, '`')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
 
 function parseArgs () {
   return Object.fromEntries(
@@ -108,7 +129,7 @@ async function buildChangeItems (rawCommits, version) {
   const liNodes = doc.getElementsByTagNameNS(HTML_NS, 'li')
   const items = []
   for (let i = 0; i < liNodes.length; i++) {
-    const text = liNodes.item(i).textContent
+    const text = normalizeItem(liNodes.item(i).textContent || '')
     if (text) items.push(text)
   }
   return items
