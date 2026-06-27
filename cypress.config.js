@@ -1,19 +1,20 @@
-const { defineConfig } = require('cypress')
+import { defineConfig } from 'cypress'
+import setupPlugins from './src/test/cypress/plugins/index.js'
 
-module.exports = defineConfig({
+export default defineConfig({
+  allowCypressEnv: false,
   fileServerFolder: 'src/main/xar-resources',
   fixturesFolder: 'src/test/cypress/fixtures',
   screenshotsFolder: 'src/test/cypress/screenshots',
   videosFolder: 'src/test/cypress/videos',
+  downloadsFolder: 'src/test/cypress/downloads',
   e2e: {
-    // We've imported your old cypress plugins here.
-    // You may want to clean this up later by importing these.
-    setupNodeEvents(on, config) {
-      return require('./src/test/cypress/plugins/index.js')(on, config)
+    setupNodeEvents (on, config) {
+      return setupPlugins(on, config)
     },
     baseUrl: 'http://localhost:8080/exist/apps/fundocs/',
     excludeSpecPattern: 'src/test/cypress/integration/examples/*.js',
     specPattern: 'src/test/cypress/integration/**/*.{js,jsx,ts,tsx}',
-    supportFile: 'src/test/cypress/support/index.js',
-  },
+    supportFile: 'src/test/cypress/support/index.js'
+  }
 })
