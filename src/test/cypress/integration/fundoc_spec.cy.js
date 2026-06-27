@@ -22,6 +22,7 @@ context('Function Documentation', () => {
       cy.get('#query-field')
         .type('file:sync{enter}')
       cy.get('.function-head')
+        .first()
         .should('exist')
         .click()
       cy.url()
@@ -33,7 +34,7 @@ context('Function Documentation', () => {
       cy.get('.extended-docs')
         .should('exist')
         .click()
-      // displays MD 
+      // displays MD
       cy.get('zero-md')
         .should('exist')
     })
@@ -55,7 +56,7 @@ context('Function Documentation', () => {
       cy.get('.extended-docs')
         .should('exist')
         .click()
-      // displays MD 
+      // displays MD
       cy.get('zero-md')
         .should('exist')
     })
@@ -80,7 +81,7 @@ context('Function Documentation', () => {
         .check()
       cy.get('.form-inline > .btn')
         .click()
-      // check module from fundocs itself 
+      // check module from fundocs itself
       cy.get('#modules')
         .contains('http://exist-db.org/apps/fundocs/generate')
         .click()
