@@ -12,3 +12,4 @@ node/
 .DS_Store
 .tool-versions
 src/test/cypress/screenshots/
+src/test/cypress/downloads/
