@@ -61,7 +61,7 @@
     "@xmldom/xmldom": "^0.9.11",
     "conventional-changelog-conventionalcommits": "^10.3.0",
     "conventional-changelog-writer": "^9.2.1",
-    "cypress": "^15.20.1",
+    "cypress": "^15.21.0",
     "delete": "^1.1.0",
     "dotenv-cli": "^11.0.0",
     "gulp": "^5.0.1",
