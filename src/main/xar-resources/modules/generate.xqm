@@ -21,6 +21,21 @@ declare namespace xqdoc="http://www.xqdoc.org/1.0";
 
 declare variable $generate:doc-collection := $config:app-root || "/data";
 
+(:~
+ : Namespaces of the modules imported (by location) into this module. They are
+ : listed by util:mapped-modules() and util:registered-modules() while this
+ : module runs, but eXist cannot
+ : resolve them from the namespace alone: inspect:inspect-module-uri() then
+ : falls back to fetching the namespace URI over HTTP, without a timeout and
+ : while holding a broker. Their sources are stored under the app collection,
+ : so generate:load-stored-modules() documents them by path anyway.
+ :)
+declare variable $generate:own-namespaces := (
+    "http://exist-db.org/apps/fundocs/generate",
+    "http://exist-db.org/xquery/apps/config",
+    "http://exist-db.org/xquery/dbutil"
+);
+
 
 declare function generate:fundocs() {
     (
@@ -33,13 +48,13 @@ declare function generate:fundocs() {
 };
 
 declare %private function generate:load-mapped-modules() as array(*)* {
-    for $path in util:mapped-modules()
+    for $path in util:mapped-modules()[not(. = $generate:own-namespaces)]
     let $uri := xs:anyURI($path)
     return generate:safe-inspect($uri, inspect:inspect-module-uri#1)
 };
 
 declare %private function generate:load-internal-modules() as array(*)* {
-    for $path in util:registered-modules()
+    for $path in util:registered-modules()[not(. = $generate:own-namespaces)]
     let $uri := xs:anyURI($path)
     return generate:safe-inspect($uri, inspect:inspect-module-uri#1)
 };
