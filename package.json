@@ -63,7 +63,7 @@
     "conventional-changelog-writer": "^9.3.0",
     "cypress": "^16.1.1",
     "delete": "^1.1.0",
-    "dotenv-cli": "^11.0.0",
+    "dotenv-cli": "^11.1.0",
     "gulp": "^5.0.1",
     "gulp-autoprefixer": "^10.0.0",
     "gulp-cssnano": "^2.1.3",
