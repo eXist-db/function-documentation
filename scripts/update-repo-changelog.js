@@ -7,6 +7,11 @@
  * Called by semantic-release via @semantic-release/exec prepareCmd.
  *
  * Adapted from eXist-db/semver.xq.
+ *
+ * conventional-changelog-writer v9+ / conventionalcommits preset v10 replaced
+ * handlebars string templates with template functions. The old mainTemplate
+ * string plus empty headerPartial/commitPartial/footerPartial strings crash
+ * with `TypeError: headerPartial is not a function`.
  */
 import { execSync } from 'child_process'
 import { readFileSync, writeFileSync } from 'fs'
@@ -20,6 +25,7 @@ import conventionalChangelogConventionalCommits from 'conventional-changelog-con
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const REPO_NS = 'http://exist-db.org/xquery/repo'
 const HTML_NS = 'http://www.w3.org/1999/xhtml'
+const MD_LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g
 
 const SECTION_PREFIX = {
   Features: 'New',
@@ -28,20 +34,31 @@ const SECTION_PREFIX = {
   Reverts: 'Revert'
 }
 
+function escapeXml (text) {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
 // Render the scope (when present) as a parenthesised qualifier on the prefix:
 // "Fix (documentation): add ngram-index..." rather than the awkward double-colon
 // "Fix: documentation: add ngram-index...".
-const XML_MAIN_TEMPLATE =
-  '{{#each noteGroups}}' +
-  '{{#each notes}}' +
-  '<li>Breaking change: {{text}}</li>\n' +
-  '{{/each}}' +
-  '{{/each}}' +
-  '{{#each commitGroups}}' +
-  '{{#each commits}}' +
-  '{{#unless isBreaking}}<li>{{prefix}}{{#if scope}} ({{scope}}){{/if}}: {{subject}}</li>\n{{/unless}}' +
-  '{{/each}}' +
-  '{{/each}}'
+// Replaces the writer's default markdown template (conventional-changelog-writer
+// v9+ takes a template function, no longer a handlebars string).
+function xmlTemplate (context) {
+  const lines = []
+  for (const group of context.noteGroups ?? []) {
+    for (const note of group.notes) {
+      lines.push(`<li>Breaking change: ${escapeXml(note.text)}</li>`)
+    }
+  }
+  for (const group of context.commitGroups ?? []) {
+    for (const commit of group.commits) {
+      if (commit.isBreaking) continue
+      const scope = commit.scope ? ` (${commit.scope})` : ''
+      lines.push(`<li>${escapeXml(`${commit.prefix}${scope}: ${commit.subject}`)}</li>`)
+    }
+  }
+  return lines.join('\n')
+}
 
 /**
  * Tidy up a commit-derived <li> text node for display in the in-app changelog.
@@ -90,9 +107,18 @@ function getRawCommits (prevTag) {
   const hashes = execSync(`git log ${ref}..HEAD --format=%H`, { encoding: 'utf8' })
     .trim().split('\n').filter(Boolean)
 
+  // %s folds a hard-wrapped subject paragraph into a single line; %B would
+  // keep the line break and the parser would truncate the subject there.
   return hashes.map(hash =>
-    execSync(`git log -1 --format=%B ${hash}`, { encoding: 'utf8' }).trim()
+    execSync(`git log -1 --format=%s%n%n%b ${hash}`, { encoding: 'utf8' }).trim()
   )
+}
+
+function githubContext () {
+  const pkg = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf8'))
+  const m = (pkg.repository?.url ?? '').match(/github\.com[/:]([^/]+)\/([^/.]+)/)
+  if (!m) return null
+  return { host: 'https://github.com', owner: m[1], repository: m[2] }
 }
 
 async function buildChangeItems (rawCommits, version) {
@@ -104,10 +130,7 @@ async function buildChangeItems (rawCommits, version) {
   const presetTransform = writerOpts.transform
   const writerOptions = {
     ...writerOpts,
-    mainTemplate: XML_MAIN_TEMPLATE,
-    headerPartial: '',
-    commitPartial: '',
-    footerPartial: '',
+    template: xmlTemplate,
     transform (commit, context) {
       const transformed = presetTransform(commit, context)
       if (!transformed) return null
@@ -120,7 +143,12 @@ async function buildChangeItems (rawCommits, version) {
     }
   }
 
-  const output = await writeChangelogString(parsed, { version }, writerOptions)
+  const linkContext = githubContext()
+  const output = await writeChangelogString(
+    parsed,
+    { version, ...(linkContext ?? {}) },
+    writerOptions
+  )
 
   const doc = new DOMParser().parseFromString(
     `<ul xmlns="${HTML_NS}">${output}</ul>`,
@@ -129,10 +157,34 @@ async function buildChangeItems (rawCommits, version) {
   const liNodes = doc.getElementsByTagNameNS(HTML_NS, 'li')
   const items = []
   for (let i = 0; i < liNodes.length; i++) {
-    const text = normalizeItem(liNodes.item(i).textContent || '')
+    let text = normalizeItem(liNodes.item(i).textContent || '')
+    if (!linkContext) {
+      // Without a link context the preset renders references as markdown
+      // links with `undefined` URLs — reduce them to their label text.
+      text = text.replace(MD_LINK, '$1')
+    }
     if (text) items.push(text)
   }
   return items
+}
+
+// Item text may contain markdown links produced by the conventional-changelog
+// preset (issue refs, mentions); render them as XHTML anchors.
+function appendItemContent (doc, li, text) {
+  let last = 0
+  for (const match of text.matchAll(MD_LINK)) {
+    if (match.index > last) {
+      li.appendChild(doc.createTextNode(text.slice(last, match.index)))
+    }
+    const a = doc.createElementNS(HTML_NS, 'a')
+    a.setAttribute('href', match[2])
+    a.appendChild(doc.createTextNode(match[1]))
+    li.appendChild(a)
+    last = match.index + match[0].length
+  }
+  if (last < text.length) {
+    li.appendChild(doc.createTextNode(text.slice(last)))
+  }
 }
 
 function findChangeForVersion (changelog, version) {
@@ -163,7 +215,7 @@ function mergeIntoExistingChange (doc, change, items) {
   for (const item of items) {
     ul.appendChild(doc.createTextNode('\n                '))
     const li = doc.createElementNS(HTML_NS, 'li')
-    li.textContent = item
+    appendItemContent(doc, li, item)
     ul.appendChild(li)
   }
   for (const li of existingLis) {
@@ -200,7 +252,7 @@ function insertChangeEntry (tmplPath, version, items) {
   for (const item of items) {
     ul.appendChild(doc.createTextNode('\n                '))
     const li = doc.createElementNS(HTML_NS, 'li')
-    li.textContent = item
+    appendItemContent(doc, li, item)
     ul.appendChild(li)
   }
   ul.appendChild(doc.createTextNode('\n            '))
