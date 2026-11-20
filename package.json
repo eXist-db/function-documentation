@@ -75,7 +75,7 @@
     "gulp-zip": "^6.1.0",
     "husky": "^9.1.7",
     "sass": "^1.108.2",
-    "semantic-release": "^25.0.9"
+    "semantic-release": "^26.0.1"
   },
   "browserslist": [
     "defaults"
